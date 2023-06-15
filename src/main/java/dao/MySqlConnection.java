@@ -83,13 +83,17 @@ public class MySqlConnection {
 
 		try {
 			connect();
-			// Prepare statement to get column names
-			stmt = connection
-					.prepareStatement("SELECT column_name FROM information_schema.columns WHERE table_name = ?");
-			stmt.setString(1, tableName);
+//			// Prepare statement to get column names
+//			stmt = connection
+//					.prepareStatement("SELECT column_name FROM information_schema.columns WHERE table_name = ?");
+//			stmt.setString(1, tableName);
+//
+//			// Execute query and get results
+//			rs = stmt.executeQuery();
 
-			// Execute query and get results
-			rs = stmt.executeQuery();
+
+            // Get the column information
+            rs = connection.getMetaData().getColumns(null, null, tableName, null);
 
 			// Print out column names
 			boolean firstColumn = true;
@@ -99,6 +103,8 @@ public class MySqlConnection {
 					continue;
 				}
 				String columnName = rs.getString("column_name");
+//				String columnDataType = rs.getString("type_name");
+//				System.out.println("col: " + columnName + "... TYPE: " + columnDataType);
 				columnNames.add(columnName);
 			}
 		} catch (SQLException e) {

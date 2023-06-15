@@ -25,7 +25,7 @@ import dao.DbXMLParser;
 import dao.MySqlConnection;
 
 public class Trigger extends Application{
-//	DataManager dm = new DataManager();
+//	DataManager dm = n8`ew DataManager();
 	private String url = "jdbc:mysql://localhost:3306/beacon_localisation";
 	private String user = "root";
 	private String password = "root";
