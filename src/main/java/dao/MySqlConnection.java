@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import middleware.Main;
-import scala.actors.threadpool.Arrays;
 
 public class MySqlConnection {
 	private String url;
