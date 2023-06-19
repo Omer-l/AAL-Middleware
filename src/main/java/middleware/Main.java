@@ -4,17 +4,11 @@ import java.math.BigInteger;
 import java.sql.*;
 import java.util.Date;
 
-
-import dao.DataManager;
-import entity.mysql.beacon_localisation.Record;
-import entity.mysql.beacon_localisation.Room;
-import entity.mysql.beacon_localisation.User;
-import entity.postgresql.sensors.IncomingEvent;
+ 
 import gui.Trigger;
-
 public class Main {
 	public static final boolean DEBUG = true;
-	public static DataManager dataManager = new DataManager();
+//	public static DataManager dataManager = new DataManager();
 	
 	public static void main(String[] args) {
 //		Record record = new Record();

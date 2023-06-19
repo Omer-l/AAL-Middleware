@@ -47,7 +47,7 @@ public class Main extends Application{
         whenTitleText.setStyle("-fx-font-weight: bold;");
         whenItemsList = FXCollections.observableArrayList();
 
-        ListView<String> whenListView = new ListView<>(whenItemsList);
+        ListView<String> whenListView = new ListView<String>(whenItemsList);
 
         TextField whenItemTextField = new TextField();
         Button whenAddButton = new Button("Add");

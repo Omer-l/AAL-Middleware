@@ -20,15 +20,11 @@ import javafx.scene.text.Text;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.control.TextField;
-
 import java.io.IOException;
-
-import dao.DataManager;
 import dao.DbXMLParser;
 import dao.MySqlConnection;
 
 public class Trigger extends Application{
-//	DataManager dm = n8`ew DataManager();
 	private String url = "jdbc:mysql://localhost:3306/beacon_localisation";
 	private String user = "root";
 	private String password = "root";
@@ -149,15 +145,20 @@ public class Trigger extends Application{
         stage.show();
     }
     
-    private EventHandler<ActionEvent> processAddQuery(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, TextField valueField) {
+    private void processAddQuery(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, TextField valueField) {
     	String rdbm = rdbmMenu.getText();
     	String db = databaseMenu.getText();
     	String table = tableMenu.getText();
     	String column = columnMenu.getText();
     	String value = valueField.getText();
+    	boolean noBlankFields = !(rdbm.isEmpty() || db.isEmpty() || table.isEmpty() || column.isEmpty() || value.isEmpty());
+    	if(noBlankFields) {
+//    		if(DataManager.isEntity(rdbm, db, table)) {
+//    			
+//    		}
+    	}
     	
     	System.out.println(rdbm + ", " + db + ", " + table + ", " + column + ", " + value);
-		return null;
 	}
 
 

@@ -193,7 +193,7 @@ public class MySqlConnection {
 	}
 
 	public ArrayList<Map<String, Object>> queryDB(String query) {
-		ArrayList<Map<String, Object>> result = new ArrayList<>();
+		ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 
 		try {
 			connect();
@@ -288,7 +288,7 @@ public class MySqlConnection {
 	}
 	
 	public ArrayList<HashMap<String, String>> getForeignKeys(String tableName) {
-		ArrayList<HashMap<String, String>> foreignKeysMap = new ArrayList<>();
+		ArrayList<HashMap<String, String>> foreignKeysMap = new ArrayList<HashMap<String, String>>();
 		try {
 			connect();
             // Retrieve metadata from the result set
@@ -303,7 +303,7 @@ public class MySqlConnection {
                 String pkColumnName = foreignKeys.getString("PKCOLUMN_NAME");  // Name of the primary key column
                 String fkTableName = foreignKeys.getString("FKTABLE_NAME");  // Name of the foreign key table
                 String fkColumnName = foreignKeys.getString("FKCOLUMN_NAME");  // Name of the foreign key column
-                HashMap<String, String> foreignKeyMap = new HashMap<>();
+                HashMap<String, String> foreignKeyMap = new HashMap<String, String>();
                 foreignKeyMap.put("pkTableName", foreignKeys.getString("PKTABLE_NAME"));  // Name of the primary key table
                 foreignKeyMap.put("pkColumnName", foreignKeys.getString("PKCOLUMN_NAME"));  // Name of the primary key column
                 foreignKeyMap.put("fkTableName", foreignKeys.getString("FKTABLE_NAME"));  // Name of the foreign key table
