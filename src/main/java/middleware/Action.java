@@ -1,12 +1,12 @@
 package middleware;
 
-import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.util.Date;
 
 public class Action {
 
 	public static void performActions(Object o) {
+		
 		sendDataToMReasonerDB(o);
 	}
 	
@@ -46,24 +46,6 @@ public class Action {
 	}
 	
 	public static void main(String[] args) {
-//		Record record = new Record();
-//		User gines = new User();
-//		gines.setId(1);
-//		gines.setName("Gines");
-//		record.setUser(gines);
-//		Room r = new Room();
-//		r.setId(0);
-//		r.setName("LivingRoom");
-//		record.setRoom(r);
-//		record.setMac("C5:39:2D:D9:C1:B8");
-//		record.setRssi(-76);
-//		record.setX(530);
-//		record.setY(70);
-//		record.setDateTime(new Date());
-//		Object recordObject = (Object) record;
-////		System.out.println(recordObject.getClass());
-////		System.out.println(record.getClass());
-//		sendDataToDB(recordObject, "MySQL");
 	}
 	
 	

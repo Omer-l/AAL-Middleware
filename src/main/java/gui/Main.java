@@ -75,10 +75,7 @@ public class Main extends Application{
         		whenTitleText, whenListView, whenItemTextField, whenAddButton, whenRemoveButton,
         		thenTitleText, thenListView, thenItemTextField, thenAddButton, thenRemoveButton);
         root.setPadding(new Insets(10));
-
-        primaryStage.setScene(new Scene(root, 900, 1000));
-        primaryStage.setTitle("Add New Rule");
-        primaryStage.show();
+ 
     }
     
     public static void openWhenAddWindow(String item) {

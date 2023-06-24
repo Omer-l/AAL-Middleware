@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import middleware.Main;
 
 public class MySqlConnection {
@@ -16,6 +15,7 @@ public class MySqlConnection {
 	private String username;
 	private String password;
 	private Connection connection;
+	
 
 	public MySqlConnection(String url, String username, String password) {
 		this.url = url;
