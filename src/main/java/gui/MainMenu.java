@@ -23,6 +23,9 @@ public class MainMenu extends Application{
 	public final static String HEADER_1_STYLE = "-fx-font-size: 20px;";
 	public final static String HEADER_2_STYLE = "-fx-font-weight:   bold; -fx-font-size: 16px;";
 	public final static String MENU_BUTTON_STYLE = "-fx-background-color:   white; -fx-border-color: black;";
+	public final static String MAIN_CONTENT_STYLE = "-fx-background-color:  #d3d3d3;";
+	public final static String GUI_BACKGROUND_STYLE = "-fx-background-color:   #FAF0DC;";
+	
 	public static VBox root = new VBox();
 	//NAVBAR
 	public static VBox menuBarVBox = new VBox();
@@ -39,15 +42,22 @@ public class MainMenu extends Application{
 
     @Override
     public void start(Stage primaryStage) {
-    	changeTitle("Main Menu");
-    	root.setStyle("-fx-background-color:   #FAF0DC;");
-    	titleHBox.setAlignment(Pos.CENTER);
     	menuBarVBox.getChildren().addAll(menuBarHBox, titleHBox);
+    	root.getChildren().addAll(menuBarVBox, mainHBox);
+    	open();
+        primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
+        primaryStage.setTitle("Add New Rule");
+        primaryStage.show();
+    }
+    
+    public static void open() {
+    	root.setStyle(GUI_BACKGROUND_STYLE);
+    	titleHBox.setAlignment(Pos.CENTER);
     	menuBarVBox.prefHeightProperty().bind(root.heightProperty().divide(10));
     	menuBarVBox.prefWidthProperty().bind(root.widthProperty());
     	mainHBox.prefWidthProperty().bind(root.widthProperty());
     	mainHBox.prefHeightProperty().bind(root.heightProperty().divide(10).multiply(9));
-    	mainHBox.setStyle("-fx-background-color:  #d3d3d3;");
+    	mainHBox.setStyle(MAIN_CONTENT_STYLE);
     	//LEFT SIDE MAIN
     	VBox mainVBox1 = new VBox(2);
     	mainVBox1.prefWidthProperty().bind(root.widthProperty().divide(2));
@@ -112,10 +122,6 @@ public class MainMenu extends Application{
 
     	addHoverInteraction(new VBox[] {configVBox1, configVBox2, configVBox3, configVBox4, automationVBox1, settingsVBox1}, "white", "darkgray");
     	mainHBox.getChildren().addAll(mainVBox1, mainVBox2);
-    	root.getChildren().addAll(menuBarVBox, mainHBox);
-        primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
-        primaryStage.setTitle("Add New Rule");
-        primaryStage.show();
     }
     
     public static void clearMainBox() {
@@ -130,18 +136,25 @@ public class MainMenu extends Application{
     	titleHBox.getChildren().add(newTitle);
     }
     
-    private static void goToRulesListWindow() {
+    public static void goToRulesListWindow() {
     	clearMainBox();
     	changeTitle("Rules");
     	Rules rulesWindow = new Rules();
     	rulesWindow.open();
 	}
     
-    private static void goToDatabaseListWindow() {
+    public static void goToDatabaseListWindow() {
     	clearMainBox();
     	changeTitle("Database Events");
     	DatabaseEvents de = new DatabaseEvents();
     	de.open();
+	}
+    
+    public static void goToMainMenu() {
+    	clearMainBox();
+    	changeTitle("Main Menu");
+    	menuBarHBox.getChildren().clear();
+    	MainMenu.open();
 	}
 
 	public static void addHoverInteraction(VBox[] buttons, String fromColor, String toColor) {
