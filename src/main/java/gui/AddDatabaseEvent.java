@@ -28,6 +28,7 @@ public class AddDatabaseEvent {
 	private String user = "root";
 	private String password = "root";
 	private MySqlConnection dbManager = new MySqlConnection(url, user, password);
+    private Menu menu5 = new Menu();
 
 	public void open() {
 		MainMenu.changeTitle("Add Database Event");
@@ -157,11 +158,28 @@ public class AddDatabaseEvent {
         column1HBox7VBox1.getChildren().addAll(column1HBox7VBox1Header);
         column1HBox7VBox2.getChildren().addAll(column1HBox7VBox2MenuBar);
         column1HBox7.getChildren().addAll(column1HBox7VBox1, column1HBox7VBox2);
-
-        setRDBMSMenuOnAction(menu1, menu2, menu3, menu4);
         
+
+        HBox column1HBox8 = new HBox();
+        VBox column1HBox8VBox1 = new VBox();
+        column1HBox8VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox8VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Text column1HBox8VBox1Header = new Text("Sort By");
+        VBox column1HBox8VBox2 = new VBox();
+        column1HBox8VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        MenuBar column1HBox8VBox2MenuBar = new MenuBar();
+        // Create MenuItems for the dropdown menu
+        column1HBox8VBox2MenuBar.getMenus().add(menu5);
+//        Text menuBar3Label = new Text("Table");
+//    	HBox menuBar3HBox = new HBox(10);
+//    	menuBar3HBox.getChildren().addAll(menuBar3Label, column1HBox8VBox2MenuBar);
+        column1HBox8VBox1.getChildren().addAll(column1HBox8VBox1Header);
+        column1HBox8VBox2.getChildren().addAll(column1HBox8VBox2MenuBar);
+        column1HBox8.getChildren().addAll(column1HBox8VBox1, column1HBox8VBox2);
+        
+        setRDBMSMenuOnAction(menu1, menu2, menu3, menu4);
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
-        column1VBox2.getChildren().addAll(column1VBox2Header, column1Hbox4, column1HBox5, column1HBox6, column1HBox7);
+        column1VBox2.getChildren().addAll(column1VBox2Header, column1Hbox4, column1HBox5, column1HBox6, column1HBox7, column1HBox8);
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2);
         
         
@@ -239,14 +257,24 @@ public class AddDatabaseEvent {
 	private void loadColumnsMenu(Menu tableMenu, Menu columnMenu, String tableName) {
 		columnMenu.getItems().clear();
 		ObservableList<MenuItem> columns = FXCollections.observableArrayList();
+		ObservableList<MenuItem> sortByColumns = FXCollections.observableArrayList();
+		MenuItem wholeRowOption = new MenuItem("Whole Row");
+		wholeRowOption.setOnAction(event -> {
+			columnMenu.setText(wholeRowOption.getText());
+		});
+		columns.add(wholeRowOption);
+		
 		for(String columnName : dbManager.getColumnNames(tableName)) {
 			MenuItem columnOption = new MenuItem(columnName);
+			MenuItem sortByColumnOption = new MenuItem(columnName);
 			columnOption.setOnAction(event -> {
 				columnMenu.setText(columnName);
 			});
 			columns.add(columnOption);
+			sortByColumns.add(sortByColumnOption);
 		}
 		
 		columnMenu.getItems().addAll(columns);
+        menu5.getItems().addAll(sortByColumns);
 	}
 }
