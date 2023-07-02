@@ -1,6 +1,8 @@
 package gui;
 import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 
+import dao.DbXMLParser;
+import dao.MySqlConnection;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +24,10 @@ import javafx.stage.Stage;
 import javafx.geometry.Pos;
 
 public class AddDatabaseEvent {
+	private String url = "jdbc:mysql://localhost:3306/beacon_localisation";
+	private String user = "root";
+	private String password = "root";
+	private MySqlConnection dbManager = new MySqlConnection(url, user, password);
 
 	public void open() {
 		MainMenu.changeTitle("Add Database Event");
@@ -152,11 +158,95 @@ public class AddDatabaseEvent {
         column1HBox7VBox2.getChildren().addAll(column1HBox7VBox2MenuBar);
         column1HBox7.getChildren().addAll(column1HBox7VBox1, column1HBox7VBox2);
 
+        setRDBMSMenuOnAction(menu1, menu2, menu3, menu4);
+        
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
         column1VBox2.getChildren().addAll(column1VBox2Header, column1Hbox4, column1HBox5, column1HBox6, column1HBox7);
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2);
         
         
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
+	}
+
+	private void setRDBMSMenuOnAction(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu) {
+	    Menu[] menusToReset = {databaseMenu, tableMenu, columnMenu};
+		rdbmMenu.getItems().get(0).setOnAction(event -> {
+	        reset(menusToReset);
+			loadDatabasesMenu(rdbmMenu, databaseMenu, "hibernate-mysql.cfg.xml");
+			rdbmMenu.setText(rdbmMenu.getItems().get(0).getText());
+	        setDatabaseMenuOnAction(databaseMenu, tableMenu, columnMenu);
+		
+		});
+		rdbmMenu.getItems().get(1).setOnAction(event -> {
+	        reset(menusToReset);
+			loadDatabasesMenu(rdbmMenu, databaseMenu, "hibernate-postgresql.cfg.xml");
+			rdbmMenu.setText(rdbmMenu.getItems().get(1).getText());
+	        setDatabaseMenuOnAction(databaseMenu, tableMenu, columnMenu);
+			});
+	}
+
+	private void reset(Menu[] menus) {
+		for(Menu menu : menus) {
+			menu.setText("");
+			menu.getItems().clear();
+		}
+	}
+
+	private void setDatabaseMenuOnAction(Menu dbMenu, Menu tableMenu, Menu columnMenu) {
+	    Menu[] menusToReset = {tableMenu, columnMenu};
+		for(MenuItem menuItem : dbMenu.getItems()) {
+			menuItem.setOnAction(event -> {
+	    		reset(menusToReset);
+				loadTablesMenu(tableMenu, columnMenu, menuItem.getText());
+				System.out.println(menuItem.getText());
+	    		menuItem.getParentMenu().setText(menuItem.getText());
+			});
+		}
+	}
+
+	private void loadDatabasesMenu(Menu menu, Menu databaseMenu, String hibernateConfigFileName) {
+		ObservableList<MenuItem> databases = FXCollections.observableArrayList();
+		String[] dbDetails = DbXMLParser.getDBDetailsSQL(hibernateConfigFileName);
+		dbManager.setUrl(dbDetails[0]);
+		dbManager.setUsername(dbDetails[1]);
+		dbManager.setPassword(dbDetails[2]);
+		databaseMenu.getItems().clear();
+		for(String dbName : dbManager.getDatabaseNames())
+			databases.add(new MenuItem(dbName));
+		
+		databaseMenu.getItems().addAll(databases);
+	}
+
+	private void loadTablesMenu(Menu tableMenu, Menu columnMenu, String databaseName) {
+	    Menu[] menusToReset = {columnMenu};
+		tableMenu.getItems().clear();
+		System.out.println("LOADING");
+		ObservableList<MenuItem> tables = FXCollections.observableArrayList();
+		for(String tableName : dbManager.getTableNames(databaseName)) {
+			System.out.println(tableName);
+			MenuItem tableOption = new MenuItem(tableName);
+			tableOption.setOnAction(event -> {
+				reset(menusToReset);
+				tableMenu.setText(tableName);
+				loadColumnsMenu(tableMenu, columnMenu, tableName);
+			});
+			tables.add(tableOption);
+		}
+		
+		tableMenu.getItems().addAll(tables);
+	}
+
+	private void loadColumnsMenu(Menu tableMenu, Menu columnMenu, String tableName) {
+		columnMenu.getItems().clear();
+		ObservableList<MenuItem> columns = FXCollections.observableArrayList();
+		for(String columnName : dbManager.getColumnNames(tableName)) {
+			MenuItem columnOption = new MenuItem(columnName);
+			columnOption.setOnAction(event -> {
+				columnMenu.setText(columnName);
+			});
+			columns.add(columnOption);
+		}
+		
+		columnMenu.getItems().addAll(columns);
 	}
 }
