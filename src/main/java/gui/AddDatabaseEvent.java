@@ -107,20 +107,54 @@ public class AddDatabaseEvent {
         column1HBox5VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         MenuBar column1HBox5VBox2MenuBar = new MenuBar();
         Menu menu2 = new Menu();
-
         // Create MenuItems for the dropdown menu
         column1HBox5VBox2MenuBar.getMenus().add(menu2);
-        Text menuBar2Label = new Text("Database");
-    	HBox menuBar2HBox = new HBox(10);
-    	menuBar2HBox.getChildren().addAll(menuBar2Label, column1HBox5VBox2MenuBar);
-
-        column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
-        column1VBox2.getChildren().addAll(column1VBox2Header, column1Hbox4, column1HBox5);
-        mainVBox1.getChildren().addAll(column1VBox1, column1VBox2);
-        
+//        Text menuBar2Label = new Text("Table");
+//    	HBox menuBar2HBox = new HBox(10);
+//    	menuBar2HBox.getChildren().addAll(menuBar2Label, column1HBox5VBox2MenuBar);
         column1HBox5VBox1.getChildren().addAll(column1HBox5VBox1Header);
         column1HBox5VBox2.getChildren().addAll(column1HBox5VBox2MenuBar);
         column1HBox5.getChildren().addAll(column1HBox5VBox1, column1HBox5VBox2);
+
+        HBox column1HBox6 = new HBox();
+        VBox column1HBox6VBox1 = new VBox();
+        column1HBox6VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox6VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Text column1HBox6VBox1Header = new Text("Table");
+        VBox column1HBox6VBox2 = new VBox();
+        column1HBox6VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        MenuBar column1HBox6VBox2MenuBar = new MenuBar();
+        Menu menu3 = new Menu();
+        // Create MenuItems for the dropdown menu
+        column1HBox6VBox2MenuBar.getMenus().add(menu3);
+//        Text menuBar3Label = new Text("Table");
+//    	HBox menuBar3HBox = new HBox(10);
+//    	menuBar3HBox.getChildren().addAll(menuBar3Label, column1HBox6VBox2MenuBar);
+        column1HBox6VBox1.getChildren().addAll(column1HBox6VBox1Header);
+        column1HBox6VBox2.getChildren().addAll(column1HBox6VBox2MenuBar);
+        column1HBox6.getChildren().addAll(column1HBox6VBox1, column1HBox6VBox2);
+
+        HBox column1HBox7 = new HBox();
+        VBox column1HBox7VBox1 = new VBox();
+        column1HBox7VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox7VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Text column1HBox7VBox1Header = new Text("Column");
+        VBox column1HBox7VBox2 = new VBox();
+        column1HBox7VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        MenuBar column1HBox7VBox2MenuBar = new MenuBar();
+        Menu menu4 = new Menu();
+        // Create MenuItems for the dropdown menu
+        column1HBox7VBox2MenuBar.getMenus().add(menu4);
+//        Text menuBar3Label = new Text("Table");
+//    	HBox menuBar3HBox = new HBox(10);
+//    	menuBar3HBox.getChildren().addAll(menuBar3Label, column1HBox7VBox2MenuBar);
+        column1HBox7VBox1.getChildren().addAll(column1HBox7VBox1Header);
+        column1HBox7VBox2.getChildren().addAll(column1HBox7VBox2MenuBar);
+        column1HBox7.getChildren().addAll(column1HBox7VBox1, column1HBox7VBox2);
+
+        column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
+        column1VBox2.getChildren().addAll(column1VBox2Header, column1Hbox4, column1HBox5, column1HBox6, column1HBox7);
+        mainVBox1.getChildren().addAll(column1VBox1, column1VBox2);
         
         
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
