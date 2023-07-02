@@ -11,6 +11,7 @@ public class Rules {
     public void open() {
         Button button1 = new Button("Back");
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
+        button1.setOnAction(event -> { MainMenu.goToMainMenu(); });
         MainMenu.menuBarHBox.getChildren().addAll(button1);
         //LEFT SIDE MAIN
         VBox mainVBox1 = new VBox(2);

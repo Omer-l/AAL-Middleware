@@ -37,20 +37,19 @@ public class MainMenu extends Application{
 	//MAIN
 	public static HBox mainVBox = new HBox(10);
     public static void main(String[] args) {
+//    	open();
+    	AddDatabaseEvent ade = new AddDatabaseEvent();
+    	ade.open();
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-    	menuBarVBox.getChildren().addAll(menuBarHBox, titleHBox);
-    	root.getChildren().addAll(menuBarVBox, mainHBox);
-    	open();
         primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.setTitle("Add New Rule");
         primaryStage.show();
-    }
-    
-    public static void open() {
+    	menuBarVBox.getChildren().addAll(menuBarHBox, titleHBox);
+    	root.getChildren().addAll(menuBarVBox, mainHBox);
     	root.setStyle(GUI_BACKGROUND_STYLE);
     	titleHBox.setAlignment(Pos.CENTER);
     	menuBarVBox.prefHeightProperty().bind(root.heightProperty().divide(10));
@@ -58,6 +57,9 @@ public class MainMenu extends Application{
     	mainHBox.prefWidthProperty().bind(root.widthProperty());
     	mainHBox.prefHeightProperty().bind(root.heightProperty().divide(10).multiply(9));
     	mainHBox.setStyle(MAIN_CONTENT_STYLE);
+    }
+    
+    public static void open() {
     	//LEFT SIDE MAIN
     	VBox mainVBox1 = new VBox(2);
     	mainVBox1.prefWidthProperty().bind(root.widthProperty().divide(2));
