@@ -37,9 +37,9 @@ public class MainMenu extends Application{
 	//MAIN
 	public static HBox mainVBox = new HBox(10);
     public static void main(String[] args) {
-//    	open();
-    	AddDatabaseEvent ade = new AddDatabaseEvent();
-    	ade.open();
+    	open();
+//    	AddDatabaseEvent ade = new AddDatabaseEvent();
+//    	ade.open();
         launch(args);
     }
 

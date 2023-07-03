@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -177,12 +178,27 @@ public class AddDatabaseEvent {
         column1HBox8VBox2.getChildren().addAll(column1HBox8VBox2MenuBar);
         column1HBox8.getChildren().addAll(column1HBox8VBox1, column1HBox8VBox2);
         
+        VBox column1VBox3 = new VBox(10);
+        
+        ButtonBar column1ButtonBar = new ButtonBar();
+        Button testButton = new Button("Test");
+        Button saveButton = new Button("Save");
+        column1ButtonBar.getButtons().addAll(testButton, saveButton);
+        HBox column1HBox9 = new HBox();
+        Text logText = new Text("LOG: ");
+        TextField logField = new TextField();
+        logField.prefWidthProperty().bind(mainVBox1.widthProperty().multiply(0.9));
+        logField.prefHeightProperty().bind(mainVBox1.heightProperty().multiply(0.1));
+        logField.setEditable(false);
+        column1HBox9.getChildren().addAll(logText, logField);
+        
+        
         setRDBMSMenuOnAction(menu1, menu2, menu3, menu4);
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
         column1VBox2.getChildren().addAll(column1VBox2Header, column1Hbox4, column1HBox5, column1HBox6, column1HBox7, column1HBox8);
-        mainVBox1.getChildren().addAll(column1VBox1, column1VBox2);
+        column1VBox3.getChildren().addAll(column1ButtonBar, column1HBox9);
         
-        
+        mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
 	}
 
