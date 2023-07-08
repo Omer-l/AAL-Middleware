@@ -21,9 +21,7 @@ public class DatabaseEvents extends Window {
 		super(prevWindow);
 	}
 
-	@Override
-	public void open(Window prevWindow) {
-    	prevWindow = null; //ensures built windows are nullified and garbage collected. 
+	public void open() {
 		MainMenu.clearMainBox();
     	MainMenu.changeTitle("Database Events");
         Button button1 = new Button("Back");
@@ -62,7 +60,7 @@ public class DatabaseEvents extends Window {
         column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
         Text column1VBox2Header = new Text("Add New Event");
         column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);
-        column1VBox2.setOnMouseClicked(event -> {new AddDatabaseEvent(this).open(this);});
+        column1VBox2.setOnMouseClicked(event -> {new AddDatabaseEvent(this).open();});
         
         column1VBox2.getChildren().addAll(column1VBox2Header);
         

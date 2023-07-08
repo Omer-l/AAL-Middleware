@@ -41,7 +41,7 @@ public class MainMenu extends Application {
 //    	open();
 //    	AddWhen adr = new AddWhen();
     	AddRule adr = new AddRule();
-    	adr.open(null);
+    	adr.open();
         launch(args);
     }
 
@@ -61,8 +61,7 @@ public class MainMenu extends Application {
     	mainHBox.setStyle(MAIN_CONTENT_STYLE);
     }
     
-    public static void open(Window prevWindow) {
-    	prevWindow = null; //ensures built windows are nullified and garbage collected. 
+    public static void open() {
     	clearMainBox();
     	changeTitle("Main Menu");
     	//LEFT SIDE MAIN
@@ -146,17 +145,17 @@ public class MainMenu extends Application {
     
     public static void goToRulesListWindow(Window prevWindow) {
     	Rules rulesWindow = new Rules(prevWindow);
-    	rulesWindow.open(null);
+    	rulesWindow.open();
 	}
     
     public static void goToDatabaseListWindow(Window prevWindow) {
     	DatabaseEvents de = new DatabaseEvents(prevWindow);
-    	de.open(null);
+    	de.open();
 	}
     
     public static void goToMainMenu() {
     	menuBarHBox.getChildren().clear();
-    	MainMenu.open(null);
+    	MainMenu.open();
 	}
 
 	public static void addHoverInteraction(VBox[] buttons, String fromColor, String toColor) {
