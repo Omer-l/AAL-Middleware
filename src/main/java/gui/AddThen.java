@@ -16,19 +16,19 @@ import javafx.scene.text.Text;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 
-public class AddWhen extends Window {
+public class AddThen extends Window {
 	
-	public AddWhen(Window prevWindow) {
+	public AddThen(Window prevWindow) {
 		super(prevWindow);
 	}
 
-	public AddWhen() {
+	public AddThen() {
 
 	}
 
 	public void open() {
 		MainMenu.clearMainBox();
-		MainMenu.changeTitle("Add When");
+		MainMenu.changeTitle("Add Then");
         Button button1 = new Button("Back");
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left

@@ -112,6 +112,7 @@ public class AddRule extends Window {
         Text column1VBox7Header = new Text("Add Then");
         column1VBox7Header.setStyle(MainMenu.HEADER_2_STYLE);
         column1VBox7.getChildren().addAll(column1VBox7Header);
+        column1VBox7.setOnMouseClicked(event -> { new AddThen(this).open(); });
 
         VBox column1ButtonsVBox = new VBox(2);
         
