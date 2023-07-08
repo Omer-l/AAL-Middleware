@@ -24,17 +24,22 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 
-public class AddDatabaseEvent {
+public class AddDatabaseEvent extends Window {
 	private String url = "jdbc:mysql://localhost:3306/beacon_localisation";
 	private String user = "root";
 	private String password = "root";
 	private MySqlConnection dbManager = new MySqlConnection(url, user, password);
     private Menu menu5 = new Menu();
+    
+	public AddDatabaseEvent(Window prevWindow) {
+		super(prevWindow);
+	}
 
 	public void open() {
+		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add Database Event");
         Button button1 = new Button("Back");
-        button1.setOnAction(event -> {MainMenu.goToMainMenu(); });
+        button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);
         //LEFT SIDE MAIN

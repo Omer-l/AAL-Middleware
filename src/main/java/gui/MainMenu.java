@@ -17,12 +17,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 
-public class MainMenu extends Application{
+public class MainMenu extends Application {
 	private final int WINDOW_WIDTH = 900;
 	private final int WINDOW_HEIGHT = 800;
 	public final static String HEADER_1_STYLE = "-fx-font-size: 20px;";
 	public final static String HEADER_2_STYLE = "-fx-font-weight:   bold; -fx-font-size: 16px;";
 	public final static String MENU_BUTTON_STYLE = "-fx-background-color:   white; -fx-border-color: black;";
+	public final static String MENU_ADD_NEW_EVENT_BUTTON_STYLE = "-fx-background-color:   yellow; -fx-border-color: black;";
 	public final static String MAIN_CONTENT_STYLE = "-fx-background-color:  #d3d3d3;";
 	public final static String GUI_BACKGROUND_STYLE = "-fx-background-color:   #FAF0DC;";
 	
@@ -37,9 +38,10 @@ public class MainMenu extends Application{
 	//MAIN
 	public static HBox mainVBox = new HBox(10);
     public static void main(String[] args) {
-    	open();
-//    	AddDatabaseEvent ade = new AddDatabaseEvent();
-//    	ade.open();
+//    	open();
+//    	AddWhen adr = new AddWhen();
+    	AddRule adr = new AddRule();
+    	adr.open();
         launch(args);
     }
 
@@ -60,6 +62,8 @@ public class MainMenu extends Application{
     }
     
     public static void open() {
+    	clearMainBox();
+    	changeTitle("Main Menu");
     	//LEFT SIDE MAIN
     	VBox mainVBox1 = new VBox(2);
     	mainVBox1.prefWidthProperty().bind(root.widthProperty().divide(2));
@@ -73,7 +77,7 @@ public class MainMenu extends Application{
     	configVBox1Header.setStyle(HEADER_2_STYLE);
     	Text configVBox1Details = new Text("What to read/write from the database");
     	configVBox1.getChildren().addAll(configVBox1Header, configVBox1Details);
-    	configVBox1.setOnMouseClicked(event -> { goToDatabaseListWindow();});
+    	configVBox1.setOnMouseClicked(event -> { goToDatabaseListWindow(null);});
     	VBox configVBox2 = new VBox();
     	configVBox2.setStyle(MENU_BUTTON_STYLE);
     	Text configVBox2Header = new Text("File");
@@ -103,7 +107,7 @@ public class MainMenu extends Application{
     	automationVBox1Header.setStyle(HEADER_2_STYLE);
     	Text automationVBox1Details = new Text("Rules in system");
     	automationVBox1.getChildren().addAll(automationVBox1Header, automationVBox1Details);
-    	automationVBox1.setOnMouseClicked(event -> { goToRulesListWindow(); });
+    	automationVBox1.setOnMouseClicked(event -> { goToRulesListWindow(null); });
     	automationVBox.getChildren().addAll(automationHeader, automationVBox1);
     	mainVBox1.getChildren().addAll(configVBox, automationVBox);
     	//RIGHT SIDE MAIN
@@ -127,6 +131,7 @@ public class MainMenu extends Application{
     }
     
     public static void clearMainBox() {
+		menuBarHBox.getChildren().clear();
     	mainHBox.getChildren().clear();
     	mainVBox.getChildren().clear();
     	titleHBox.getChildren().clear();
@@ -138,23 +143,17 @@ public class MainMenu extends Application{
     	titleHBox.getChildren().add(newTitle);
     }
     
-    public static void goToRulesListWindow() {
-    	clearMainBox();
-    	changeTitle("Rules");
-    	Rules rulesWindow = new Rules();
+    public static void goToRulesListWindow(Window prevWindow) {
+    	Rules rulesWindow = new Rules(prevWindow);
     	rulesWindow.open();
 	}
     
-    public static void goToDatabaseListWindow() {
-    	clearMainBox();
-    	changeTitle("Database Events");
-    	DatabaseEvents de = new DatabaseEvents();
+    public static void goToDatabaseListWindow(Window prevWindow) {
+    	DatabaseEvents de = new DatabaseEvents(prevWindow);
     	de.open();
 	}
     
     public static void goToMainMenu() {
-    	clearMainBox();
-    	changeTitle("Main Menu");
     	menuBarHBox.getChildren().clear();
     	MainMenu.open();
 	}
