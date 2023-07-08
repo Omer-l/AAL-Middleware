@@ -26,7 +26,9 @@ public class AddWhen extends Window {
 
 	}
 
-	public void open() {
+	@Override
+	public void open(Window prevWindow) {
+    	prevWindow = null; //ensures built windows are nullified and garbage collected. 
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add When");
         Button button1 = new Button("Back");
@@ -114,7 +116,7 @@ public class AddWhen extends Window {
         text1VBox.setOnMouseClicked(event -> { 
         	VBox label = (VBox) event.getSource(); 
         	DatabaseEvents de = new DatabaseEvents(this);
-        	de.open();
+        	de.open(this);
         } );
         
         text2VBox.setOnMouseClicked(event -> { VBox label = (VBox) event.getSource(); System.out.println("CLICKED: " + label.getChildren().get(0));} );

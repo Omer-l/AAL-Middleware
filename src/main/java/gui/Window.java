@@ -16,13 +16,13 @@ public abstract class Window {
 	public Window back() {
     	MainMenu.clearMainBox();
 		if(prevWindow == null) {
-			new MainMenu().open();
+			new MainMenu().open(this);
 			return null;
 		} else {
-			prevWindow.open();
+			prevWindow.open(this);
 			return prevWindow;
 		}
 	}
 	
-	public void open() {};
+	public void open(Window prevWindow) {};
 }

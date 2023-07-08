@@ -35,7 +35,9 @@ public class AddDatabaseEvent extends Window {
 		super(prevWindow);
 	}
 
-	public void open() {
+	@Override
+	public void open(Window prevWindow) {
+    	prevWindow = null; //ensures built windows are nullified and garbage collected. 
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add Database Event");
         Button button1 = new Button("Back");

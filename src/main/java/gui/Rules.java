@@ -16,7 +16,9 @@ public class Rules extends Window {
     	
     }
 
-	public void open() {
+	@Override
+	public void open(Window prevWindow) {
+    	prevWindow = null; //ensures built windows are nullified and garbage collected. 
 		MainMenu.clearMainBox();
     	MainMenu.changeTitle("Rules");
         Button button1 = new Button("Back");
@@ -43,7 +45,7 @@ public class Rules extends Window {
         Text configVBox2Header = new Text("Add New Rule");
         configVBox2Header.setStyle(MainMenu.HEADER_2_STYLE);
         configVBox2.getChildren().addAll(configVBox2Header);
-        configVBox2.setOnMouseClicked(event -> { new AddRule(this).open(); });
+        configVBox2.setOnMouseClicked(event -> { new AddRule(this).open(this); });
         
         configVBox.getChildren().addAll(configHeader, configVBox1, configVBox2);
 

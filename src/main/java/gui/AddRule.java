@@ -25,7 +25,9 @@ public class AddRule extends Window {
 		
 	}
 
-	public void open() {
+	@Override
+	public void open(Window prevWindow) {
+    	prevWindow = null; //ensures built windows are nullified and garbage collected. 
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add Rule");
         Button button1 = new Button("Back");
@@ -93,7 +95,7 @@ public class AddRule extends Window {
         Text column1VBox5Header = new Text("Add When");
         column1VBox5Header.setStyle(MainMenu.HEADER_2_STYLE);
         column1VBox5.getChildren().addAll(column1VBox5Header);
-        column1VBox5.setOnMouseClicked(event -> { new AddWhen(this).open(); });
+        column1VBox5.setOnMouseClicked(event -> { new AddWhen(this).open(this); });
 
         //column1urations
         VBox column1VBox3 = new VBox(2);
@@ -112,7 +114,7 @@ public class AddRule extends Window {
         Text column1VBox7Header = new Text("Add Then");
         column1VBox7Header.setStyle(MainMenu.HEADER_2_STYLE);
         column1VBox7.getChildren().addAll(column1VBox7Header);
-        column1VBox7.setOnMouseClicked(event -> { new AddThen(this).open(); });
+        column1VBox7.setOnMouseClicked(event -> { new AddThen(this).open(this); });
 
         VBox column1ButtonsVBox = new VBox(2);
         

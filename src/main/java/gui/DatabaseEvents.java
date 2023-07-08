@@ -21,7 +21,9 @@ public class DatabaseEvents extends Window {
 		super(prevWindow);
 	}
 
-	public void open() {
+	@Override
+	public void open(Window prevWindow) {
+    	prevWindow = null; //ensures built windows are nullified and garbage collected. 
 		MainMenu.clearMainBox();
     	MainMenu.changeTitle("Database Events");
         Button button1 = new Button("Back");
@@ -48,13 +50,19 @@ public class DatabaseEvents extends Window {
         		this.back().back();
         		this.back().back();
         	}
+        	
+        	if(this.prevWindow instanceof AddThen) {
+        		((AddRule) this.prevWindow.prevWindow).thenData.add(column1VBox1Details.getText().substring(0, column1VBox1Details.getText().indexOf(" ")));
+        		this.back().back();
+        		this.back().back();
+        	}
         });
 
         VBox column1VBox2 = new VBox();
         column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
         Text column1VBox2Header = new Text("Add New Event");
         column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);
-        column1VBox2.setOnMouseClicked(event -> {new AddDatabaseEvent(this).open();});
+        column1VBox2.setOnMouseClicked(event -> {new AddDatabaseEvent(this).open(this);});
         
         column1VBox2.getChildren().addAll(column1VBox2Header);
         
@@ -74,6 +82,19 @@ public class DatabaseEvents extends Window {
         column2VBox1Header.setStyle(MainMenu.HEADER_2_STYLE);
         Text column2VBox1Details = new Text("Writes to MReasoner DB about BLE Event");
         column2VBox1.getChildren().addAll(column2VBox1Header, column2VBox1Details);
+        column2VBox1.setOnMouseClicked(event -> {
+        	if(this.prevWindow instanceof AddWhen) {
+        		((AddRule) this.prevWindow.prevWindow).whenData.add(column2VBox1Details.getText().substring(0, column2VBox1Details.getText().indexOf(" ")));
+        		this.back().back();
+        		this.back().back();
+        	}
+        	
+        	if(this.prevWindow instanceof AddThen) {
+        		((AddRule) this.prevWindow.prevWindow).thenData.add(column2VBox1Details.getText().substring(0, column2VBox1Details.getText().indexOf(" ")));
+        		this.back().back();
+        		this.back().back();
+        	}
+        });
 
         VBox column2VBox2 = new VBox();
         column2VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
