@@ -289,6 +289,7 @@ public class AddDatabaseEvent extends Window {
 		MenuItem wholeRowOption = new MenuItem("Whole Row");
 		wholeRowOption.setOnAction(event -> {
 			columnMenu.setText(wholeRowOption.getText());
+			valueField.setDisable(true);
 		});
 		columns.add(wholeRowOption);
 		
@@ -297,6 +298,7 @@ public class AddDatabaseEvent extends Window {
 			MenuItem sortByColumnOption = new MenuItem(columnName);
 			columnOption.setOnAction(event -> {
 				columnMenu.setText(columnName);
+				valueField.setDisable(false);
 			});
 			sortByColumnOption.setOnAction(event -> {
 				menu5.setText(columnName);
