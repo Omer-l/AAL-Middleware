@@ -35,6 +35,11 @@ public class AddDatabaseEvent extends Window {
 		super(prevWindow);
 	}
 
+    
+	public AddDatabaseEvent() {
+		
+	}
+
 	public void open() {
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add Database Event");
@@ -188,6 +193,7 @@ public class AddDatabaseEvent extends Window {
         ButtonBar column1ButtonBar = new ButtonBar();
         Button testButton = new Button("Test");
         Button saveButton = new Button("Save");
+        saveButton.setDisable(true);
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
         HBox column1HBox9 = new HBox();
         Text logText = new Text("LOG: ");
@@ -291,11 +297,28 @@ public class AddDatabaseEvent extends Window {
 			columnOption.setOnAction(event -> {
 				columnMenu.setText(columnName);
 			});
+			sortByColumnOption.setOnAction(event -> {
+				menu5.setText(columnName);
+			});
 			columns.add(columnOption);
 			sortByColumns.add(sortByColumnOption);
 		}
 		
 		columnMenu.getItems().addAll(columns);
         menu5.getItems().addAll(sortByColumns);
+	}
+	
+	private void processTestQuery(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, TextField valueField) {
+    	String rdbm = rdbmMenu.getText();
+    	String db = databaseMenu.getText();
+    	String table = tableMenu.getText();
+    	String column = columnMenu.getText();
+    	String value = valueField.getText();
+    	boolean noBlankFields = !(rdbm.isEmpty() || db.isEmpty() || table.isEmpty() || column.isEmpty() || value.isEmpty());
+    	if(noBlankFields) {
+        	System.out.println(rdbm + ", " + db + ", " + table + ", " + column + ", " + value);
+    	} else 
+        	System.out.println("Blank");
+
 	}
 }

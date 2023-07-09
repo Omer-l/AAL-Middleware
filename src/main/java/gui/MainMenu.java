@@ -40,7 +40,7 @@ public class MainMenu extends Application {
     public static void main(String[] args) {
 //    	open();
 //    	AddWhen adr = new AddWhen();
-    	AddRule adr = new AddRule();
+    	AddDatabaseEvent adr = new AddDatabaseEvent();
     	adr.open();
         launch(args);
     }
