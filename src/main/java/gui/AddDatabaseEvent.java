@@ -30,6 +30,7 @@ public class AddDatabaseEvent extends Window {
 	private String password = "root";
 	private MySqlConnection dbManager = new MySqlConnection(url, user, password);
     private Menu menu5 = new Menu();
+    private TextField valueField = new TextField();
     
 	public AddDatabaseEvent(Window prevWindow) {
 		super(prevWindow);
@@ -158,17 +159,16 @@ public class AddDatabaseEvent extends Window {
         column1HBox7VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox7VBox1Header = new Text("Column");
         VBox column1HBox7VBox2 = new VBox();
-        column1HBox7VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        column1HBox7VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
         MenuBar column1HBox7VBox2MenuBar = new MenuBar();
+        column1HBox7VBox2MenuBar.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
         Menu menu4 = new Menu();
         // Create MenuItems for the dropdown menu
         column1HBox7VBox2MenuBar.getMenus().add(menu4);
-//        Text menuBar3Label = new Text("Table");
-//    	HBox menuBar3HBox = new HBox(10);
-//    	menuBar3HBox.getChildren().addAll(menuBar3Label, column1HBox7VBox2MenuBar);
         column1HBox7VBox1.getChildren().addAll(column1HBox7VBox1Header);
-        column1HBox7VBox2.getChildren().addAll(column1HBox7VBox2MenuBar);
-        column1HBox7.getChildren().addAll(column1HBox7VBox1, column1HBox7VBox2);
+        column1HBox7VBox2.getChildren().addAll(valueField);
+        valueField.setDisable(true);
+        column1HBox7.getChildren().addAll(column1HBox7VBox1, column1HBox7VBox2MenuBar, column1HBox7VBox2);
         
 
         HBox column1HBox8 = new HBox();
@@ -192,6 +192,7 @@ public class AddDatabaseEvent extends Window {
         
         ButtonBar column1ButtonBar = new ButtonBar();
         Button testButton = new Button("Test");
+//        testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, field); });
         Button saveButton = new Button("Save");
         saveButton.setDisable(true);
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
@@ -308,7 +309,7 @@ public class AddDatabaseEvent extends Window {
         menu5.getItems().addAll(sortByColumns);
 	}
 	
-	private void processTestQuery(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, TextField valueField) {
+	private void processTestQuery(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, Menu sortByMenu, TextField valueField) {
     	String rdbm = rdbmMenu.getText();
     	String db = databaseMenu.getText();
     	String table = tableMenu.getText();
