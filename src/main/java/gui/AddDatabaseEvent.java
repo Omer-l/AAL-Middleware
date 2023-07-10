@@ -193,7 +193,9 @@ public class AddDatabaseEvent extends Window {
         ButtonBar column1ButtonBar = new ButtonBar();
         testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, valueField); });
         saveButton.setDisable(true);
-        saveButton.setOnAction(event -> { MainMenu.databaseQueries.add(query); });
+        saveButton.setOnAction(event -> { 
+        	MainMenu.databaseQueries.add(query); 
+        	});
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
         HBox column1HBox9 = new HBox();
         Text logText = new Text("LOG: ");
