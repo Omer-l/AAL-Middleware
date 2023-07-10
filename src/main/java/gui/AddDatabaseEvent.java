@@ -193,7 +193,7 @@ public class AddDatabaseEvent extends Window {
         ButtonBar column1ButtonBar = new ButtonBar();
         testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, valueField); });
         saveButton.setDisable(true);
-        testButton.setOnAction(event -> {  });
+        saveButton.setOnAction(event -> { MainMenu.databaseQueries.add(query); });
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
         HBox column1HBox9 = new HBox();
         Text logText = new Text("LOG: ");
@@ -230,7 +230,6 @@ public class AddDatabaseEvent extends Window {
 	}
 
 	private void reset(Menu[] menus) {
-		saveButton.setDisable(true);
 		for(Menu menu : menus) {
 			menu.setText("");
 			menu.getItems().clear();
@@ -333,7 +332,7 @@ public class AddDatabaseEvent extends Window {
         		saveButton.setDisable(false);
         		this.query = query.toString();
         	} else
-        		System.out.println("Blank");
+        	System.out.println("Blank");
     	}
 	}
 }
