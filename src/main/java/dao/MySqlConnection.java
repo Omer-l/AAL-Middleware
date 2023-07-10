@@ -4,6 +4,7 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,10 @@ public class MySqlConnection {
 //			sqle.printStackTrace();
 //		}
 	}
+	
+	public MySqlConnection() {
+		
+	}
 
 	public void connect() throws SQLException {
 		connection = DriverManager.getConnection(url, username, password);
@@ -48,10 +53,10 @@ public class MySqlConnection {
 		try {
 			this.url = this.url.substring(0, this.url.lastIndexOf('/') + 1) + database;
 			connect();
-		     //Creating a Statement object
-		      Statement stmt = connection.createStatement();
-		      //Retrieving the data
-		      ResultSet tables = url.contains("mysql") ? stmt.executeQuery("Show tables") : stmt.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE'");
+		    //Creating a Statement object
+		    Statement stmt = connection.createStatement();
+		    //Retrieving the data
+		    ResultSet tables = url.contains("mysql") ? stmt.executeQuery("Show tables") : stmt.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_type = 'BASE TABLE'");
 			while (tables.next()) {
 				String tableName = url.contains("mysql") ? tables.getString(1) : tables.getString("table_name");
 				System.out.println(url + " NAME: " + tableName);
@@ -214,6 +219,9 @@ public class MySqlConnection {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			Map<String, Object> row = new HashMap<String, Object>();
+			row.put("ERROR: ", Arrays.toString(e.getStackTrace()));
+			result.add(row);
 		} finally {
 			if (connection != null) {
                 try {
@@ -232,11 +240,11 @@ public class MySqlConnection {
 			connect();
 			String[] columnNames = getColumnNames(tableName);
 			String query = generateInsertQuery(tableName, rowData, columnNames);
-				PreparedStatement pstmt = connection.prepareStatement(query);
-				setPreparedStatementValues(pstmt, rowData, columnNames);
-				System.out.println("Q: " + query);
-				pstmt.executeUpdate();
-				System.out.println("Row inserted successfully.");
+			PreparedStatement pstmt = connection.prepareStatement(query);
+			setPreparedStatementValues(pstmt, rowData, columnNames);
+			System.out.println("Q: " + query);
+			pstmt.executeUpdate();
+			System.out.println("Row inserted successfully.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

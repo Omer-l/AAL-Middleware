@@ -1,5 +1,7 @@
 package gui;
 
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +28,7 @@ public class MainMenu extends Application {
 	public final static String MENU_ADD_NEW_EVENT_BUTTON_STYLE = "-fx-background-color:   yellow; -fx-border-color: black;";
 	public final static String MAIN_CONTENT_STYLE = "-fx-background-color:  #d3d3d3;";
 	public final static String GUI_BACKGROUND_STYLE = "-fx-background-color:   #FAF0DC;";
+	public final static ArrayList<String> databaseQueries = new ArrayList<String>();
 	
 	public static VBox root = new VBox();
 	//NAVBAR

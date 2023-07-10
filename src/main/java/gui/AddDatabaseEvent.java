@@ -1,6 +1,6 @@
 package gui;
-import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 
+import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 import dao.DbXMLParser;
 import dao.MySqlConnection;
 import javafx.application.Application;
@@ -25,13 +25,13 @@ import javafx.stage.Stage;
 import javafx.geometry.Pos;
 
 public class AddDatabaseEvent extends Window {
-	private String url = "jdbc:mysql://localhost:3306/beacon_localisation";
-	private String user = "root";
-	private String password = "root";
-	private MySqlConnection dbManager = new MySqlConnection(url, user, password);
+	private MySqlConnection dbManager = new MySqlConnection();
     private Menu menu5 = new Menu();
     private TextField valueField = new TextField();
-    
+    private TextField logField = new TextField();
+    private Button testButton = new Button("Test");
+    private Button saveButton = new Button("Save");
+    private String query;
 	public AddDatabaseEvent(Window prevWindow) {
 		super(prevWindow);
 	}
@@ -191,14 +191,12 @@ public class AddDatabaseEvent extends Window {
         VBox column1VBox3 = new VBox(10);
         
         ButtonBar column1ButtonBar = new ButtonBar();
-        Button testButton = new Button("Test");
-//        testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, field); });
-        Button saveButton = new Button("Save");
+        testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, valueField); });
         saveButton.setDisable(true);
+        testButton.setOnAction(event -> {  });
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
         HBox column1HBox9 = new HBox();
         Text logText = new Text("LOG: ");
-        TextField logField = new TextField();
         logField.prefWidthProperty().bind(mainVBox1.widthProperty().multiply(0.9));
         logField.prefHeightProperty().bind(mainVBox1.heightProperty().multiply(0.1));
         logField.setEditable(false);
@@ -232,6 +230,7 @@ public class AddDatabaseEvent extends Window {
 	}
 
 	private void reset(Menu[] menus) {
+		saveButton.setDisable(true);
 		for(Menu menu : menus) {
 			menu.setText("");
 			menu.getItems().clear();
@@ -264,7 +263,7 @@ public class AddDatabaseEvent extends Window {
 	}
 
 	private void loadTablesMenu(Menu tableMenu, Menu columnMenu, String databaseName) {
-	    Menu[] menusToReset = {columnMenu};
+	    Menu[] menusToReset = {columnMenu, menu5};
 		tableMenu.getItems().clear();
 		System.out.println("LOADING");
 		ObservableList<MenuItem> tables = FXCollections.observableArrayList();
@@ -317,11 +316,24 @@ public class AddDatabaseEvent extends Window {
     	String table = tableMenu.getText();
     	String column = columnMenu.getText();
     	String value = valueField.getText();
-    	boolean noBlankFields = !(rdbm.isEmpty() || db.isEmpty() || table.isEmpty() || column.isEmpty() || value.isEmpty());
+    	String sortBy = menu5.getText();
+    	boolean wholeRow = column.equals("Whole Row");
+    	boolean noBlankFields = !(rdbm.isEmpty() || db.isEmpty() || table.isEmpty() || column.isEmpty() || (value.isEmpty() && !wholeRow));
     	if(noBlankFields) {
         	System.out.println(rdbm + ", " + db + ", " + table + ", " + column + ", " + value);
-    	} else 
-        	System.out.println("Blank");
-
+        	StringBuilder query = new StringBuilder("SELECT * FROM " + table);
+        	if(!wholeRow)
+        		query.append(" WHERE " + column + " = " + value);
+        	
+        	query.append(" ORDER BY " + sortBy + " DESC LIMIT 1");
+        	System.out.println(query);
+        	String result = dbManager.queryDB(query.toString()).toString();
+        	logField.setText(result);
+        	if(!result.contains("ERROR")) {
+        		saveButton.setDisable(false);
+        		this.query = query.toString();
+        	} else
+        		System.out.println("Blank");
+    	}
 	}
 }
