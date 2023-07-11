@@ -2,6 +2,8 @@ package gui;
 
 import java.util.ArrayList;
 
+import dao.DbXMLParser;
+import dao.MySqlConnection;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.AnchorPane;
@@ -29,7 +32,7 @@ public class MainMenu extends Application {
 	public final static String MAIN_CONTENT_STYLE = "-fx-background-color:  #d3d3d3;";
 	public final static String GUI_BACKGROUND_STYLE = "-fx-background-color:   #FAF0DC;";
 	public final static ArrayList<String> databaseQueries = new ArrayList<String>();
-	
+	public static MySqlConnection mainDbManager = new MySqlConnection();
 	public static VBox root = new VBox();
 	//NAVBAR
 	public static VBox menuBarVBox = new VBox();
@@ -41,6 +44,9 @@ public class MainMenu extends Application {
 	//MAIN
 	public static HBox mainVBox = new HBox(10);
     public static void main(String[] args) {
+		mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
+		mainDbManager.setUsername("root");
+		mainDbManager.setPassword("root");
 //    	open();
 //    	AddWhen adr = new AddWhen();
     	AddDatabaseEvent adr = new AddDatabaseEvent();

@@ -21,7 +21,7 @@ public class DatabaseListenerThread extends Thread {
     	try {
             // Keep the main thread running to continue listening
             while (true) {
-            	ArrayList<Map<String, Object>> mostRecentResult = mySqlConnection.queryDB("SELECT * FROM record ORDER BY dateTime DESC LIMIT 1");
+            	ArrayList<Map<String, Object>> mostRecentResult = mySqlConnection.queryDB("SELECT * FROM record ORDER BY dateTime DESC LIMIT 1", "select");
             	Object obj = mostRecentResult.get(0).values().toArray()[0];
             	System.out.println("HERE: " + obj);
             	Class<?> objClass = obj.getClass();

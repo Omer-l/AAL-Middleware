@@ -193,9 +193,26 @@ public class AddDatabaseEvent extends Window {
         ButtonBar column1ButtonBar = new ButtonBar();
         testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, valueField); });
         saveButton.setDisable(true);
-        saveButton.setOnAction(event -> { 
-        	MainMenu.databaseQueries.add(query); 
-        	});
+        saveButton.setOnAction(event -> {
+        	String uniqueIdInput = column1HBox2VBox2TextField.getText();
+        	String nameInput = column1HBox1VBox2TextField.getText();
+        	String descriptionInput = column1HBox3VBox2TextField.getText();    	
+        	String rdbm = menu1.getText();
+        	String db = menu2.getText();
+        	String table = menu3.getText();
+        	String column = menu4.getText();
+        	String value = valueField.getText();
+        	String sortBy = menu5.getText();
+        	boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
+        	if(!emptyField) {
+	        	MainMenu.databaseQueries.add(query);
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', 'read');", "");
+	        	back();
+        	} else {
+        		logField.setText("A Field is empty");
+        	}
+        });
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
         HBox column1HBox9 = new HBox();
         Text logText = new Text("LOG: ");
@@ -328,7 +345,7 @@ public class AddDatabaseEvent extends Window {
         	
         	query.append(" ORDER BY " + sortBy + " DESC LIMIT 1");
         	System.out.println(query);
-        	String result = dbManager.queryDB(query.toString()).toString();
+        	String result = dbManager.queryDB(query.toString(), "select").toString();
         	logField.setText(result);
         	if(!result.contains("ERROR")) {
         		saveButton.setDisable(false);

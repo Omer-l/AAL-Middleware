@@ -49,7 +49,7 @@ public class MySqlConnection {
 
 	public ArrayList<String> getTableNames(String database) {
 		ArrayList<String> tableNames = new ArrayList<String>();
-
+		
 		try {
 			this.url = this.url.substring(0, this.url.lastIndexOf('/') + 1) + database;
 			connect();
@@ -197,24 +197,31 @@ public class MySqlConnection {
 		return rows;
 	}
 
-	public ArrayList<Map<String, Object>> queryDB(String query) {
+	public ArrayList<Map<String, Object>> queryDB(String query, String type) {
 		ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-
+		
 		try {
 			connect();
 			Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int columnCount = rsmd.getColumnCount();
+			switch(type) {
+				case "select":
+					ResultSet rs = stmt.executeQuery(query);
+					ResultSetMetaData rsmd = rs.getMetaData();
+					int columnCount = rsmd.getColumnCount();
 
-			while (rs.next()) {
-				Map<String, Object> row = new HashMap<String, Object>();
-				for (int i = 1; i <= columnCount; i++) {
-					String colName = rsmd.getColumnName(i);
-					Object colValue = rs.getObject(i);
-					row.put(colName, colValue);
-				}
-				result.add(row);
+					while (rs.next()) {
+						Map<String, Object> row = new HashMap<String, Object>();
+						for (int i = 1; i <= columnCount; i++) {
+							String colName = rsmd.getColumnName(i);
+							Object colValue = rs.getObject(i);
+							row.put(colName, colValue);
+						}
+						result.add(row);
+					}
+					break;
+				case "":
+					stmt.executeUpdate(query);
+				   	break;
 			}
 
 		} catch (SQLException e) {
