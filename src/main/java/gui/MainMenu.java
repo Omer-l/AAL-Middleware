@@ -49,7 +49,7 @@ public class MainMenu extends Application {
 		mainDbManager.setPassword("root");
 //    	open();
 //    	AddWhen adr = new AddWhen();
-    	AddDatabaseEvent adr = new AddDatabaseEvent();
+    	DatabaseEvents adr = new DatabaseEvents(null);
     	adr.open();
         launch(args);
     }

@@ -1,4 +1,6 @@
 package gui;
+import java.util.Arrays;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,36 +37,12 @@ public class DatabaseEvents extends Window {
         VBox column1VBox = new VBox(2);
         Text column1Header = new Text("Read Events");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
-
-        VBox column1VBox1 = new VBox();
-        column1VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        Text column1VBox1Header = new Text("When Omer is in the living room");
-        column1VBox1Header.setStyle(MainMenu.HEADER_2_STYLE);
-        Text column1VBox1Details = new Text("I3D4X " + "Read BLE database for Omer is in the living room");
-        column1VBox1.getChildren().addAll(column1VBox1Header, column1VBox1Details);
-        column1VBox1.setOnMouseClicked(event -> {
-        	if(this.prevWindow instanceof AddWhen) {
-        		((AddRule) this.prevWindow.prevWindow).whenData.add(column1VBox1Details.getText().substring(0, column1VBox1Details.getText().indexOf(" ")));
-        		this.back().back();
-        		this.back().back();
-        	}
-        	
-        	if(this.prevWindow instanceof AddThen) {
-        		((AddRule) this.prevWindow.prevWindow).thenData.add(column1VBox1Details.getText().substring(0, column1VBox1Details.getText().indexOf(" ")));
-        		this.back().back();
-        		this.back().back();
-        	}
-        });
-
-        VBox column1VBox2 = new VBox();
-        column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
-        Text column1VBox2Header = new Text("Add New Event");
-        column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);
-        column1VBox2.setOnMouseClicked(event -> {new AddDatabaseEvent(this).open();});
+        System.out.println(Arrays.deepToString(getEvents()));
+        column1VBox.getChildren().addAll(column1Header);
         
-        column1VBox2.getChildren().addAll(column1VBox2Header);
+//        column1VBox2.getChildren().addAll(column1VBox2Header);
         
-        column1VBox.getChildren().addAll(column1Header, column1VBox1, column1VBox2);
+//        column1VBox.getChildren().addAll(column1Header, column1VBox1, column1VBox2);
         mainVBox1.getChildren().addAll(column1VBox);
         //RIGHT SIDE MAIN
         VBox mainVBox2 = new VBox(2);
@@ -74,37 +52,45 @@ public class DatabaseEvents extends Window {
         Text column2Header = new Text("Write Events");
         column2Header.setStyle(MainMenu.HEADER_1_STYLE);
 
-        VBox column2VBox1 = new VBox(2);
-        column2VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        Text column2VBox1Header = new Text("Write User is in the room");
-        column2VBox1Header.setStyle(MainMenu.HEADER_2_STYLE);
-        Text column2VBox1Details = new Text("Writes to MReasoner DB about BLE Event");
-        column2VBox1.getChildren().addAll(column2VBox1Header, column2VBox1Details);
-        column2VBox1.setOnMouseClicked(event -> {
-        	if(this.prevWindow instanceof AddWhen) {
-        		((AddRule) this.prevWindow.prevWindow).whenData.add(column2VBox1Details.getText().substring(0, column2VBox1Details.getText().indexOf(" ")));
-        		this.back().back();
-        		this.back().back();
-        	}
-        	
-        	if(this.prevWindow instanceof AddThen) {
-        		((AddRule) this.prevWindow.prevWindow).thenData.add(column2VBox1Details.getText().substring(0, column2VBox1Details.getText().indexOf(" ")));
-        		this.back().back();
-        		this.back().back();
-        	}
-        });
-
-        VBox column2VBox2 = new VBox();
-        column2VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
-        Text column2VBox2Header = new Text("Add New Event");
-        column2VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);
-        column2VBox2.getChildren().addAll(column2VBox2Header);
-
-        column2VBox.getChildren().addAll(column2Header, column2VBox1,column2VBox2);
+//        column2VBox.getChildren().addAll(column2Header, column2VBoxes,column2VBox2);
         mainVBox2.getChildren().addAll(column2VBox);
 
-    	MainMenu.addHoverInteraction(new VBox[] {column1VBox1, column2VBox1}, "white", "darkgray");
-    	MainMenu.addHoverInteraction(new VBox[] {column1VBox2, column2VBox2}, "yellow", "darkgray");
+//    	MainMenu.addHoverInteraction(new VBox[] {column1VBox1, column2VBox1}, "white", "darkgray");
+//    	MainMenu.addHoverInteraction(new VBox[] {column1VBoxes[column1VBoxes.length - 1], column2VBoxes[column2VBoxes.length - 1]}, "yellow", "darkgray");
         MainMenu.mainHBox.getChildren().addAll(mainVBox1, mainVBox2);
+	}
+	
+	public VBox[][] getEvents() {
+		VBox[][] readAndWriteVBox = new VBox[2][100];
+		String query = "SELECT *\n"
+				+ "FROM database_event\n"
+				+ "INNER JOIN event ON database_event.unique_id = event.unique_id;";
+		System.out.println(MainMenu.mainDbManager.queryDB(query, "select"));
+//		VBox column1VBox1 = new VBox();
+//        column1VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+//        Text column1VBox1Header = new Text("When Omer is in the living room");
+//        column1VBox1Header.setStyle(MainMenu.HEADER_2_STYLE);
+//        Text column1VBox1Details = new Text("I3D4X " + "Read BLE database for Omer is in the living room");
+//        column1VBox1.getChildren().addAll(column1VBox1Header, column1VBox1Details);
+//        column1VBox1.setOnMouseClicked(event -> {
+//        	if(this.prevWindow instanceof AddWhen) {
+//        		((AddRule) this.prevWindow.prevWindow).whenData.add(column1VBox1Details.getText().substring(0, column1VBox1Details.getText().indexOf(" ")));
+//        		this.back().back();
+//        		this.back().back();
+//        	}
+//        	
+//        	if(this.prevWindow instanceof AddThen) {
+//        		((AddRule) this.prevWindow.prevWindow).thenData.add(column1VBox1Details.getText().substring(0, column1VBox1Details.getText().indexOf(" ")));
+//        		this.back().back();
+//        		this.back().back();
+//        	}
+//        });
+
+        VBox column1VBox2 = new VBox();
+        column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
+        Text column1VBox2Header = new Text("Add New Event");
+        column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);
+        column1VBox2.setOnMouseClicked(event -> {new AddDatabaseEvent(this).open();});
+		return readAndWriteVBox;
 	}
 }
