@@ -1,5 +1,7 @@
 package gui;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -37,8 +39,8 @@ public class DatabaseEvents extends Window {
         VBox column1VBox = new VBox(2);
         Text column1Header = new Text("Read Events");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
-        System.out.println(Arrays.deepToString(getEvents()));
         column1VBox.getChildren().addAll(column1Header);
+        getReadEvents(column1VBox);
         
 //        column1VBox2.getChildren().addAll(column1VBox2Header);
         
@@ -60,37 +62,43 @@ public class DatabaseEvents extends Window {
         MainMenu.mainHBox.getChildren().addAll(mainVBox1, mainVBox2);
 	}
 	
-	public VBox[][] getEvents() {
-		VBox[][] readAndWriteVBox = new VBox[2][100];
+	public void getReadEvents(VBox readEventsVBox) {
 		String query = "SELECT *\n"
-				+ "FROM database_event\n"
-				+ "INNER JOIN event ON database_event.unique_id = event.unique_id;";
-		System.out.println(MainMenu.mainDbManager.queryDB(query, "select"));
-//		VBox column1VBox1 = new VBox();
-//        column1VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-//        Text column1VBox1Header = new Text("When Omer is in the living room");
-//        column1VBox1Header.setStyle(MainMenu.HEADER_2_STYLE);
-//        Text column1VBox1Details = new Text("I3D4X " + "Read BLE database for Omer is in the living room");
-//        column1VBox1.getChildren().addAll(column1VBox1Header, column1VBox1Details);
-//        column1VBox1.setOnMouseClicked(event -> {
-//        	if(this.prevWindow instanceof AddWhen) {
-//        		((AddRule) this.prevWindow.prevWindow).whenData.add(column1VBox1Details.getText().substring(0, column1VBox1Details.getText().indexOf(" ")));
-//        		this.back().back();
-//        		this.back().back();
-//        	}
-//        	
-//        	if(this.prevWindow instanceof AddThen) {
-//        		((AddRule) this.prevWindow.prevWindow).thenData.add(column1VBox1Details.getText().substring(0, column1VBox1Details.getText().indexOf(" ")));
-//        		this.back().back();
-//        		this.back().back();
-//        	}
-//        });
+				+ "FROM database_read_event\n"
+				+ "INNER JOIN event ON database_read_event.unique_id = event.unique_id;";
+		ArrayList<Map<String, Object>> readEvents = MainMenu.mainDbManager.queryDB(query, "select");
+		for(Map<String, Object> readEvent : readEvents) {
+			VBox column1VBox = new VBox();
+	        column1VBox.setStyle(MainMenu.MENU_BUTTON_STYLE);
+	        Text column1VBoxHeader = new Text((String) readEvent.get("name"));
+	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
+	        Text column1VBoxUniqueId = new Text((String) readEvent.get("unique_id"));
+	        Text column1VBoxDescription = new Text((String) readEvent.get("description"));
+	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
+	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
+	        column1VBoxUniqueId.setVisible(false);
+	        column1VBox.setOnMouseClicked(event -> {
+	        	if(this.prevWindow instanceof AddWhen) { //add uniqueID
+	        		((AddRule) this.prevWindow.prevWindow).whenData.add(column1VBoxDescription.getText().substring(0, column1VBoxDescription.getText().indexOf(" ")));
+	        		this.back().back();
+	        		this.back().back();
+	        	}
+	        	
+	        	if(this.prevWindow instanceof AddThen) {//add uniqueID
+	        		((AddRule) this.prevWindow.prevWindow).thenData.add(column1VBoxDescription.getText().substring(0, column1VBoxDescription.getText().indexOf(" ")));
+	        		this.back().back();
+	        		this.back().back();
+	        	}
+	        });
+	        readEventsVBox.getChildren().add(column1VBox);
+		}
+		
 
         VBox column1VBox2 = new VBox();
         column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
         Text column1VBox2Header = new Text("Add New Event");
         column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);
         column1VBox2.setOnMouseClicked(event -> {new AddDatabaseEvent(this).open();});
-		return readAndWriteVBox;
+        readEventsVBox.getChildren().add(column1VBox2);
 	}
 }

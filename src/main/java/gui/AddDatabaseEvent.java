@@ -194,8 +194,8 @@ public class AddDatabaseEvent extends Window {
         testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, valueField); });
         saveButton.setDisable(true);
         saveButton.setOnAction(event -> {
-        	String uniqueIdInput = column1HBox2VBox2TextField.getText();
-        	String nameInput = column1HBox1VBox2TextField.getText();
+        	String uniqueIdInput = column1HBox1VBox2TextField.getText();
+        	String nameInput = column1HBox2VBox2TextField.getText();
         	String descriptionInput = column1HBox3VBox2TextField.getText();    	
         	String rdbm = menu1.getText();
         	String db = menu2.getText();
@@ -207,7 +207,7 @@ public class AddDatabaseEvent extends Window {
         	if(!emptyField) {
 	        	MainMenu.databaseQueries.add(query);
 	        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', 'read');", "");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "');", "");
 	        	back();
         	} else {
         		logField.setText("A Field is empty");
