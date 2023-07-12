@@ -175,4 +175,12 @@ public class MainMenu extends Application {
 	    	button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + fromColor + ";"));
     	}
     }
+	
+	public static void setActive(Button button) {
+    	button.setStyle("-fx-background-color: darkgray;");
+	}
+	
+	public static void deactivate(Button button) {
+    	button.setStyle("");
+	}
 }

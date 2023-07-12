@@ -97,8 +97,33 @@ public class AddFileEvent extends Window {
         VBox column1VBox2 = new VBox(2);
         Text column1VBox2Header = new Text("Method");
         column1VBox2Header.setStyle(MainMenu.HEADER_1_STYLE);
-        HBox column1Hbox4 = new HBox();
+        HBox column1ButtonBar1HBox = new HBox();
+        column1ButtonBar1HBox.setAlignment(Pos.CENTER);
+        ButtonBar column1ButtonBar1 = new ButtonBar();
+        Button runFileMethodButton = new Button("Run");
+        Button readFileMethodButton = new Button("Read");
+        Button writeFileMethodButton = new Button("Write");
         
+        runFileMethodButton.setOnAction(event -> { 
+        	MainMenu.setActive(runFileMethodButton);
+        	MainMenu.deactivate(readFileMethodButton);
+        	MainMenu.deactivate(writeFileMethodButton);
+        });
+        readFileMethodButton.setOnAction(event -> { 
+        	MainMenu.setActive(readFileMethodButton); 
+        	MainMenu.deactivate(runFileMethodButton);
+        	MainMenu.deactivate(writeFileMethodButton);
+        });
+        writeFileMethodButton.setOnAction(event -> { 
+        	MainMenu.setActive(writeFileMethodButton); 
+        	MainMenu.deactivate(readFileMethodButton);
+        	MainMenu.deactivate(runFileMethodButton);
+        	});
+        column1ButtonBar1.getButtons().addAll(runFileMethodButton, readFileMethodButton, writeFileMethodButton);
+        column1ButtonBar1HBox.getChildren().add(column1ButtonBar1);
+//        column1ButtonBar1
+        
+        HBox column1Hbox4 = new HBox();
         VBox column1Hbox4VBox1 = new VBox();
         column1Hbox4VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
         column1Hbox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
@@ -118,103 +143,14 @@ public class AddFileEvent extends Window {
         column1Hbox4VBox2.getChildren().addAll(column1HBox4VBox2MenuBar);
         column1Hbox4.getChildren().addAll(column1Hbox4VBox1, column1Hbox4VBox2);
 
-        HBox column1HBox5 = new HBox();
-        VBox column1HBox5VBox1 = new VBox();
-        column1HBox5VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        column1HBox5VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox5VBox1Header = new Text("Database");
-        VBox column1HBox5VBox2 = new VBox();
-        column1HBox5VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        MenuBar column1HBox5VBox2MenuBar = new MenuBar();
-        Menu menu2 = new Menu();
-        // Create MenuItems for the dropdown menu
-        column1HBox5VBox2MenuBar.getMenus().add(menu2);
-//        Text menuBar2Label = new Text("Table");
-//    	HBox menuBar2HBox = new HBox(10);
-//    	menuBar2HBox.getChildren().addAll(menuBar2Label, column1HBox5VBox2MenuBar);
-        column1HBox5VBox1.getChildren().addAll(column1HBox5VBox1Header);
-        column1HBox5VBox2.getChildren().addAll(column1HBox5VBox2MenuBar);
-        column1HBox5.getChildren().addAll(column1HBox5VBox1, column1HBox5VBox2);
-
-        HBox column1HBox6 = new HBox();
-        VBox column1HBox6VBox1 = new VBox();
-        column1HBox6VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        column1HBox6VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox6VBox1Header = new Text("Table");
-        VBox column1HBox6VBox2 = new VBox();
-        column1HBox6VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        MenuBar column1HBox6VBox2MenuBar = new MenuBar();
-        Menu menu3 = new Menu();
-        // Create MenuItems for the dropdown menu
-        column1HBox6VBox2MenuBar.getMenus().add(menu3);
-//        Text menuBar3Label = new Text("Table");
-//    	HBox menuBar3HBox = new HBox(10);
-//    	menuBar3HBox.getChildren().addAll(menuBar3Label, column1HBox6VBox2MenuBar);
-        column1HBox6VBox1.getChildren().addAll(column1HBox6VBox1Header);
-        column1HBox6VBox2.getChildren().addAll(column1HBox6VBox2MenuBar);
-        column1HBox6.getChildren().addAll(column1HBox6VBox1, column1HBox6VBox2);
-
-        HBox column1HBox7 = new HBox();
-        VBox column1HBox7VBox1 = new VBox();
-        column1HBox7VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        column1HBox7VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox7VBox1Header = new Text("Column");
-        VBox column1HBox7VBox2 = new VBox();
-        column1HBox7VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
-        MenuBar column1HBox7VBox2MenuBar = new MenuBar();
-        column1HBox7VBox2MenuBar.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
-        Menu menu4 = new Menu();
-        // Create MenuItems for the dropdown menu
-        column1HBox7VBox2MenuBar.getMenus().add(menu4);
-        column1HBox7VBox1.getChildren().addAll(column1HBox7VBox1Header);
-        column1HBox7VBox2.getChildren().addAll(valueField);
-        valueField.setDisable(true);
-        column1HBox7.getChildren().addAll(column1HBox7VBox1, column1HBox7VBox2MenuBar, column1HBox7VBox2);
-        
-
-        HBox column1HBox8 = new HBox();
-        VBox column1HBox8VBox1 = new VBox();
-        column1HBox8VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        column1HBox8VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox8VBox1Header = new Text("Sort By");
-        VBox column1HBox8VBox2 = new VBox();
-        column1HBox8VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        MenuBar column1HBox8VBox2MenuBar = new MenuBar();
-        // Create MenuItems for the dropdown menu
-        column1HBox8VBox2MenuBar.getMenus().add(menu5);
-//        Text menuBar3Label = new Text("Table");
-//    	HBox menuBar3HBox = new HBox(10);
-//    	menuBar3HBox.getChildren().addAll(menuBar3Label, column1HBox8VBox2MenuBar);
-        column1HBox8VBox1.getChildren().addAll(column1HBox8VBox1Header);
-        column1HBox8VBox2.getChildren().addAll(column1HBox8VBox2MenuBar);
-        column1HBox8.getChildren().addAll(column1HBox8VBox1, column1HBox8VBox2);
         
         VBox column1VBox3 = new VBox(10);
         
-        ButtonBar column1ButtonBar = new ButtonBar();
-        testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, valueField); });
+        ButtonBar column1ButtonBar2 = new ButtonBar();
+//        testButton.setOnAction(event -> { processTestQuery()});
         saveButton.setDisable(true);
-        saveButton.setOnAction(event -> {
-        	String uniqueIdInput = column1HBox1VBox2TextField.getText();
-        	String nameInput = column1HBox2VBox2TextField.getText();
-        	String descriptionInput = column1HBox3VBox2TextField.getText();    	
-        	String rdbm = menu1.getText();
-        	String db = menu2.getText();
-        	String table = menu3.getText();
-        	String column = menu4.getText();
-        	String value = valueField.getText();
-        	String sortBy = menu5.getText();
-        	boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
-        	if(!emptyField) {
-	        	MainMenu.databaseQueries.add(query);
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "');", "");
-	        	back();
-        	} else {
-        		logField.setText("A Field is empty");
-        	}
-        });
-        column1ButtonBar.getButtons().addAll(testButton, saveButton);
+        saveButton.setOnAction(event -> {  });
+        column1ButtonBar2.getButtons().addAll(testButton, saveButton);
         HBox column1HBox9 = new HBox();
         Text logText = new Text("LOG: ");
         logField.prefWidthProperty().bind(mainVBox1.widthProperty().multiply(0.9));
@@ -222,11 +158,9 @@ public class AddFileEvent extends Window {
         logField.setEditable(false);
         column1HBox9.getChildren().addAll(logText, logField);
         
-        
-        setRDBMSMenuOnAction(menu1, menu2, menu3, menu4);
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
-        column1VBox2.getChildren().addAll(column1VBox2Header, column1Hbox4, column1HBox5, column1HBox6, column1HBox7, column1HBox8);
-        column1VBox3.getChildren().addAll(column1ButtonBar, column1HBox9);
+        column1VBox2.getChildren().addAll(column1VBox2Header, column1ButtonBar1HBox, column1Hbox4);
+        column1VBox3.getChildren().addAll(column1ButtonBar2, column1HBox9);
         
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
