@@ -36,7 +36,7 @@ public class DatabaseEvents extends Window {
         //LEFT SIDE MAIN
         VBox mainVBox1 = new VBox(2);
         mainVBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        //column1urations
+        //read events
         VBox column1VBox = new VBox(2);
         Text column1Header = new Text("Read Events");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
@@ -44,10 +44,6 @@ public class DatabaseEvents extends Window {
         getEvents("SELECT * FROM database_read_event INNER JOIN event ON database_read_event.unique_id = event.unique_id;", column1VBox);
         int readEventsLastIndex = column1VBox.getChildren().size() - 1;
         column1VBox.getChildren().get(readEventsLastIndex).setOnMouseClicked(event -> {new AddDatabaseEvent(this).open();});
-
-//        column1VBox2.getChildren().addAll(column1VBox2Header);
-        
-//        column1VBox.getChildren().addAll(column1Header, column1VBox1, column1VBox2);
         mainVBox1.getChildren().addAll(column1VBox);
         //RIGHT SIDE MAIN
         VBox mainVBox2 = new VBox(2);
@@ -61,7 +57,6 @@ public class DatabaseEvents extends Window {
         int writeEventsLastIndex = column1VBox.getChildren().size() - 1;
         column2VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { /** add event */ System.out.println("Write event clicked"); });
         mainVBox2.getChildren().addAll(column2VBox);
-
 
     	MainMenu.addHoverInteraction(new VBox[] {(VBox) column1VBox.getChildren().get(readEventsLastIndex), (VBox) column2VBox.getChildren().get(writeEventsLastIndex)}, "yellow", "darkgray");
         MainMenu.mainHBox.getChildren().addAll(mainVBox1, mainVBox2);

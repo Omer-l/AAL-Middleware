@@ -48,7 +48,7 @@ public class MainMenu extends Application {
 		mainDbManager.setUsername("root");
 		mainDbManager.setPassword("root");
 //    	open();
-		DatabaseEvents adr = new DatabaseEvents(null);
+		AddFileEvent adr = new AddFileEvent(null);
     	adr.open();
         launch(args);
     }
@@ -56,7 +56,7 @@ public class MainMenu extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
-        primaryStage.setTitle("Add New Rule");
+        primaryStage.setTitle("Middleware");
         primaryStage.show();
     	menuBarVBox.getChildren().addAll(menuBarHBox, titleHBox);
     	root.getChildren().addAll(menuBarVBox, mainHBox);
@@ -83,14 +83,14 @@ public class MainMenu extends Application {
     	configVBox1.setStyle(MENU_BUTTON_STYLE);
     	Text configVBox1Header = new Text("Database");
     	configVBox1Header.setStyle(HEADER_2_STYLE);
-    	Text configVBox1Details = new Text("What to read/write from the database");
+    	Text configVBox1Details = new Text("Read/Write database");
     	configVBox1.getChildren().addAll(configVBox1Header, configVBox1Details);
     	configVBox1.setOnMouseClicked(event -> { goToDatabaseListWindow(null);});
     	VBox configVBox2 = new VBox();
     	configVBox2.setStyle(MENU_BUTTON_STYLE);
-    	Text configVBox2Header = new Text("File");
+    	Text configVBox2Header = new Text("System");
     	configVBox2Header.setStyle(HEADER_2_STYLE);
-    	Text configVBox2Details = new Text("What to read/write from files");
+    	Text configVBox2Details = new Text("Run/Read/Write files");
     	configVBox2.getChildren().addAll(configVBox2Header, configVBox2Details);
     	VBox configVBox3 = new VBox();
     	configVBox3.setStyle(MENU_BUTTON_STYLE);
