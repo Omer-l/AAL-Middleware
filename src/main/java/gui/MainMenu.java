@@ -43,6 +43,8 @@ public class MainMenu extends Application {
 	public static HBox mainHBox = new HBox(10);
 	//MAIN
 	public static HBox mainVBox = new HBox(10);
+	//MAIN
+	public static Stage primaryStage;
     public static void main(String[] args) {
 		mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
 		mainDbManager.setUsername("root");
@@ -55,6 +57,7 @@ public class MainMenu extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+    	this.primaryStage = primaryStage;
         primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.setTitle("Middleware");
         primaryStage.show();
