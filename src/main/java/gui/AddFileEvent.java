@@ -120,6 +120,7 @@ public class AddFileEvent extends Window {
         	MainMenu.setActive(runFileMethodButton);
         	MainMenu.deactivate(readFileMethodButton);
         	MainMenu.deactivate(writeFileMethodButton);
+        	saveButton.setDisable(true);
     		column1VBox3.getChildren().clear();
         	openRunForm(column1VBox3);
         });
@@ -127,6 +128,7 @@ public class AddFileEvent extends Window {
         	MainMenu.setActive(readFileMethodButton); 
         	MainMenu.deactivate(runFileMethodButton);
         	MainMenu.deactivate(writeFileMethodButton);
+        	saveButton.setDisable(true);
     		column1VBox3.getChildren().clear();
         	openReadForm(column1VBox3);
         });
@@ -134,6 +136,7 @@ public class AddFileEvent extends Window {
         	MainMenu.setActive(writeFileMethodButton); 
         	MainMenu.deactivate(readFileMethodButton);
         	MainMenu.deactivate(runFileMethodButton);
+        	saveButton.setDisable(true);
     		column1VBox3.getChildren().clear();
         	openWriteForm(column1VBox3);
         	});
@@ -237,13 +240,19 @@ public class AddFileEvent extends Window {
 
 		            // Read and print the output
 		            String line;
+		            logField.clear();
 		            while ((line = reader.readLine()) != null) {
 		                System.out.println(line);
+		                logField.setText(logField.getText() + "\n" + line);
 		            }
 
 		            // Wait for the process to finish
 		            int exitCode = process.waitFor();
 		            System.out.println("Process exited with code: " + exitCode);
+		            if(exitCode == 0)
+		            	saveButton.setDisable(false);
+		            else
+		            	saveButton.setDisable(true);
 		        } catch (IOException | InterruptedException e) {
 		            e.printStackTrace();
 		        }
