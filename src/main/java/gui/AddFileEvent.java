@@ -1,6 +1,11 @@
 package gui;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.io.BufferedReader;
 
 import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 import dao.DbXMLParser;
@@ -222,32 +227,27 @@ public class AddFileEvent extends Window {
 	private void processTestQuery(String operation) {
 		switch(operation) {
 			case "run":
-				// Set the path to your Java file
-		        String filePath = selectedFile.getAbsolutePath();
 
-		        // Create a JavaCompiler object
-		        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		        try {
+		            ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", "java", selectedFile.getAbsolutePath());
+		            Process process = processBuilder.start();
 
-		        // Compile the Java file
-		        int compilationResult = compiler.run(null, null, null, filePath);
+		            // Get the output stream of the process
+		            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-		        // Check if compilation was successful
-		        if (compilationResult == 0) {
-		            try {
-		                // Extract the class name from the file path
-		                String className = selectedFile.getName().replace(".java", "");
-
-		                // Load the compiled class dynamically
-		                Class<?> loadedClass = Class.forName(className);
-
-		                // Execute the main method of the loaded class
-		                loadedClass.getDeclaredMethod("main", String[].class)
-		                        .invoke(null, (Object) logField.getText());
-		            } catch (Exception e) {
-		                e.printStackTrace();
+		            // Read and print the output
+		            String line;
+		            while ((line = reader.readLine()) != null) {
+		                System.out.println(line);
 		            }
+
+		            // Wait for the process to finish
+		            int exitCode = process.waitFor();
+		            System.out.println("Process exited with code: " + exitCode);
+		        } catch (IOException | InterruptedException e) {
+		            e.printStackTrace();
 		        }
-				break;
+	            break;
 			case "read":
 				break;
 			case "write":
