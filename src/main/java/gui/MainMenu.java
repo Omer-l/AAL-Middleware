@@ -186,4 +186,9 @@ public class MainMenu extends Application {
 	public static void deactivate(Button button) {
     	button.setStyle("");
 	}
+
+	public static boolean isActive(Button runFileMethodButton) {
+		System.out.println(runFileMethodButton.getStyle());
+		return runFileMethodButton.getStyle().contains("darkgray");
+	}
 }

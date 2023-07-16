@@ -210,7 +210,7 @@ public class AddDatabaseEvent extends Window {
 	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "');", "");
 	        	back();
         	} else {
-        		logField.setText("A Field is empty");
+        		logField.setText("unique id, name or description field is empty");
         	}
         });
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
