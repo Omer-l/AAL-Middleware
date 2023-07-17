@@ -102,7 +102,7 @@ public class AddRule extends Window {
         ButtonBar column1ButtonBar = new ButtonBar();
         Button saveButton = new Button("Save");
         column1ButtonBar.getButtons().addAll(saveButton);
-        saveButton.setOnAction(processSaveButton());
+        saveButton.setOnAction( event -> { processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox3VBox2TextField.getText(), column1HBox2VBox2TextField.getText()); });
 
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
         column1ButtonsVBox.getChildren().addAll(column1ButtonBar);
@@ -139,7 +139,29 @@ public class AddRule extends Window {
         eventsVBox.getChildren().add(column1VBox2);
 	}
 
-	private void processSaveButton() {
-		
+	private void processSaveButton(String uniqueIdInput, String nameInput, String descriptionInput) {
+
+    	boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
+    	String whenUniqueIds = getUniqueIds(whenData);
+    	String thenUniqueIds = getUniqueIds(thenData);
+    	if(!emptyField) {
+        	MainMenu.mainDbManager.queryDB("INSERT INTO rules VALUES ('" + uniqueIdInput + "', '" + whenUniqueIds + "', '" + thenUniqueIds + "');", "");
+    	} else {
+    		System.out.println("unique id, name or description field is empty");
+    	}
+		back();
+	}
+
+	private String getUniqueIds(ArrayList<ArrayList<String>> data) {
+		StringBuilder uniqueIds = new StringBuilder();
+		for(int i = 0; i < data.size(); i++) {
+			ArrayList<String> event = data.get(i);
+			String id = event.get(1);
+			if(i != data.size() - 1)
+				uniqueIds.append(id + ", ");
+			else
+				uniqueIds.append(id);
+		}
+		return uniqueIds.toString();
 	}
 }

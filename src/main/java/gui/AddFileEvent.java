@@ -156,9 +156,6 @@ public class AddFileEvent extends Window {
         testButton.setOnAction(event -> { processTestButton("run"); });
         saveButton.setDisable(true);
     	saveButton.setOnAction(event -> {
-//        	String uniqueIdInput = 
-//        	String nameInput = 
-//        	String descriptionInput = 
         	processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox3VBox2TextField.getText(), column1HBox2VBox2TextField.getText());
     	});
         column1ButtonBar2.getButtons().addAll(testButton, saveButton);
