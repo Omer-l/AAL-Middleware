@@ -66,7 +66,7 @@ public class FileEvents extends Window {
         column3Header.setStyle(MainMenu.HEADER_1_STYLE);
         column3VBox.getChildren().add(column3Header);
         getEvents("SELECT * FROM system_file_write_event INNER JOIN event ON system_file_write_event.unique_id = event.unique_id;", column3VBox);
-        int writeEventsLastIndex = column1VBox.getChildren().size() - 1;
+        int writeEventsLastIndex = column3VBox.getChildren().size() - 1;
         column3VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { new AddFileEvent(this, "write").open(); });
         mainVBox3.getChildren().addAll(column3VBox);
 

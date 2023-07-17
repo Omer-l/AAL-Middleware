@@ -219,7 +219,7 @@ public class AddFileEvent extends Window {
 
         // Show the file dialog
         selectedFile = fileChooser.showOpenDialog(MainMenu.primaryStage);
-
+        
         if (selectedFile != null) {
             // Display the selected file path in the label
             logField.setText(selectedFile.getAbsolutePath());
@@ -277,6 +277,8 @@ public class AddFileEvent extends Window {
 	}
 
 	private void processSaveButton(String uniqueIdInput, String nameInput, String descriptionInput) {
+		String filePath = selectedFile.getAbsolutePath().replaceAll("\\\\", "/");
+		System.out.println(filePath);
 		System.out.println("WRITING");
 		if(MainMenu.isActive(runFileMethodButton)) {
 	    	String arguments = valueField.getText();
@@ -284,7 +286,7 @@ public class AddFileEvent extends Window {
 	    	boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
 	    	if(!emptyField) {
 	    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES ('" + uniqueIdInput + "', '" + selectedFile.getAbsolutePath() + "', '" + arguments + "');", "");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES ('" + uniqueIdInput + "', '" + filePath + "', '" + arguments + "');", "");
 	    	} else {
 	    		logField.setText("unique id, name or description field is empty");
 	    	}
