@@ -50,7 +50,7 @@ public class MainMenu extends Application {
 		mainDbManager.setUsername("root");
 		mainDbManager.setPassword("root");
 //    	open();
-		AddFileEvent adr = new AddFileEvent(new FileEvents(null), "run");
+		Rules adr = new Rules(null);
     	adr.open();
         launch(args);
     }

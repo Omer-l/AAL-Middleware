@@ -1,7 +1,10 @@
 package gui;
 
 import java.util.ArrayList;
+import java.util.Map;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -14,8 +17,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class AddRule extends Window {
-	ArrayList<String> whenData = new ArrayList<>();
-	ArrayList<String> thenData = new ArrayList<>();
+	ArrayList<ArrayList<String>> whenData = new ArrayList<>();
+	ArrayList<ArrayList<String>> thenData = new ArrayList<>();
 	
 	public AddRule(Window prevWindow) {
 		super(prevWindow);
@@ -80,54 +83,63 @@ public class AddRule extends Window {
         VBox column1VBox2 = new VBox(2);
         Text column1VBox2Header = new Text("When");
         column1VBox2Header.setStyle(MainMenu.HEADER_1_STYLE);
-
-        VBox column1VBox4 = new VBox();
-        column1VBox4.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        Text column1VBox4Header = new Text("When Omer is in the living room");
-        column1VBox4Header.setStyle(MainMenu.HEADER_2_STYLE);
-        Text column1VBox4Details = new Text("Read BLE database for Omer is in the living room");
-        column1VBox4.getChildren().addAll(column1VBox4Header, column1VBox4Details);
-
-        VBox column1VBox5 = new VBox();
-        column1VBox5.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
-        Text column1VBox5Header = new Text("Add When");
-        column1VBox5Header.setStyle(MainMenu.HEADER_2_STYLE);
-        column1VBox5.getChildren().addAll(column1VBox5Header);
-        column1VBox5.setOnMouseClicked(event -> { new AddWhen(this).open(); });
+        column1VBox2.getChildren().addAll(column1VBox2Header);
+        getEvents(column1VBox2, whenData);
+        int whenEventsLastIndex = column1VBox2.getChildren().size() - 1;
+        column1VBox2.getChildren().get(whenEventsLastIndex).setOnMouseClicked(event -> {new AddWhen(this).open();});
 
         //column1urations
         VBox column1VBox3 = new VBox(2);
         Text column1VBox3Header = new Text("Then");
         column1VBox3Header.setStyle(MainMenu.HEADER_1_STYLE);
-
-        VBox column1VBox6 = new VBox();
-        column1VBox6.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        Text column1VBox6Header = new Text("Write User is in the room");
-        column1VBox6Header.setStyle(MainMenu.HEADER_2_STYLE);
-        Text column1VBox6Details = new Text("Writes to MReasoner DB about BLE Event");
-        column1VBox6.getChildren().addAll(column1VBox6Header, column1VBox6Details);
-
-        VBox column1VBox7 = new VBox();
-        column1VBox7.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
-        Text column1VBox7Header = new Text("Add Then");
-        column1VBox7Header.setStyle(MainMenu.HEADER_2_STYLE);
-        column1VBox7.getChildren().addAll(column1VBox7Header);
-        column1VBox7.setOnMouseClicked(event -> { new AddThen(this).open(); });
+        column1VBox2.getChildren().addAll(column1VBox3Header);
+        getEvents(column1VBox3, thenData);
+        int thenEventsLastIndex = column1VBox3.getChildren().size() - 1;
+        column1VBox3.getChildren().get(thenEventsLastIndex).setOnMouseClicked(event -> {  new AddThen(this).open();});
 
         VBox column1ButtonsVBox = new VBox(2);
         
         ButtonBar column1ButtonBar = new ButtonBar();
         Button saveButton = new Button("Save");
         column1ButtonBar.getButtons().addAll(saveButton);
+        saveButton.setOnAction(processSaveButton());
 
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
-        column1VBox2.getChildren().addAll(column1VBox2Header, column1VBox4, column1VBox5);
-        column1VBox2.getChildren().addAll(column1VBox3Header, column1VBox6, column1VBox7);
         column1ButtonsVBox.getChildren().addAll(column1ButtonBar);
         
-    	MainMenu.addHoverInteraction(new VBox[] {column1VBox4, column1VBox6}, "white", "darkgray");
-    	MainMenu.addHoverInteraction(new VBox[] {column1VBox5, column1VBox7}, "yellow", "darkgray");
     	mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3, column1ButtonsVBox);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
+	}
+	
+	public void getEvents(VBox eventsVBox, ArrayList<ArrayList<String>> events) {
+		for(ArrayList<String> readEvent : events) {
+			VBox column1VBox = new VBox();
+	        column1VBox.setStyle(MainMenu.MENU_BUTTON_STYLE);
+	        Text column1VBoxHeader = new Text((String) readEvent.get(1));
+	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
+	        Text column1VBoxUniqueId = new Text((String) readEvent.get(0));
+	        Text column1VBoxDescription = new Text((String) readEvent.get(2));
+	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
+	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
+	        column1VBoxUniqueId.setVisible(false);
+	        column1VBox.setOnMouseClicked(event -> {
+	        	//remove from list or edit?
+	        });
+	    	MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
+	        eventsVBox.getChildren().add(column1VBox);
+		}
+		
+
+        VBox column1VBox2 = new VBox();
+        column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
+        Text column1VBox2Header = new Text("Add New Event");
+        column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        
+        column1VBox2.getChildren().addAll(column1VBox2Header);
+    	MainMenu.addHoverInteraction(new VBox[] {column1VBox2}, "yellow", "darkgray");
+        eventsVBox.getChildren().add(column1VBox2);
+	}
+
+	private void processSaveButton() {
+		
 	}
 }

@@ -87,14 +87,22 @@ public class FileEvents extends Window {
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
 	        column1VBoxUniqueId.setVisible(false);
 	        column1VBox.setOnMouseClicked(event -> {
-	        	if(this.prevWindow instanceof AddWhen) { //add uniqueID
-	        		((AddRule) this.prevWindow.prevWindow).whenData.add(column1VBoxDescription.getText().substring(0, column1VBoxDescription.getText().indexOf(" ")));
+	        	if(this.prevWindow instanceof AddWhen) { //add uniqueID//add uniqueID
+	        		ArrayList<String> whenEvent = new ArrayList<String>();
+	        		whenEvent.add(column1VBoxHeader.getText());
+	        		whenEvent.add(column1VBoxUniqueId.getText());
+	        		whenEvent.add(column1VBoxDescription.getText());
+	        		((AddRule) this.prevWindow.prevWindow).whenData.add(whenEvent);
 	        		this.back().back();
 	        		this.back().back();
 	        	}
 	        	
 	        	if(this.prevWindow instanceof AddThen) {//add uniqueID
-	        		((AddRule) this.prevWindow.prevWindow).thenData.add(column1VBoxDescription.getText().substring(0, column1VBoxDescription.getText().indexOf(" ")));
+	        		ArrayList<String> thenEvent = new ArrayList<String>();
+	        		thenEvent.add(column1VBoxHeader.getText());
+	        		thenEvent.add(column1VBoxUniqueId.getText());
+	        		thenEvent.add(column1VBoxDescription.getText());
+	        		((AddRule) this.prevWindow.prevWindow).thenData.add(thenEvent);
 	        		this.back().back();
 	        		this.back().back();
 	        	}

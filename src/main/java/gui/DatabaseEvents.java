@@ -54,7 +54,7 @@ public class DatabaseEvents extends Window {
         column2Header.setStyle(MainMenu.HEADER_1_STYLE);
         column2VBox.getChildren().add(column2Header);
         getEvents("SELECT * FROM database_write_event INNER JOIN event ON database_write_event.unique_id = event.unique_id;", column2VBox);
-        int writeEventsLastIndex = column1VBox.getChildren().size() - 1;
+        int writeEventsLastIndex = column2VBox.getChildren().size() - 1;
         column2VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { /** add event */ System.out.println("Write event clicked"); });
         mainVBox2.getChildren().addAll(column2VBox);
 
@@ -76,13 +76,21 @@ public class DatabaseEvents extends Window {
 	        column1VBoxUniqueId.setVisible(false);
 	        column1VBox.setOnMouseClicked(event -> {
 	        	if(this.prevWindow instanceof AddWhen) { //add uniqueID
-	        		((AddRule) this.prevWindow.prevWindow).whenData.add(column1VBoxDescription.getText().substring(0, column1VBoxDescription.getText().indexOf(" ")));
+	        		ArrayList<String> whenEvent = new ArrayList<String>();
+	        		whenEvent.add(column1VBoxHeader.getText());
+	        		whenEvent.add(column1VBoxUniqueId.getText());
+	        		whenEvent.add(column1VBoxDescription.getText());
+	        		((AddRule) this.prevWindow.prevWindow).whenData.add(whenEvent);
 	        		this.back().back();
 	        		this.back().back();
 	        	}
 	        	
 	        	if(this.prevWindow instanceof AddThen) {//add uniqueID
-	        		((AddRule) this.prevWindow.prevWindow).thenData.add(column1VBoxDescription.getText().substring(0, column1VBoxDescription.getText().indexOf(" ")));
+	        		ArrayList<String> thenEvent = new ArrayList<String>();
+	        		thenEvent.add(column1VBoxHeader.getText());
+	        		thenEvent.add(column1VBoxUniqueId.getText());
+	        		thenEvent.add(column1VBoxDescription.getText()); 
+	        		((AddRule) this.prevWindow.prevWindow).thenData.add(thenEvent);
 	        		this.back().back();
 	        		this.back().back();
 	        	}

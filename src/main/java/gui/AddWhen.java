@@ -117,7 +117,13 @@ public class AddWhen extends Window {
         	de.open();
         } );
         
-        text2VBox.setOnMouseClicked(event -> { VBox label = (VBox) event.getSource(); System.out.println("CLICKED: " + label.getChildren().get(0));} );
+        text2VBox.setOnMouseClicked(event -> { 
+        	VBox label = (VBox) event.getSource(); 
+        	FileEvents de = new FileEvents(this);
+        	de.open();
+        } );
+        
+        //DELETE THESE TWO
         text3VBox.setOnMouseClicked(event -> { VBox label = (VBox) event.getSource(); System.out.println("CLICKED: " + label.getChildren().get(0));} );
         text4VBox.setOnMouseClicked(event -> { VBox label = (VBox) event.getSource(); System.out.println("CLICKED: " + label.getChildren().get(0));} );
         
