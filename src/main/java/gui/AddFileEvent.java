@@ -40,14 +40,21 @@ public class AddFileEvent extends Window {
     private TextField logField = new TextField();
     private Button testButton = new Button("Test");
     private Button saveButton = new Button("Save");
+    private Button runFileMethodButton = new Button("Run");
+    private Button readFileMethodButton = new Button("Read");
+    private Button writeFileMethodButton = new Button("Write");
     private String query;
     private File selectedFile;
     private TextField valueField = new TextField();
+    private String operation = "run"; //run, read, or write
     
 	public AddFileEvent(Window prevWindow) {
 		super(prevWindow);
 	}
-
+    
+	public AddFileEvent(String operation) {
+		this.operation = operation;
+	}
     
 	public AddFileEvent() {
 		
@@ -112,11 +119,7 @@ public class AddFileEvent extends Window {
         HBox column1ButtonBar1HBox = new HBox();
         column1ButtonBar1HBox.setAlignment(Pos.CENTER);
         ButtonBar column1ButtonBar1 = new ButtonBar();
-        Button runFileMethodButton = new Button("Run");
-        Button readFileMethodButton = new Button("Read");
-        Button writeFileMethodButton = new Button("Write");
 
-    	MainMenu.setActive(runFileMethodButton);
         runFileMethodButton.setOnAction(event -> { 
         	MainMenu.setActive(runFileMethodButton);
         	MainMenu.deactivate(readFileMethodButton);
@@ -141,30 +144,25 @@ public class AddFileEvent extends Window {
     		column1VBox3.getChildren().clear();
         	openWriteForm(column1VBox3);
         	});
+        
+        switch(operation) {
+	        case "run": MainMenu.setActive(runFileMethodButton); break;
+	        case "read": MainMenu.setActive(runFileMethodButton); break;
+	        case "write": MainMenu.setActive(runFileMethodButton); break;
+        }
         column1ButtonBar1.getButtons().addAll(runFileMethodButton, readFileMethodButton, writeFileMethodButton);
         column1ButtonBar1HBox.getChildren().add(column1ButtonBar1);
 //        column1ButtonBar1
         VBox column1VBox4 = new VBox(10);
         
         ButtonBar column1ButtonBar2 = new ButtonBar();
-        testButton.setOnAction(event -> { processTestQuery("run"); });
+        testButton.setOnAction(event -> { processTestButton("run"); });
         saveButton.setDisable(true);
     	saveButton.setOnAction(event -> {
-        	String uniqueIdInput = column1HBox1VBox2TextField.getText();
-        	String nameInput = column1HBox2VBox2TextField.getText();
-        	String descriptionInput = column1HBox3VBox2TextField.getText();   
-        	System.out.println("WRITING");
-    		if(MainMenu.isActive(runFileMethodButton)) {
-	        	String arguments = valueField.getText();
-	        	System.out.println("WROTE");
-	        	boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
-	        	if(!emptyField) {
-		    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-		        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_write_event VALUES ('" + uniqueIdInput + "', '" + selectedFile.getAbsolutePath() + "', '" + arguments + "');", "");
-	        	} else {
-	        		logField.setText("unique id, name or description field is empty");
-	        	}
-    		}
+//        	String uniqueIdInput = 
+//        	String nameInput = 
+//        	String descriptionInput = 
+        	processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox3VBox2TextField.getText(), column1HBox2VBox2TextField.getText());
     	});
         column1ButtonBar2.getButtons().addAll(testButton, saveButton);
         HBox column1HBox9 = new HBox();
@@ -183,6 +181,21 @@ public class AddFileEvent extends Window {
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
 	}
 
+
+	private void processSaveButton(String uniqueIdInput, String nameInput, String descriptionInput) {
+		System.out.println("WRITING");
+		if(MainMenu.isActive(runFileMethodButton)) {
+        	String arguments = valueField.getText();
+        	System.out.println("WROTE");
+        	boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
+        	if(!emptyField) {
+	    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES ('" + uniqueIdInput + "', '" + selectedFile.getAbsolutePath() + "', '" + arguments + "');", "");
+        	} else {
+        		logField.setText("unique id, name or description field is empty");
+        	}
+		}		
+	}
 
 	private void openRunForm(VBox column1VBox3) {
         HBox column1Hbox4 = new HBox();
@@ -244,7 +257,7 @@ public class AddFileEvent extends Window {
 	}
 
 
-	private void processTestQuery(String operation) {
+	private void processTestButton(String operation) {
 		switch(operation) {
 			case "run":
 
