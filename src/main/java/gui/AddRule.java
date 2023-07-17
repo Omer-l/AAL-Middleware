@@ -145,7 +145,8 @@ public class AddRule extends Window {
     	String whenUniqueIds = getUniqueIds(whenData);
     	String thenUniqueIds = getUniqueIds(thenData);
     	if(!emptyField) {
-        	MainMenu.mainDbManager.queryDB("INSERT INTO rules VALUES ('" + uniqueIdInput + "', '" + whenUniqueIds + "', '" + thenUniqueIds + "');", "");
+        	MainMenu.mainDbManager.queryDB("INSERT INTO rule VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
+        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + whenUniqueIds + "', '" + thenUniqueIds + "');", "");
     	} else {
     		System.out.println("unique id, name or description field is empty");
     	}

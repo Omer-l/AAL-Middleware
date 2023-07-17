@@ -1,5 +1,8 @@
 package gui;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -30,27 +33,55 @@ public class Rules extends Window {
         VBox configVBox = new VBox(2);
         Text configHeader = new Text("Read Events");
         configHeader.setStyle(MainMenu.HEADER_1_STYLE);
+        configVBox.getChildren().addAll(configHeader);
 
-        VBox configVBox1 = new VBox();
-        configVBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        Text configVBox1Header = new Text("Transform BLE Data");
-        configVBox1Header.setStyle(MainMenu.HEADER_2_STYLE);
-        Text configVBox1Details = new Text("When user enters a room (BLE DB), transform and send the data to MReasoner DB");
-        configVBox1.getChildren().addAll(configVBox1Header, configVBox1Details);
+//        VBox configVBox1 = new VBox();
+        getEvents("SELECT * FROM rule INNER JOIN event ON rule.unique_id = event.unique_id;", configVBox);        
+        int rulesLastIndex = configVBox.getChildren().size() - 1;
+        configVBox.getChildren().get(rulesLastIndex).setOnMouseClicked(event -> {new AddRule(this).open();});
 
-        VBox configVBox2 = new VBox();
-        configVBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
-        Text configVBox2Header = new Text("Add New Rule");
-        configVBox2Header.setStyle(MainMenu.HEADER_2_STYLE);
-        configVBox2.getChildren().addAll(configVBox2Header);
-        configVBox2.setOnMouseClicked(event -> { new AddRule(this).open(); });
+//        configVBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+//        Text configVBox1Header = new Text("Transform BLE Data");
+//        configVBox1Header.setStyle(MainMenu.HEADER_2_STYLE);
+//        Text configVBox1Details = new Text("When user enters a room (BLE DB), transform and send the data to MReasoner DB");
+//        configVBox1.getChildren().addAll(configVBox1Header, configVBox1Details);
+//
+//        VBox configVBox2 = new VBox();
+//        configVBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
+//        Text configVBox2Header = new Text("Add New Rule");
+//        configVBox2Header.setStyle(MainMenu.HEADER_2_STYLE);
+//        configVBox2.getChildren().addAll(configVBox2Header);
+//        configVBox2.setOnMouseClicked(event -> { new AddRule(this).open(); });
         
-        configVBox.getChildren().addAll(configHeader, configVBox1, configVBox2);
 
         mainVBox1.getChildren().addAll(configVBox);
 
-    	MainMenu.addHoverInteraction(new VBox[] {configVBox1}, "white", "darkgray");
-    	MainMenu.addHoverInteraction(new VBox[] {configVBox2}, "yellow", "darkgray");
+//    	MainMenu.addHoverInteraction(new VBox[] {configVBox1}, "white", "darkgray");
+//    	MainMenu.addHoverInteraction(new VBox[] {configVBox2}, "yellow", "darkgray");
     	MainMenu.mainHBox.getChildren().addAll(mainVBox1);
     }
+	
+	public void getEvents(String query, VBox eventsVBox) {
+		ArrayList<Map<String, Object>> events = MainMenu.mainDbManager.queryDB(query, "select");
+		for(Map<String, Object> readEvent : events) {
+			VBox column1VBox = new VBox();
+	        column1VBox.setStyle(MainMenu.MENU_BUTTON_STYLE);
+	        Text column1VBoxHeader = new Text((String) readEvent.get("name"));
+	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
+	        Text column1VBoxUniqueId = new Text((String) readEvent.get("unique_id"));
+	        Text column1VBoxDescription = new Text((String) readEvent.get("description"));
+	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
+	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
+	        column1VBoxUniqueId.setVisible(false);
+	    	MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
+	        eventsVBox.getChildren().add(column1VBox);
+		}
+		
+        VBox column1VBox2 = new VBox();
+        column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
+        Text column1VBox2Header = new Text("Add New Rule");
+        column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        
+        column1VBox2.getChildren().addAll(column1VBox2Header);
+        eventsVBox.getChildren().add(column1VBox2);
+	}
 }
