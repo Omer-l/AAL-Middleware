@@ -48,11 +48,8 @@ public class AddFileEvent extends Window {
     private TextField valueField = new TextField();
     private String operation = "run"; //run, read, or write
     
-	public AddFileEvent(Window prevWindow) {
+	public AddFileEvent(Window prevWindow, String operation) {
 		super(prevWindow);
-	}
-    
-	public AddFileEvent(String operation) {
 		this.operation = operation;
 	}
     
@@ -182,21 +179,6 @@ public class AddFileEvent extends Window {
 	}
 
 
-	private void processSaveButton(String uniqueIdInput, String nameInput, String descriptionInput) {
-		System.out.println("WRITING");
-		if(MainMenu.isActive(runFileMethodButton)) {
-        	String arguments = valueField.getText();
-        	System.out.println("WROTE");
-        	boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
-        	if(!emptyField) {
-	    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES ('" + uniqueIdInput + "', '" + selectedFile.getAbsolutePath() + "', '" + arguments + "');", "");
-        	} else {
-        		logField.setText("unique id, name or description field is empty");
-        	}
-		}		
-	}
-
 	private void openRunForm(VBox column1VBox3) {
         HBox column1Hbox4 = new HBox();
         VBox column1Hbox4VBox1 = new VBox();
@@ -292,5 +274,20 @@ public class AddFileEvent extends Window {
 			case "write":
 				break;
 		}
+	}
+
+	private void processSaveButton(String uniqueIdInput, String nameInput, String descriptionInput) {
+		System.out.println("WRITING");
+		if(MainMenu.isActive(runFileMethodButton)) {
+	    	String arguments = valueField.getText();
+	    	System.out.println("WROTE");
+	    	boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
+	    	if(!emptyField) {
+	    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES ('" + uniqueIdInput + "', '" + selectedFile.getAbsolutePath() + "', '" + arguments + "');", "");
+	    	} else {
+	    		logField.setText("unique id, name or description field is empty");
+	    	}
+		}		
 	}
 }
