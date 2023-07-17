@@ -43,7 +43,7 @@ public class FileEvents extends Window {
         column1VBox.getChildren().addAll(column1Header);
         getEvents("SELECT * FROM system_file_run_event INNER JOIN event ON system_file_run_event.unique_id = event.unique_id;", column1VBox);
         int runEventsLastIndex = column1VBox.getChildren().size() - 1;
-        column1VBox.getChildren().get(runEventsLastIndex).setOnMouseClicked(event -> {new AddFileEvent(this).open();});
+        column1VBox.getChildren().get(runEventsLastIndex).setOnMouseClicked(event -> {new AddFileEvent(this, "run").open();});
         mainVBox1.getChildren().addAll(column1VBox);
         //MIDDLE SIDE MAIN
         VBox mainVBox2 = new VBox(2);
@@ -55,7 +55,7 @@ public class FileEvents extends Window {
         column2VBox.getChildren().addAll(column2Header);
         getEvents("SELECT * FROM system_file_read_event INNER JOIN event ON system_file_read_event.unique_id = event.unique_id;", column2VBox);
         int readEventsLastIndex = column2VBox.getChildren().size() - 1;
-        column2VBox.getChildren().get(readEventsLastIndex).setOnMouseClicked(event -> {new AddDatabaseEvent(this).open();});
+        column2VBox.getChildren().get(readEventsLastIndex).setOnMouseClicked(event -> {new AddFileEvent(this, "read").open();});
         mainVBox2.getChildren().addAll(column2VBox);
         //RIGHT SIDE MAIN
         VBox mainVBox3 = new VBox(2);
@@ -67,7 +67,7 @@ public class FileEvents extends Window {
         column3VBox.getChildren().add(column3Header);
         getEvents("SELECT * FROM system_file_write_event INNER JOIN event ON system_file_write_event.unique_id = event.unique_id;", column3VBox);
         int writeEventsLastIndex = column1VBox.getChildren().size() - 1;
-        column3VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { /** add event */ System.out.println("Write event clicked"); });
+        column3VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { new AddFileEvent(this, "write").open(); });
         mainVBox3.getChildren().addAll(column3VBox);
 
     	MainMenu.addHoverInteraction(new VBox[] {(VBox) column1VBox.getChildren().get(readEventsLastIndex), (VBox) column3VBox.getChildren().get(writeEventsLastIndex)}, "yellow", "darkgray");
