@@ -290,6 +290,7 @@ public class AddFileEvent extends Window {
 	    	} else {
 	    		logField.setText("unique id, name or description field is empty");
 	    	}
-		}		
+		}
+		back();
 	}
 }
