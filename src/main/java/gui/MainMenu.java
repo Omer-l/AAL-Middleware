@@ -50,7 +50,7 @@ public class MainMenu extends Application {
 		mainDbManager.setUsername("root");
 		mainDbManager.setPassword("root");
 //    	open();
-		AddFileEvent adr = new AddFileEvent(null);
+		AddFileEvent adr = new AddFileEvent(new FileEvents(null));
     	adr.open();
         launch(args);
     }
@@ -95,6 +95,7 @@ public class MainMenu extends Application {
     	configVBox2Header.setStyle(HEADER_2_STYLE);
     	Text configVBox2Details = new Text("Run/Read/Write files");
     	configVBox2.getChildren().addAll(configVBox2Header, configVBox2Details);
+    	configVBox2.setOnMouseClicked(event -> { new FileEvents(null).open();});
     	VBox configVBox3 = new VBox();
     	configVBox3.setStyle(MENU_BUTTON_STYLE);
     	Text configVBox3Header = new Text("Schedules");
