@@ -11,7 +11,5 @@ public class Main {
 //	public static DataManager dataManager = new DataManager();
 	
 	public static void main(String[] args) {
-    	DatabaseListenerThread dbL = new DatabaseListenerThread("");
-    	dbL.run();
 	}
 }

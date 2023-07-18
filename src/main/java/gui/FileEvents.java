@@ -95,9 +95,7 @@ public class FileEvents extends Window {
 	        		((AddRule) this.prevWindow.prevWindow).whenData.add(whenEvent);
 	        		this.back().back();
 	        		this.back().back();
-	        	}
-	        	
-	        	if(this.prevWindow instanceof AddThen) {//add uniqueID
+	        	} if(this.prevWindow instanceof AddThen) {//add uniqueID
 	        		ArrayList<String> thenEvent = new ArrayList<String>();
 	        		thenEvent.add(column1VBoxHeader.getText());
 	        		thenEvent.add(column1VBoxUniqueId.getText());
