@@ -40,24 +40,7 @@ public class Rules extends Window {
         int rulesLastIndex = configVBox.getChildren().size() - 1;
         configVBox.getChildren().get(rulesLastIndex).setOnMouseClicked(event -> {new AddRule(this).open();});
 
-//        configVBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-//        Text configVBox1Header = new Text("Transform BLE Data");
-//        configVBox1Header.setStyle(MainMenu.HEADER_2_STYLE);
-//        Text configVBox1Details = new Text("When user enters a room (BLE DB), transform and send the data to MReasoner DB");
-//        configVBox1.getChildren().addAll(configVBox1Header, configVBox1Details);
-//
-//        VBox configVBox2 = new VBox();
-//        configVBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
-//        Text configVBox2Header = new Text("Add New Rule");
-//        configVBox2Header.setStyle(MainMenu.HEADER_2_STYLE);
-//        configVBox2.getChildren().addAll(configVBox2Header);
-//        configVBox2.setOnMouseClicked(event -> { new AddRule(this).open(); });
-        
-
         mainVBox1.getChildren().addAll(configVBox);
-
-//    	MainMenu.addHoverInteraction(new VBox[] {configVBox1}, "white", "darkgray");
-//    	MainMenu.addHoverInteraction(new VBox[] {configVBox2}, "yellow", "darkgray");
     	MainMenu.mainHBox.getChildren().addAll(mainVBox1);
     }
 	

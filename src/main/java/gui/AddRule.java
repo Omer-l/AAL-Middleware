@@ -102,7 +102,7 @@ public class AddRule extends Window {
         ButtonBar column1ButtonBar = new ButtonBar();
         Button saveButton = new Button("Save");
         column1ButtonBar.getButtons().addAll(saveButton);
-        saveButton.setOnAction( event -> { processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox3VBox2TextField.getText(), column1HBox2VBox2TextField.getText()); });
+        saveButton.setOnAction( event -> { processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText()); });
 
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
         column1ButtonsVBox.getChildren().addAll(column1ButtonBar);
@@ -145,8 +145,8 @@ public class AddRule extends Window {
     	String whenUniqueIds = getUniqueIds(whenData);
     	String thenUniqueIds = getUniqueIds(thenData);
     	if(!emptyField) {
-        	MainMenu.mainDbManager.queryDB("INSERT INTO rule VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + whenUniqueIds + "', '" + thenUniqueIds + "');", "");
+        	MainMenu.mainDbManager.queryDB("INSERT INTO rule VALUES ('" + uniqueIdInput + "', '" + whenUniqueIds + "', '" + thenUniqueIds + "');", "");
+        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
     	} else {
     		System.out.println("unique id, name or description field is empty");
     	}
