@@ -33,14 +33,16 @@ public class DbXMLParser {
                         Element childElement = (Element) node;
                         String nodeName = childElement.getNodeName();
                         String nodeValue = childElement.getTextContent();
-                        String nodeAttribute = childElement.getAttribute("name");
-                        if(nodeName.equals("property"))
-                    		if(nodeAttribute.contains("url"))
-                    			dbDetails[0] = nodeValue;
-                        	else if(nodeAttribute.contains("username"))
-                        		dbDetails[1] = nodeValue;
-                        	else if(nodeAttribute.contains("password"))
-                        		dbDetails[2] = nodeValue;
+                        dbDetails[0] = childElement.getAttribute("url");
+                        dbDetails[1] = childElement.getAttribute("username");
+                        dbDetails[2] = childElement.getAttribute("password");
+//                        if(nodeName.equals("property"))
+//                    		if(nodeAttribute.contains("url"))
+//                    			dbDetails[0] = nodeValue;
+//                        	else if(nodeAttribute.contains("username"))
+//                        		dbDetails[1] = nodeValue;
+//                        	else if(nodeAttribute.contains("password"))
+//                        		dbDetails[2] = nodeValue;
                     }
         		}
             }

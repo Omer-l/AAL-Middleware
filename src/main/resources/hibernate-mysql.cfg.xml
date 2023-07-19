@@ -1,28 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC
-        "-//Hibernate/Hibernate Configuration DTD//EN"
-        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
-<hibernate-configuration>
-    <session-factory>
-        <!-- Database connection properties -->
-        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/beacon_localisation</property>
-        <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">root</property>
-
-        <!-- Hibernate dialect for MySQL -->
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
-
-        <!-- Enable Hibernate's automatic session context management -->
-        <property name="hibernate.current_session_context_class">thread</property>
-
-        <!-- Mapping files and annotated classes -->
-        <!-- Add your entity class mappings here -->
-        <mapping class="entity.mysql.beacon_localisation.Beacon" />
-        <mapping class="entity.mysql.beacon_localisation.Record" />
-        <mapping class="entity.mysql.beacon_localisation.Room" />
-        <mapping class="entity.mysql.beacon_localisation.User" />
-        <mapping class="entity.mysql.beacon_localisation.UserApi"/>
-
-    </session-factory>
-</hibernate-configuration>
+<database-configuration>
+    <!-- Database connection properties -->
+    <url>jdbc:mysql://localhost:3306/beacon_localisation</url>
+    <username>root</username>
+    <password>root</password>
+</database-configuration>
