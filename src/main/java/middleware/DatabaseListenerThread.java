@@ -59,6 +59,9 @@ public class DatabaseListenerThread extends Thread {
 		mainDbManager.setPassword("root");
 		ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
 		DatabaseListenerThread dbLT1 = new DatabaseListenerThread(rules.get(1)); //MAKE A LOOP
+		for (Map<String, Object> rule : rules) {
+			
+		}
     }
     
 	@Override
