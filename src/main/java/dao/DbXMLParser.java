@@ -52,27 +52,27 @@ public class DbXMLParser {
 		return dbDetails;
 	}
 	
-    private static String[] traverseElements(Element element) {
-        NodeList nodeList = element.getChildNodes();
-		String[] dbDetails = new String[3]; //0 is url, 1 is user, 2 is password
-		for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                Element childElement = (Element) node;
-                String nodeName = childElement.getNodeName();
-                String nodeValue = childElement.getTextContent();
-                String nodeAttribute = childElement.getAttribute("name");
-                if(nodeName.equals("property"))
-            		if(nodeAttribute.contains("url"))
-            			dbDetails[0] = nodeValue;
-                	else if(nodeAttribute.contains("username"))
-                		dbDetails[1] = nodeValue;
-                	else if(nodeAttribute.contains("password"))
-                		dbDetails[2] = nodeValue;
-//                System.out.println("VAL: " + nodeValue);
-//                traverseElements(childElement);
-            }
-        }
-		return dbDetails;
-    }
+//    private static String[] traverseElements(Element element) {
+//        NodeList nodeList = element.getChildNodes();
+//		String[] dbDetails = new String[3]; //0 is url, 1 is user, 2 is password
+//		for (int i = 0; i < nodeList.getLength(); i++) {
+//            Node node = nodeList.item(i);
+//            if (node.getNodeType() == Node.ELEMENT_NODE) {
+//                Element childElement = (Element) node;
+//                String nodeName = childElement.getNodeName();
+//                String nodeValue = childElement.getTextContent();
+//                String nodeAttribute = childElement.getAttribute("name");
+//                if(nodeName.equals("property"))
+//            		if(nodeAttribute.contains("url"))
+//            			dbDetails[0] = nodeValue;
+//                	else if(nodeAttribute.contains("username"))
+//                		dbDetails[1] = nodeValue;
+//                	else if(nodeAttribute.contains("password"))
+//                		dbDetails[2] = nodeValue;
+////                System.out.println("VAL: " + nodeValue);
+////                traverseElements(childElement);
+//            }
+//        }
+//		return dbDetails;
+//    }
 }
