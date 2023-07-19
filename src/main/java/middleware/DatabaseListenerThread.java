@@ -72,7 +72,7 @@ public class DatabaseListenerThread extends Thread {
 //    		
 //    	}
 		//go through whens
-		for(Map<String, Object> when : thens) {
+		for(Map<String, Object> when : whens) {
 			String eventType = (String) when.get("event_type");
 			System.out.println("TYPE: " + eventType);
 		}

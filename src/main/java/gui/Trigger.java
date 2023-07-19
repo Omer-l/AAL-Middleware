@@ -173,7 +173,7 @@ public class Trigger extends Application{
     	});
     	rdbmMenu.getItems().get(1).setOnAction(event -> {
             reset(menusToReset);
-    		loadDatabasesMenu(rdbmMenu, databaseMenu, "hibernate-postgresql.cfg.xml");
+    		loadDatabasesMenu(rdbmMenu, databaseMenu, "postgresql.cfg.xml");
     		rdbmMenu.setText(rdbmMenu.getItems().get(1).getText());
             setDatabaseMenuOnAction(databaseMenu, tableMenu, columnMenu);
     		});
