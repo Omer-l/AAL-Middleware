@@ -1,6 +1,7 @@
 package middleware;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.lang.reflect.Field;
 
@@ -12,14 +13,55 @@ public class DatabaseListenerThread extends Thread {
     private String queries;
     public static String[] referencedTableNames = {"database_read_event", "database_write_event", "rule", "system_file_read_event", "system_file_run_event", "system_file_write_event"};
 	public static MySqlConnection mainDbManager = new MySqlConnection();
+	public ArrayList<Map<String, Object>> whens;
+	public ArrayList<Map<String, Object>> thens;
 	//has new row been added
 	//has the searched value been matched?
 
-    public DatabaseListenerThread() {
-//        getQueries();
+    public DatabaseListenerThread(Map<String, Object> rule) {
+        getWhensAndThens(rule);
     }
     
-    @Override
+    private void getWhensAndThens(Map<String, Object> rule) {
+	    String[] whenIds = ((String) rule.get("when_event_ids")).split("\\s*,\\s*");
+	    String[] thenIds = ((String) rule.get("then_event_ids")).split("\\s*,\\s*");
+	    whens = getEvents(whenIds);
+	    thens = getEvents(thenIds);
+	}
+
+	private ArrayList<Map<String, Object>> getEvents(String[] ids) {
+		ArrayList<Map<String, Object>> matchingEvents = new ArrayList<>();
+		for(String id : ids) {
+//			Map<String, Object> when = new HashMap<String, Object>();
+			//loop through the tables
+			for(String tableName : referencedTableNames) {
+				String query = "SELECT * FROM " + tableName + " WHERE unique_id = \"" + id + "\"";
+				ArrayList<Map<String, Object>> resultList = mainDbManager.queryDB(query, "select");
+				//is there is amatching id in this table
+				if(resultList.size() > 0) {
+					//add a new "event_type" element to map
+					Map<String, Object> event = resultList.get(0);
+					event.put("event_type", tableName);
+					//add found result row to the whens/thens
+					matchingEvents.add(event);
+					//break since event has been found
+					break;
+				}
+			}
+		}
+		
+		return matchingEvents;
+	}
+
+	public static void main(String[] args) {
+		mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
+		mainDbManager.setUsername("root");
+		mainDbManager.setPassword("root");
+		ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
+		DatabaseListenerThread dbLT1 = new DatabaseListenerThread(rules.get(1)); //MAKE A LOOP
+    }
+    
+	@Override
     public void run() {
 //    	if(query.contains("WHERE")) { //Then it's not a whole row query
 //    		
@@ -29,36 +71,27 @@ public class DatabaseListenerThread extends Thread {
     }
     
     public static void loadRules() {
-		ArrayList<Map<String, Object>> whenEventIds = mainDbManager.queryDB("SELECT when_event_ids from rule", "select");
-		ArrayList<Map<String, Object>> thenEventIds = mainDbManager.queryDB("SELECT then_event_ids from rule", "select");
-		ArrayList<String> whenDbReadEvents = getDbEvents("database_read_event", ((String) whenEventIds.get(0).get("when_event_ids")).split("\\s*,\\s*"));
+//		ArrayList<Map<String, Object>> whenEventIds = mainDbManager.queryDB("SELECT when_event_ids from rule", "select");
+//		ArrayList<Map<String, Object>> thenEventIds = mainDbManager.queryDB("SELECT then_event_ids from rule", "select");
+//		ArrayList<String> whenDbReadEvents = getDbEvents("database_read_event", ((String) whenEventIds.get(0).get("when_event_ids")).split("\\s*,\\s*"));
 //		ArrayList<String> thenDbReadEvents = getDbEvents("database_read_event", ((String) thenEventIds.get(0).get("when_event_ids")).split("\\s*,\\s*"));
 //		ArrayList<String> whenFileWriteEvents = getDbEvents("system_file_run_event", ((String) whenEventIds.get(0).get("then_event_ids")).split("\\s*,\\s*"));
 //		ArrayList<String> thenFileWriteEvents = getDbEvents("system_file_run_event", ((String) thenEventIds.get(0).get("then_event_ids")).split("\\s*,\\s*"));
 		//a list of events, where are these events from?
     }
     
-private static ArrayList<String> getDbEvents(String string, String[] ids) {
-		ArrayList<String> events = new ArrayList<String>();
+    private static ArrayList<String> getDbEvents(String tableName, String[] ids) {
+		ArrayList<Map<String, Object>> events = new ArrayList<Map<String, Object>>();
 
-		for(String id : ids) {
-			for(String tableName : referencedTableNames) {
-				ArrayList<Map<String, Object>> resultList = mainDbManager.queryDB("SELECT * FROM ", "select");
-			}
+		for(String id : ids) { //which ID is this table
+			String query = "SELECT * FROM " + tableName + " WHERE unique_id = \"" + id + "\"";
+			ArrayList<Map<String, Object>> resultList = mainDbManager.queryDB(query, "select");
+			if(resultList.size() > 0)
+				events = resultList;
 		}
 		
 		return null;
 	}
-
-//    public void ArrayList<Map>
-    
-    public static void main(String[] args) {
-    	mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
-    	mainDbManager.setUsername("root");
-    	mainDbManager.setPassword("root");
-    	
-    }
-    	//get the rows
 
 //    @Override
 //    public void run() {
