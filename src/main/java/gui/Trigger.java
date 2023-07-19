@@ -166,7 +166,7 @@ public class Trigger extends Application{
         Menu[] menusToReset = {databaseMenu, tableMenu, columnMenu};
     	rdbmMenu.getItems().get(0).setOnAction(event -> {
             reset(menusToReset);
-    		loadDatabasesMenu(rdbmMenu, databaseMenu, "hibernate-mysql.cfg.xml");
+    		loadDatabasesMenu(rdbmMenu, databaseMenu, "mysql.cfg.xml");
     		rdbmMenu.setText(rdbmMenu.getItems().get(0).getText());
             setDatabaseMenuOnAction(databaseMenu, tableMenu, columnMenu);
     	

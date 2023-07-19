@@ -57,8 +57,8 @@
 //
 //                //Load configuration from hibernate configuration file
 //                switch(db) {
-//	                case "MySQL" : standardServiceRegistryBuilder.configure("hibernate-mysql.cfg.xml"); break;
-//	                case "PostgreSQL" : standardServiceRegistryBuilder.configure("hibernate-postgresql.cfg.xml"); break; 
+//	                case "MySQL" : standardServiceRegistryBuilder.configure("mysql.cfg.xml"); break;
+//	                case "PostgreSQL" : standardServiceRegistryBuilder.configure("postgresql.cfg.xml"); break; 
 //                }
 //                //Create the registry that will be used to build the session factory
 //                StandardServiceRegistry registry = standardServiceRegistryBuilder.build();
