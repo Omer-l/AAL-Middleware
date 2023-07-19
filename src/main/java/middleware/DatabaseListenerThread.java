@@ -49,7 +49,6 @@ public class DatabaseListenerThread extends Thread {
 				}
 			}
 		}
-		
 		return matchingEvents;
 	}
 
@@ -58,10 +57,11 @@ public class DatabaseListenerThread extends Thread {
 		mainDbManager.setUsername("root");
 		mainDbManager.setPassword("root");
 		ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
-		DatabaseListenerThread dbLT1 = new DatabaseListenerThread(rules.get(1)); //MAKE A LOOP
-		for (Map<String, Object> rule : rules) {
-			
-		}
+		ArrayList<DatabaseListenerThread> threads = new ArrayList<>();
+		for (Map<String, Object> rule : rules)
+			threads.add(new DatabaseListenerThread(rule));
+		
+		threads.get(1).run();
     }
     
 	@Override
@@ -71,6 +71,11 @@ public class DatabaseListenerThread extends Thread {
 //    	} else {
 //    		
 //    	}
+		//go through whens
+		for(Map<String, Object> when : thens) {
+			String eventType = (String) when.get("event_type");
+			System.out.println("TYPE: " + eventType);
+		}
     }
     
     public static void loadRules() {
