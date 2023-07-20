@@ -8,9 +8,9 @@ CREATE TABLE `event` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- middleware.rules definition
+-- middleware.rule definition
 
-CREATE TABLE `rules` (
+CREATE TABLE `rule` (
   `unique_id` varchar(100) NOT NULL,
   `when_event_ids` varchar(500) NOT NULL,
   `then_event_ids` varchar(500) NOT NULL,
@@ -28,6 +28,7 @@ CREATE TABLE `database_read_event` (
   `column` varchar(155) NOT NULL,
   `sortby` varchar(100) NOT NULL,
   `value` varchar(255) DEFAULT NULL,
+  `query` varchar(1000) NOT NULL,
   PRIMARY KEY (`unique_id`),
   CONSTRAINT `database_events_FK` FOREIGN KEY (`unique_id`) REFERENCES `event` (`unique_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -42,12 +43,32 @@ CREATE TABLE `database_write_event` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- middleware.system_file_write_event definition
+-- middleware.system_file_read_event definition
 
-CREATE TABLE `system_file_write_event` (
+CREATE TABLE `system_file_read_event` (
+  `unique_id` varchar(100) NOT NULL,
+  `path` varchar(1000) NOT NULL,
+  PRIMARY KEY (`unique_id`),
+  CONSTRAINT `system_file_event_FK_copy` FOREIGN KEY (`unique_id`) REFERENCES `event` (`unique_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- middleware.system_file_run_event definition
+
+CREATE TABLE `system_file_run_event` (
   `unique_id` varchar(100) NOT NULL,
   `path` varchar(1000) NOT NULL,
   `arguments` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`unique_id`),
   CONSTRAINT `system_file_event_FK` FOREIGN KEY (`unique_id`) REFERENCES `event` (`unique_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- middleware.system_file_write_event definition
+
+CREATE TABLE `system_file_write_event` (
+  `unique_id` varchar(100) NOT NULL,
+  `path` varchar(1000) NOT NULL,
+  PRIMARY KEY (`unique_id`),
+  CONSTRAINT `system_file_event_FK_copy_copy` FOREIGN KEY (`unique_id`) REFERENCES `event` (`unique_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
