@@ -21,7 +21,6 @@ public class MyDatabaseTrigger extends Thread {
 	public MyDatabaseTrigger(MySqlConnection connection) {
         this.connection = connection;
         this.listening = true;
-//		MainMenu.mainDbManager.getDatabaseNames();
         mySqlDbNames.add("beacon_localisation");
         mySqlTableNames.add("record");
         postgresqlDbNames.add("sensors");
@@ -43,12 +42,6 @@ public class MyDatabaseTrigger extends Thread {
     }
 	 @Override
 	    public void run() {
-//		    prevResults.addAll(latestResults(connection, mySqlDbNames, mySqlTableNames));
-//	        connection.setUrl("jdbc:postgresql://localhost:5432/sensors");
-//	        connection.setUsername("postgres");
-//	        connection.setPassword("123456");
-//	        prevResults.addAll(latestResults(connection, postgresqlDbNames, postgresqlTableNames));
-//		    System.out.println(prevResults);
 		    try {
 	        	//initialise prevResults
 	            while (listening) {
@@ -70,11 +63,7 @@ public class MyDatabaseTrigger extends Thread {
         	        } else {
         	        	System.out.println("EQS!\n");
         	        }
-        				//then run all rules
-        				//else continue
-	                // Sleep for some time before checking again
 	                Thread.sleep(1000); // Sleep for 1 second
-//	            	break;//delete
 	            }
 	        } catch (InterruptedException e) {
 	            e.printStackTrace();
