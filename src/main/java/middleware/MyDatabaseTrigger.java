@@ -63,17 +63,22 @@ public class MyDatabaseTrigger extends Thread {
         	        if(!latestResults.equals(prevResults)) {
         	        	System.out.println("NOT EQS!\n");
         	        	prevResults = latestResults;
+        	        	runRules();
         	        } else {
         	        	System.out.println("EQS!\n");
         	        }
 	                Thread.sleep(1000); // Sleep for 1 second
 	                //efficiency test
-	                memoryUsage();
+//	                memoryUsage();
 	            }
 	        } catch (InterruptedException e) {
 	            e.printStackTrace();
 	        }
 	    }
+
+	private void runRules() {
+		
+	}
 
 	private void memoryUsage() {
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
