@@ -1,5 +1,8 @@
 package middleware;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.MemoryUsage;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +48,7 @@ public class MyDatabaseTrigger extends Thread {
 		    try {
 	        	//initialise prevResults
 	            while (listening) {
-        			//go through querying each table for newResult
+        			//go through querying each table for the latest row in the table
 	                ArrayList<Map<String, Object>> latestResults = new ArrayList<Map<String, Object>>();
         	        connection.setUrl("jdbc:mysql://localhost:3306/beacon_localisation");
         	        connection.setUsername("root");
@@ -56,7 +59,7 @@ public class MyDatabaseTrigger extends Thread {
         	        connection.setPassword("123456");
         	        latestResults.addAll(latestResults(connection, postgresqlDbNames, postgresqlTableNames));
         	        System.out.println(latestResults + "\n" + prevResults);
-        			//check whether newResult isn't actually prevResult
+        			//checks whether the latest result isn't actually previous Result
         	        if(!latestResults.equals(prevResults)) {
         	        	System.out.println("NOT EQS!\n");
         	        	prevResults = latestResults;
@@ -64,11 +67,33 @@ public class MyDatabaseTrigger extends Thread {
         	        	System.out.println("EQS!\n");
         	        }
 	                Thread.sleep(1000); // Sleep for 1 second
+	                //efficiency test
+	                memoryUsage();
 	            }
 	        } catch (InterruptedException e) {
 	            e.printStackTrace();
 	        }
 	    }
+
+	private void memoryUsage() {
+        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+        MemoryUsage heapMemoryUsage = memoryMXBean.getHeapMemoryUsage();
+        MemoryUsage nonHeapMemoryUsage = memoryMXBean.getNonHeapMemoryUsage();
+
+        System.out.println("Heap Memory Usage:");
+        printMemoryUsage(heapMemoryUsage);
+
+        System.out.println("Non-Heap Memory Usage:");
+        printMemoryUsage(nonHeapMemoryUsage);
+		
+	}
+
+	private void printMemoryUsage(MemoryUsage memoryUsage) {
+        System.out.println("    Init: " + memoryUsage.getInit() / (1024 * 1024) + " MB");
+        System.out.println("    Used: " + memoryUsage.getUsed() / (1024 * 1024) + " MB");
+        System.out.println("    Committed: " + memoryUsage.getCommitted() / (1024 * 1024) + " MB");
+        System.out.println("    Max: " + memoryUsage.getMax() / (1024 * 1024) + " MB");		
+	}
 
 	private Collection<Map<String, Object>> latestResults(MySqlConnection con, ArrayList<String> dbNames, ArrayList<String> tbNames) {
     	ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
