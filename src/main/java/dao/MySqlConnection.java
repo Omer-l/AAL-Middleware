@@ -400,6 +400,10 @@ ORDER BY dateTime  DESC LIMIT 1;
 	public void setUrl(String url) {
 		this.url = url;
 	}
+	
+	public void connectToDb(String db) { 
+		this.url = url.substring(0, url.lastIndexOf('/')+1) + db;
+	}
 
 	public String getUsername() {
 		return username;
