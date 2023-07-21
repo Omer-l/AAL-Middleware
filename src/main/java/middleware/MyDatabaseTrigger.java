@@ -43,31 +43,38 @@ public class MyDatabaseTrigger extends Thread {
     }
 	 @Override
 	    public void run() {
-		    prevResults.addAll(latestResults(connection, mySqlDbNames, mySqlTableNames));
-	        connection.setUrl("jdbc:postgresql://localhost:5432/sensors");
-	        connection.setUsername("postgres");
-	        connection.setPassword("123456");
-	        prevResults.addAll(latestResults(connection, postgresqlDbNames, postgresqlTableNames));
-		    System.out.println(prevResults);
+//		    prevResults.addAll(latestResults(connection, mySqlDbNames, mySqlTableNames));
+//	        connection.setUrl("jdbc:postgresql://localhost:5432/sensors");
+//	        connection.setUsername("postgres");
+//	        connection.setPassword("123456");
+//	        prevResults.addAll(latestResults(connection, postgresqlDbNames, postgresqlTableNames));
+//		    System.out.println(prevResults);
 		    try {
 	        	//initialise prevResults
 	            while (listening) {
-	            	for(String databaseName : mySqlDbNames) {
-	            		for(String tableName : mySqlTableNames) {
-	            			//go through querying each table for newResult
-	            			//check whether newResult isn't actually prevResult
-	            				//then run all rules
-	            				//else continue
-	            		}
-	                // Execute query
-//	                String query = "SELECT * FROM ";
-	                
-	                // Process the results
-	                
-	            	}
+        			//go through querying each table for newResult
+	                ArrayList<Map<String, Object>> latestResults = new ArrayList<Map<String, Object>>();
+        	        connection.setUrl("jdbc:mysql://localhost:3306/beacon_localisation");
+        	        connection.setUsername("root");
+        	        connection.setPassword("root");
+	                latestResults.addAll(latestResults(connection, mySqlDbNames, mySqlTableNames));
+        	        connection.setUrl("jdbc:postgresql://localhost:5432/sensors");
+        	        connection.setUsername("postgres");
+        	        connection.setPassword("123456");
+        	        latestResults.addAll(latestResults(connection, postgresqlDbNames, postgresqlTableNames));
+        	        System.out.println(latestResults + "\n" + prevResults);
+        			//check whether newResult isn't actually prevResult
+        	        if(!latestResults.equals(prevResults)) {
+        	        	System.out.println("NOT EQS!\n");
+        	        	prevResults = latestResults;
+        	        } else {
+        	        	System.out.println("EQS!\n");
+        	        }
+        				//then run all rules
+        				//else continue
 	                // Sleep for some time before checking again
 	                Thread.sleep(1000); // Sleep for 1 second
-	            	break;//delete
+//	            	break;//delete
 	            }
 	        } catch (InterruptedException e) {
 	            e.printStackTrace();
@@ -83,10 +90,9 @@ public class MyDatabaseTrigger extends Thread {
     			query.append(tableName);
     			query.append(" ORDER BY 1 DESC LIMIT 1");
     			ArrayList<Map<String, Object>> newRow = con.queryDB(query.toString(), "select");
-    			if(newRow.size() > 0) {
+    			if(newRow.size() > 0) 
     				latestResults.add(newRow.get(0));
-	        		System.out.println(newRow.get(0));
-    			} else
+    			else
     				latestResults.add(null); //placeholder
     		}
     	}
