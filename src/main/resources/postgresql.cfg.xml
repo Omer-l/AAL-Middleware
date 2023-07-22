@@ -4,5 +4,12 @@
     <url>jdbc:postgresql://localhost:5432/sensors</url>
     <username>postgres</username>
     <password>123456</password>
+	<track>
+		<databases>
+			<database name="sensors">
+				<table name="results"></table>
+			</database>
+		</databases>
+	</track>
 </database-configuration>
 

@@ -69,7 +69,7 @@ public class MyDatabaseTrigger extends Thread {
         	        }
 	                Thread.sleep(1000); // Sleep for 1 second
 	                //efficiency test
-//	                memoryUsage();
+	                memoryUsage();
 	            }
 	        } catch (InterruptedException e) {
 	            e.printStackTrace();

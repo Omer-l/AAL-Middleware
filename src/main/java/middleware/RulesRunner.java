@@ -45,8 +45,21 @@ public class RulesRunner {
 		return matchingEvents;
 	}
 	
-	public void update() {
-		
+	public void update() { //make this a @Override and a run() function but maybe not
+		//go through conditions
+		//boolean array to see if all WHENs are true
+		//loop through whens
+		for(Map<String, Object> when : whens) {
+			switch((String) when.get("event_type")) {
+				case "database_read_event": 
+					//then go to that database table and read the latest row
+					
+					; break;
+				case "read_file_event" : ; break; //TODO: IMPLEMENT THIS
+			}
+		}
+		//if all when booleans are true
+			//then run thens
 	}
 
 	public static void main(String[] args) {
@@ -58,6 +71,6 @@ public class RulesRunner {
 		for (Map<String, Object> rule : rules)
 			threads.add(new RulesRunner(rule));
 		
-		threads.get(1).updateRule();
+		threads.get(0).update();
     }
 }
