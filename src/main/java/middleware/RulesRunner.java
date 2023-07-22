@@ -1,6 +1,7 @@
 package middleware;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import dao.MySqlConnection;
@@ -30,7 +31,7 @@ public class RulesRunner {
 			for(String tableName : referencedTableNames) {
 				String query = "SELECT * FROM " + tableName + " WHERE unique_id = \"" + id + "\"";
 				ArrayList<Map<String, Object>> resultList = mainDbManager.queryDB(query, "select");
-				//is there is amatching id in this table
+				//is there is a matching id in this table
 				if(resultList.size() > 0) {
 					//add a new "event_type" element to map
 					Map<String, Object> event = resultList.get(0);
@@ -53,7 +54,21 @@ public class RulesRunner {
 			switch((String) when.get("event_type")) {
 				case "database_read_event": 
 					//then go to that database table and read the latest row
-					
+					if(when.get("rdbm").equals("MySQL")) {
+						mainDbManager.setUrl("jdbc:mysql://localhost:3306/" + (String) when.get("database"));
+						mainDbManager.setUsername("root");
+						mainDbManager.setPassword("root");
+						Map<String, Object> result = mainDbManager.queryDB((String) when.get("query"), "select").get(0);
+						if(when.get("previous_result") == null)
+							when.put("previous_result", result);
+						else if(when.get("previous_result") != result) {
+							when.replace("previous, result", result);
+						}
+					} else {
+	        	        mainDbManager.setUrl("jdbc:postgresql://localhost:5432/"  + (String) when.get("database"));
+	        	        mainDbManager.setUsername("postgres");
+	        	        mainDbManager.setPassword("123456");
+					}
 					; break;
 				case "read_file_event" : ; break; //TODO: IMPLEMENT THIS
 			}
