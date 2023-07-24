@@ -1,6 +1,7 @@
 package middleware;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -101,7 +102,10 @@ public class RulesRunner {
 			switch((String) then.get("event_type")) {
 				case "system_file_run_event": 
 					try { //TODO: duplicate code with AddFileEvent.java
-			            ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", "java", selectedFile.getAbsolutePath());
+						mainDbManager.connectToDb("middleware");
+						String filePath = (String) mainDbManager.queryDB("SELECT * FROM system_file_run_event WHERE unique_id = '" + (String) then.get("unique_id") + "'", "select").get(0).get("path");
+//						File file = new File(filePath);
+			            ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", "java", filePath);
 			            Process process = processBuilder.start();
 
 			            // Get the output stream of the process
@@ -109,19 +113,13 @@ public class RulesRunner {
 
 			            // Read and print the output
 			            String line;
-			            logField.clear();
 			            while ((line = reader.readLine()) != null) {
 			                System.out.println(line);
-			                logField.setText(logField.getText() + "\n" + line);
 			            }
 
 			            // Wait for the process to finish
 			            int exitCode = process.waitFor();
 			            System.out.println("Process exited with code: " + exitCode);
-			            if(exitCode == 0)
-			            	saveButton.setDisable(false);
-			            else
-			            	saveButton.setDisable(true);
 			        } catch (IOException | InterruptedException e) {
 			            e.printStackTrace();
 			        } break;
@@ -147,6 +145,6 @@ public class RulesRunner {
 		for (Map<String, Object> rule : rules)
 			threads.add(new RulesRunner(rule));
 		
-		threads.get(1).update();
+		threads.get(0).update();
     }
 }
