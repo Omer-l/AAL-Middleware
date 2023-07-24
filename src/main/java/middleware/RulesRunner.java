@@ -61,16 +61,19 @@ public class RulesRunner {
 						mainDbManager.setUsername("root");
 						mainDbManager.setPassword("root");
 						Map<String, Object> result = mainDbManager.queryDB((String) when.get("query"), "select").get(0);
-						if(when.get("previous_result") == null)
-							when.put("previous_result", result);
-						else if(when.get("previous_result") != result) {
-							when.replace("previous, result", result);
-						}
 						//process boolean
-						if(when.get("column").equals("Whole Row"))
-							whenReached[whenIndex] = true;
-						else {
-							
+						if(when.get("column").equals("Whole Row")) {
+							if(when.get("previous_result") == null) { //newly detected
+								when.put("previous_result", result);
+								whenReached[whenIndex] = true;
+							} else if(when.get("previous_result") != result) {
+								when.replace("previous_result", result);
+							}
+						} else if (when.get("value") != "") {
+							String whenVal = (String) when.get("value");
+							String resultVal = (String) result.get((String) when.get("column"));
+							if(whenVal.equals(resultVal))
+								whenReached[whenIndex] = true;
 						}
 						whenIndex++;
 						
@@ -83,9 +86,21 @@ public class RulesRunner {
 				case "read_file_event" : ; break; //TODO: IMPLEMENT THIS
 			}
 		}
+		if(areAllTrue(whenReached)) {
+			runThens();
+		}
 		//if all when booleans are true
 			//then run thens
 	}
+	
+	public static boolean areAllTrue(boolean[] array) {
+        for (boolean value : array) {
+            if (!value) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 	public static void main(String[] args) {
 		mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
@@ -96,6 +111,6 @@ public class RulesRunner {
 		for (Map<String, Object> rule : rules)
 			threads.add(new RulesRunner(rule));
 		
-		threads.get(0).update();
+		threads.get(1).update();
     }
 }
