@@ -207,7 +207,7 @@ public class AddDatabaseEvent extends Window {
         	if(!emptyField) {
 	        	MainMenu.databaseQueries.add(query);
 	        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', '" + this.query + "');", "");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); //TODO: Fix so that it can also insert a string
 	        	back();
         	} else {
         		logField.setText("unique id, name or description field is empty");
@@ -328,6 +328,11 @@ public class AddDatabaseEvent extends Window {
         menu5.getItems().addAll(sortByColumns);
 	}
 	
+	public static void main(String[] args) {
+		AddDatabaseEvent ade = new AddDatabaseEvent(new DatabaseEvents(null));
+		ade.open();
+	}
+	
 	private void processTestQuery(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, Menu sortByMenu, TextField valueField) {
     	String rdbm = rdbmMenu.getText();
     	String db = databaseMenu.getText();
@@ -340,8 +345,13 @@ public class AddDatabaseEvent extends Window {
     	if(noBlankFields) {
         	System.out.println(rdbm + ", " + db + ", " + table + ", " + column + ", " + value);
         	StringBuilder query = new StringBuilder("SELECT * FROM " + table);
-        	if(!wholeRow)
-        		query.append(" WHERE " + column + " = " + value);
+        	if(!wholeRow) {
+        		query.append(" WHERE " + column + " = ");
+        		if(value.matches("\\d+"))
+        			query.append(value);
+        		else
+        			query.append("'" + value + "'");
+        	}
         	
         	query.append(" ORDER BY " + sortBy + " DESC LIMIT 1");
         	System.out.println(query);
@@ -351,7 +361,7 @@ public class AddDatabaseEvent extends Window {
         		saveButton.setDisable(false);
         		this.query = query.toString();
         	} else
-        	System.out.println("Blank");
+        		System.out.println("Blank");
     	}
 	}
 }

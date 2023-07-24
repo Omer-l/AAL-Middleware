@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import middleware.Main;
 
 public class MySqlConnection {
 	private String url;
@@ -369,9 +368,6 @@ ORDER BY dateTime  DESC LIMIT 1;
 		
 		if(limit != null)
 			query.append(" DESC LIMIT " + limit);
-		
-		if(Main.DEBUG)
-			System.out.println(query);
 		
 		return query.toString();
 	}

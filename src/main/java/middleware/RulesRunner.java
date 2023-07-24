@@ -49,6 +49,8 @@ public class RulesRunner {
 	public void update() { //make this a @Override and a run() function but maybe not
 		//go through conditions
 		//boolean array to see if all WHENs are true
+		boolean[] whenReached = new boolean[whens.size()];
+		int whenIndex = 0;
 		//loop through whens
 		for(Map<String, Object> when : whens) {
 			switch((String) when.get("event_type")) {
@@ -64,6 +66,14 @@ public class RulesRunner {
 						else if(when.get("previous_result") != result) {
 							when.replace("previous, result", result);
 						}
+						//process boolean
+						if(when.get("column").equals("Whole Row"))
+							whenReached[whenIndex] = true;
+						else {
+							
+						}
+						whenIndex++;
+						
 					} else {
 	        	        mainDbManager.setUrl("jdbc:postgresql://localhost:5432/"  + (String) when.get("database"));
 	        	        mainDbManager.setUsername("postgres");
