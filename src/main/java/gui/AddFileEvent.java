@@ -241,7 +241,8 @@ public class AddFileEvent extends Window {
 			case "run":
 
 		        try {
-		            ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", "java", selectedFile.getAbsolutePath());
+		        	String args = valueField.getText();
+		            ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", "java " + args, selectedFile.getAbsolutePath());
 		            Process process = processBuilder.start();
 
 		            // Get the output stream of the process
