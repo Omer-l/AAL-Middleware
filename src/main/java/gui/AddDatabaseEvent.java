@@ -214,18 +214,14 @@ public class AddDatabaseEvent extends Window {
         	}
         });
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
-        HBox column1HBox9 = new HBox();
-        Text logText = new Text("LOG: ");
-        logField.prefWidthProperty().bind(mainVBox1.widthProperty().multiply(0.9));
-        logField.prefHeightProperty().bind(mainVBox1.heightProperty().multiply(0.1));
-        logField.setEditable(false);
-        column1HBox9.getChildren().addAll(logText, logField);
+       
+        myStyles.createLogField(logField, mainVBox1);
         
         
         setRDBMSMenuOnAction(menu1, menu2, menu3, menu4);
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
         column1VBox2.getChildren().addAll(column1VBox2Header, column1Hbox4, column1HBox5, column1HBox6, column1HBox7, column1HBox8);
-        column1VBox3.getChildren().addAll(column1ButtonBar, column1HBox9);
+        column1VBox3.getChildren().addAll(column1ButtonBar, myStyles.column1HBox9);
         
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);

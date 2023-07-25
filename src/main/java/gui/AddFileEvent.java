@@ -159,17 +159,13 @@ public class AddFileEvent extends Window {
         	processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox3VBox2TextField.getText(), column1HBox2VBox2TextField.getText());
     	});
         column1ButtonBar2.getButtons().addAll(testButton, saveButton);
-        HBox column1HBox9 = new HBox();
-        Text logText = new Text("LOG: ");
-        logField.prefWidthProperty().bind(mainVBox1.widthProperty().multiply(0.9));
-        logField.prefHeightProperty().bind(mainVBox1.heightProperty().multiply(0.1));
-        logField.setEditable(false);
-        column1HBox9.getChildren().addAll(logText, logField);
+       
+        myStyles.createLogField(logField, mainVBox1);
         
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
         column1VBox2.getChildren().addAll(column1VBox2Header, column1ButtonBar1HBox);
         openRunForm(column1VBox3);
-        column1VBox4.getChildren().addAll(column1ButtonBar2, column1HBox9);
+        column1VBox4.getChildren().addAll(column1ButtonBar2, myStyles.column1HBox9);
         
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3, column1VBox4);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
