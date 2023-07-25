@@ -55,9 +55,6 @@ public class test {
             }
             bufferedReader.close();
     		connection.close(); //loading data complete
-            String previousRoom = nameAndLocationArr.get(latestName);
-            if(latestLocation != previousRoom)
-            	nameAndLocationArr.replace(latestName, latestLocation);
 //            	connect to postgresql jdbc
         	dbUrl = "jdbc:postgresql://localhost:5432/sensors";
             username = "postgres";
@@ -67,6 +64,12 @@ public class test {
             query = "INSERT INTO public.incoming_events (state,value) VALUES ('" + latestName + "In" + latestLocation + "',true);";
             statement = connection.createStatement();
             statement.executeUpdate(query);
+            String previousLocation = nameAndLocationArr.get(latestName);
+            if(latestLocation != previousLocation) {
+            	nameAndLocationArr.replace(latestName, latestLocation);
+            	query = "INSERT INTO public.incoming_events (state,value) VALUES ('" + latestName + "In" + previousLocation + "',false);";
+            	statement.executeUpdate(query);
+            }
             //write to file of the new location of user
             // Data to save
             StringBuilder dataToSave = new StringBuilder();
@@ -81,7 +84,6 @@ public class test {
             fileWriter.write(dataToSave.toString());
             System.out.println("Data saved successfully.");
             fileWriter.close();
-
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
