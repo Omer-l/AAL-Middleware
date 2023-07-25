@@ -51,7 +51,13 @@ public class test {
             	if(!f.exists())
             		f.createNewFile();
             	BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-                
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    String[] lineSplit = line.split(",");
+                    if(lineSplit.length == 2)
+                    	nameAndLocationArr.put(lineSplit[0], lineSplit[1]);
+                }
+                bufferedReader.close();
 
             } catch (IOException | SQLException e) {
                 e.printStackTrace();
