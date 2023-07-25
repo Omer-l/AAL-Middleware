@@ -65,7 +65,7 @@ public class test {
             statement = connection.createStatement();
             statement.executeUpdate(query);
             String previousLocation = nameAndLocationArr.get(latestName);
-            if(latestLocation != previousLocation) {
+            if(!latestLocation.equals(previousLocation)) {
             	nameAndLocationArr.replace(latestName, latestLocation);
             	query = "INSERT INTO public.incoming_events (state,value) VALUES ('" + latestName + "In" + previousLocation + "',false);";
             	statement.executeUpdate(query);
