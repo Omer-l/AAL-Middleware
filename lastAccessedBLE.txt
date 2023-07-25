@@ -1,0 +1,4 @@
+Sara,toilet
+Omer,livingroom
+Mario,kitchen
+Oscar,bedroom

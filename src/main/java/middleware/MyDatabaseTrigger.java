@@ -46,6 +46,7 @@ public class MyDatabaseTrigger extends Thread {
 	 @Override
 	    public void run() {
 		    try {
+		    	int it = 0;
 	        	//initialise prevResults
 	            while (listening) {
         			//go through querying each table for the latest row in the table
@@ -60,6 +61,10 @@ public class MyDatabaseTrigger extends Thread {
         	        latestResults.addAll(latestResults(connection, postgresqlDbNames, postgresqlTableNames));
         	        System.out.println(latestResults + "\n" + prevResults);
         			//checks whether the latest result isn't actually previous Result
+        	        if(it == 0) {
+        	        	prevResults = latestResults;
+            	        it++;
+        	        }
         	        if(!latestResults.equals(prevResults)) {
         	        	System.out.println("NOT EQS!\n");
         	        	prevResults = latestResults;
@@ -77,7 +82,16 @@ public class MyDatabaseTrigger extends Thread {
 	    }
 
 	private void runRules() {
+
+		RulesRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
+		RulesRunner.mainDbManager.setUsername("root");
+		RulesRunner.mainDbManager.setPassword("root");
+		ArrayList<Map<String, Object>> rules = RulesRunner.mainDbManager.queryDB("SELECT * from rule", "select");
+		ArrayList<RulesRunner> threads = new ArrayList<>();
+		for (Map<String, Object> rule : rules)
+			threads.add(new RulesRunner(rule));
 		
+		threads.get(0).update();
 	}
 
 	private void memoryUsage() {
