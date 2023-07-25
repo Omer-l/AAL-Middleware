@@ -58,6 +58,32 @@ public class test {
                     	nameAndLocationArr.put(lineSplit[0], lineSplit[1]);
                 }
                 bufferedReader.close();
+//            	if dbRoom and fileUserRoom matches
+//            		then do nothing to file
+//            	else
+//            		edit userAndRoom map
+//            	connect to postgresql jdbc
+        		connection.close();
+            	dbUrl = "jdbc:postgresql://localhost:5432/sensors";
+                username = "postgres";
+                password = "123456";
+                connection = DriverManager.getConnection(dbUrl, username, password);
+//            	send relevant data to incoming_events postgresql
+                
+                //write to file of the new location of user
+                // Data to save
+                StringBuilder dataToSave = new StringBuilder();
+                for(String key : nameAndLocationArr.keySet()) {
+                	dataToSave.append(key);
+                	dataToSave.append(",");
+                	dataToSave.append(nameAndLocationArr.get(key));
+                	dataToSave.append("\n");
+                }
+                System.out.println(dataToSave);
+            	FileWriter fileWriter = new FileWriter(fileName);
+                fileWriter.write(dataToSave.toString());
+                System.out.println("Data saved successfully.");
+                fileWriter.close();
 
             } catch (IOException | SQLException e) {
                 e.printStackTrace();
