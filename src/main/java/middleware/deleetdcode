@@ -1,0 +1,37 @@
+deleted code 
+
+
+private void runThens() {
+		for(Map<String, Object> then : thens) {
+			switch((String) then.get("event_type")) {
+				case "system_file_run_event":
+					
+					File file = new File(then.get(""));
+					try { //TODO: duplicate code with AddFileEvent.java
+			            ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", "java", selectedFile.getAbsolutePath());
+			            Process process = processBuilder.start();
+
+			            // Get the output stream of the process
+			            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+			            // Read and print the output
+			            String line;
+			            logField.clear();
+			            while ((line = reader.readLine()) != null) {
+			                System.out.println(line);
+			                logField.setText(logField.getText() + "\n" + line);
+			            }
+
+			            // Wait for the process to finish
+			            int exitCode = process.waitFor();
+			            System.out.println("Process exited with code: " + exitCode);
+			            if(exitCode == 0)
+			            	saveButton.setDisable(false);
+			            else
+			            	saveButton.setDisable(true);
+			        } catch (IOException | InterruptedException e) {
+			            e.printStackTrace();
+			        } break;
+			}
+		}
+	}

@@ -4,4 +4,11 @@
     <url>jdbc:mysql://localhost:3306/beacon_localisation</url>
     <username>root</username>
     <password>root</password>
+    <database name="beacon_localisation">
+    	<table>record</table>
+    	<table>record1</table>
+    </database>
+    <database name="db_measure">
+    	<table>measure</table>
+    </database>
 </database-configuration>
