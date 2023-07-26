@@ -21,10 +21,16 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 public class FileEvents extends Window {
+	myStyles styles = new myStyles();
 	
 	public FileEvents(Window prevWindow) {
 		super(prevWindow);
 	}
+	
+	public FileEvents() {
+		
+	}
+	
 
 	public void open() {
 		MainMenu.clearMainBox();
@@ -41,7 +47,7 @@ public class FileEvents extends Window {
         Text column1Header = new Text("Run Events");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
         column1VBox.getChildren().addAll(column1Header);
-        getEvents("SELECT * FROM system_file_run_event INNER JOIN event ON system_file_run_event.unique_id = event.unique_id;", column1VBox);
+        styles.getEvents("SELECT * FROM system_file_run_event INNER JOIN event ON system_file_run_event.unique_id = event.unique_id;", column1VBox);
         int runEventsLastIndex = column1VBox.getChildren().size() - 1;
         column1VBox.getChildren().get(runEventsLastIndex).setOnMouseClicked(event -> {new AddFileEvent(this, "run").open();});
         mainVBox1.getChildren().addAll(column1VBox);
@@ -53,7 +59,7 @@ public class FileEvents extends Window {
         Text column2Header = new Text("Read Events");
         column2Header.setStyle(MainMenu.HEADER_1_STYLE);
         column2VBox.getChildren().addAll(column2Header);
-        getEvents("SELECT * FROM system_file_read_event INNER JOIN event ON system_file_read_event.unique_id = event.unique_id;", column2VBox);
+        styles.getEvents("SELECT * FROM system_file_read_event INNER JOIN event ON system_file_read_event.unique_id = event.unique_id;", column2VBox);
         int readEventsLastIndex = column2VBox.getChildren().size() - 1;
         column2VBox.getChildren().get(readEventsLastIndex).setOnMouseClicked(event -> {new AddFileEvent(this, "read").open();});
         mainVBox2.getChildren().addAll(column2VBox);
@@ -65,16 +71,16 @@ public class FileEvents extends Window {
         Text column3Header = new Text("Write Events");
         column3Header.setStyle(MainMenu.HEADER_1_STYLE);
         column3VBox.getChildren().add(column3Header);
-        getEvents("SELECT * FROM system_file_write_event INNER JOIN event ON system_file_write_event.unique_id = event.unique_id;", column3VBox);
+        styles.getEvents("SELECT * FROM system_file_write_event INNER JOIN event ON system_file_write_event.unique_id = event.unique_id;", column3VBox);
         int writeEventsLastIndex = column3VBox.getChildren().size() - 1;
         column3VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { new AddFileEvent(this, "write").open(); });
         mainVBox3.getChildren().addAll(column3VBox);
-
+//START
     	MainMenu.addHoverInteraction(new VBox[] {(VBox) column1VBox.getChildren().get(runEventsLastIndex), (VBox) column2VBox.getChildren().get(readEventsLastIndex), (VBox) column3VBox.getChildren().get(writeEventsLastIndex)}, "yellow", "darkgray");
         MainMenu.mainHBox.getChildren().addAll(mainVBox1, mainVBox2, mainVBox3);
 	}
 	
-	public void getEvents(String query, VBox eventsVBox) {
+	/**public void getEvents(String query, VBox eventsVBox) {
 		ArrayList<Map<String, Object>> events = MainMenu.mainDbManager.queryDB(query, "select");
 		for(Map<String, Object> readEvent : events) {
 			VBox column1VBox = new VBox();
@@ -111,11 +117,11 @@ public class FileEvents extends Window {
 		}
 		VBox column1VBox2 = new VBox();
 		myStyles.createAddNewEvent(column1VBox2,eventsVBox);
-        
-       /** column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
+        //TILL HERE
+        column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
         Text column1VBox2Header = new Text("Add New Event");
         column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        
         column1VBox2.getChildren().addAll(column1VBox2Header);
-        eventsVBox.getChildren().add(column1VBox2);**/
-	}
+        eventsVBox.getChildren().add(column1VBox2);
+	}**/
 }
