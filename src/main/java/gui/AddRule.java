@@ -132,12 +132,13 @@ public class AddRule extends Window {
 		
 
         VBox column1VBox2 = new VBox();
-        column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
+        myStyles.createAddNewEvent(column1VBox2,eventsVBox);
+        /**column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
         Text column1VBox2Header = new Text("Add New Event");
         column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        
-        column1VBox2.getChildren().addAll(column1VBox2Header); //HERE
+        column1VBox2.getChildren().addAll(column1VBox2Header);**/ //HERE
     	MainMenu.addHoverInteraction(new VBox[] {column1VBox2}, "yellow", "darkgray");
-        eventsVBox.getChildren().add(column1VBox2);
+       // eventsVBox.getChildren().add(column1VBox2);
 	}
 
 	private void processSaveButton(String uniqueIdInput, String nameInput, String descriptionInput) {
