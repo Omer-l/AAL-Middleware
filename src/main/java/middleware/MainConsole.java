@@ -12,7 +12,7 @@ import java.util.Map;
 import dao.MySqlConnection;
 import gui.MainMenu;
 
-public class MyDatabaseTrigger extends Thread {
+public class MainConsole extends Thread {
 	private ArrayList<String> mySqlDbNames = new ArrayList<String> ();
 	private ArrayList<String> mySqlTableNames = new ArrayList<String> ();
 	private ArrayList<String> postgresqlDbNames = new ArrayList<String> ();
@@ -21,7 +21,7 @@ public class MyDatabaseTrigger extends Thread {
     private MySqlConnection connection;
     private boolean listening;
     
-	public MyDatabaseTrigger(MySqlConnection connection) {
+	public MainConsole(MySqlConnection connection) {
         this.connection = connection;
         this.listening = true;
         mySqlDbNames.add("beacon_localisation");
@@ -35,7 +35,7 @@ public class MyDatabaseTrigger extends Thread {
         String username = "root";
         String password = "root";
         MySqlConnection con = new MySqlConnection(url, username, password);
-        MyDatabaseTrigger myDatabaseTrigger = new MyDatabaseTrigger(con);
+        MainConsole myDatabaseTrigger = new MainConsole(con);
         myDatabaseTrigger.run();
         
     }
