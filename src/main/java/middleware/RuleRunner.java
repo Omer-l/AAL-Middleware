@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import dao.DbXMLParser;
 import dao.MySqlConnection;
 
 public class RuleRunner {
@@ -61,9 +62,7 @@ public class RuleRunner {
 				case "database_read_event": 
 					//then go to that database table and read the latest row
 					if(when.get("rdbm").equals("MySQL")) {
-						mainDbManager.setUrl("jdbc:mysql://localhost:3306/" + (String) when.get("database"));
-						mainDbManager.setUsername("root");
-						mainDbManager.setPassword("root");
+	        	        mainDbManager.setDetails(DbXMLParser.dbDetailsMySql);
 						Map<String, Object> result = mainDbManager.queryDB((String) when.get("query"), "select").get(0);
 						//process boolean
 						if(when.get("column").equals("Whole Row")) {
@@ -82,9 +81,7 @@ public class RuleRunner {
 						whenIndex++;
 						
 					} else {
-	        	        mainDbManager.setUrl("jdbc:postgresql://localhost:5432/"  + (String) when.get("database"));
-	        	        mainDbManager.setUsername("postgres");
-	        	        mainDbManager.setPassword("123456");
+	        	        mainDbManager.setDetails(DbXMLParser.dbDetailsPostgresql);
 					}
 					; break;
 				case "read_file_event" : ; break; //TODO: IMPLEMENT THIS

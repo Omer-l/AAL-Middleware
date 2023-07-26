@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import dao.DbXMLParser;
 import dao.MySqlConnection;
 import gui.MainMenu;
 
@@ -51,13 +52,9 @@ public class MainConsole extends Thread {
 	            while (listening) {
         			//go through querying each table for the latest row in the table
 	                ArrayList<Map<String, Object>> latestResults = new ArrayList<Map<String, Object>>();
-        	        connection.setUrl("jdbc:mysql://localhost:3306/beacon_localisation");
-        	        connection.setUsername("root");
-        	        connection.setPassword("root");
+        	        connection.setDetails(DbXMLParser.dbDetailsMySql);
 	                latestResults.addAll(latestResults(connection, mySqlDbNames, mySqlTableNames));
-        	        connection.setUrl("jdbc:postgresql://localhost:5432/sensors");
-        	        connection.setUsername("postgres");
-        	        connection.setPassword("123456");
+        	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
         	        latestResults.addAll(latestResults(connection, postgresqlDbNames, postgresqlTableNames));
         	        System.out.println(latestResults + "\n" + prevResults);
         			//checks whether the latest result isn't actually previous Result
