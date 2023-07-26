@@ -416,4 +416,10 @@ ORDER BY dateTime  DESC LIMIT 1;
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public void setDetails(String[] dbDetails) {	
+		url = dbDetails[0];
+		username = dbDetails[1];
+		password = dbDetails[2];
+	}
 }

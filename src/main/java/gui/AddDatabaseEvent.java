@@ -263,12 +263,10 @@ public class AddDatabaseEvent extends Window {
 		}
 	}
 
-	private void loadDatabasesMenu(Menu menu, Menu databaseMenu, String hibernateConfigFileName) {
+	private void loadDatabasesMenu(Menu menu, Menu databaseMenu, String configFileName) {
 		ObservableList<MenuItem> databases = FXCollections.observableArrayList();
-		String[] dbDetails = DbXMLParser.getDBDetailsSQL(hibernateConfigFileName);
-		dbManager.setUrl(dbDetails[0]);
-		dbManager.setUsername(dbDetails[1]);
-		dbManager.setPassword(dbDetails[2]);
+		String[] dbDetails = configFileName.contains("mysql") ? DbXMLParser.dbDetailsMySql : DbXMLParser.dbDetailsPostgresql;
+		dbManager.setDetails(dbDetails);
 		databaseMenu.getItems().clear();
 		for(String dbName : dbManager.getDatabaseNames())
 			databases.add(new MenuItem(dbName));

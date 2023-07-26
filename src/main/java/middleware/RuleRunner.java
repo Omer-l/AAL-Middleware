@@ -10,13 +10,13 @@ import java.util.Map;
 
 import dao.MySqlConnection;
 
-public class RulesRunner {
+public class RuleRunner {
     public static String[] referencedTableNames = {"database_read_event", "database_write_event", "rule", "system_file_read_event", "system_file_run_event", "system_file_write_event"};
 	public static MySqlConnection mainDbManager = new MySqlConnection();
 	public ArrayList<Map<String, Object>> whens;
 	public ArrayList<Map<String, Object>> thens;
 
-    public RulesRunner(Map<String, Object> rule) {
+    public RuleRunner(Map<String, Object> rule) {
         getWhensAndThens(rule);
     }
     
@@ -143,9 +143,9 @@ public class RulesRunner {
 		mainDbManager.setUsername("root");
 		mainDbManager.setPassword("root");
 		ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
-		ArrayList<RulesRunner> threads = new ArrayList<>();
+		ArrayList<RuleRunner> threads = new ArrayList<>();
 		for (Map<String, Object> rule : rules)
-			threads.add(new RulesRunner(rule));
+			threads.add(new RuleRunner(rule));
 		
 		threads.get(0).update();
     }

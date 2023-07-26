@@ -83,13 +83,13 @@ public class MainConsole extends Thread {
 
 	private void runRules() {
 
-		RulesRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
-		RulesRunner.mainDbManager.setUsername("root");
-		RulesRunner.mainDbManager.setPassword("root");
-		ArrayList<Map<String, Object>> rules = RulesRunner.mainDbManager.queryDB("SELECT * from rule", "select");
-		ArrayList<RulesRunner> threads = new ArrayList<>();
+		RuleRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
+		RuleRunner.mainDbManager.setUsername("root");
+		RuleRunner.mainDbManager.setPassword("root");
+		ArrayList<Map<String, Object>> rules = RuleRunner.mainDbManager.queryDB("SELECT * from rule", "select");
+		ArrayList<RuleRunner> threads = new ArrayList<>();
 		for (Map<String, Object> rule : rules)
-			threads.add(new RulesRunner(rule));
+			threads.add(new RuleRunner(rule));
 		
 		threads.get(0).update();
 	}

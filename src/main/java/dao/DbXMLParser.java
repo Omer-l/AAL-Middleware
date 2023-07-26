@@ -19,7 +19,8 @@ public class DbXMLParser {
 	
 	public static Map<String, ArrayList<String>> mySqlDbAndTablesMap = getDbAndTablesMap("mysql.cfg.xml");
 	public static Map<String, ArrayList<String>> postgresqlDbAndTablesMap = getDbAndTablesMap("postgresql.cfg.xml");
-	
+	public static String[] dbDetailsMySql = getDBDetails("mysql.cfg.xml");
+	public static String[] dbDetailsPostgresql = getDBDetails("postgresql.cfg.xml");
 	public static void main(String[] args) {
 		 
 	}
@@ -73,7 +74,7 @@ public class DbXMLParser {
     }
 	
 	
-	public static String[] getDBDetailsSQL(String fileName) {
+	public static String[] getDBDetails(String fileName) {
 		String[] dbDetails = new String[3]; //0 is url, 1 is user, 2 is password
 		try {
             // Create a DocumentBuilderFactory
