@@ -95,8 +95,9 @@ public class DatabaseEvents extends Window {
 	        		this.back().back();
 	        	}
 	        });
-	    	MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
-	        eventsVBox.getChildren().add(column1VBox);
+	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
+	        //eventsVBox.getChildren().add(column1VBox);
+	        myStyles.addHover(column1VBox,eventsVBox);
 		}
 		
 

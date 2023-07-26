@@ -20,5 +20,19 @@ public class myStyles{
      logField.setEditable(false);
      column1HBox9.getChildren().addAll(logText,logField);
 	}
+	
+	public static void addHover(VBox column1VBox,VBox eventsVBox) {
+		MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
+        eventsVBox.getChildren().add(column1VBox);
+	}
+	
+	public static void createAddNewEvent( VBox column1VBox2,VBox eventsVBox) {
+		    column1VBox2 = new VBox();
+	        column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
+	        Text column1VBox2Header = new Text("Add New Event");
+	        column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        
+	        column1VBox2.getChildren().addAll(column1VBox2Header);
+	        eventsVBox.getChildren().add(column1VBox2);
+	}
 
 }
