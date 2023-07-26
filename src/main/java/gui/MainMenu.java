@@ -46,6 +46,7 @@ public class MainMenu extends Application {
 	//MAIN
 	public static Stage primaryStage;
     public static void main(String[] args) {
+    	//ensure connection to middleware is established before allowing configuring of middleware
 		mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
 		mainDbManager.setUsername("root");
 		mainDbManager.setPassword("root");

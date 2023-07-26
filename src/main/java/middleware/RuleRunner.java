@@ -136,9 +136,7 @@ public class RuleRunner {
     }
 
 	public static void main(String[] args) {
-		mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
-		mainDbManager.setUsername("root");
-		mainDbManager.setPassword("root");
+        mainDbManager.setDetails(DbXMLParser.dbDetailsMySql);
 		ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
 		ArrayList<RuleRunner> threads = new ArrayList<>();
 		for (Map<String, Object> rule : rules)

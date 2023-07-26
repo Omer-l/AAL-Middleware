@@ -32,10 +32,8 @@ public class MainConsole extends Thread {
 	}
 	
 	public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/beacon_localisation";
-        String username = "root";
-        String password = "root";
-        MySqlConnection con = new MySqlConnection(url, username, password);
+        MySqlConnection con = new MySqlConnection();
+        con.setDetails(DbXMLParser.dbDetailsMySql);
         MainConsole myDatabaseTrigger = new MainConsole(con);
         myDatabaseTrigger.run();
         
