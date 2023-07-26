@@ -29,7 +29,8 @@ public class AddThen extends Window {
 	public void open() {
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add Then");
-        Button button1 = new Button("Back");
+		myStyles.thenAndWhen(this);
+        /**Button button1 = new Button("Back");
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);
@@ -132,6 +133,6 @@ public class AddThen extends Window {
         
     	MainMenu.addHoverInteraction(new VBox[] {text1VBox, text2VBox, text3VBox, text4VBox}, "white", "darkgray");
     	mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, gridPane);
-        MainMenu.mainHBox.getChildren().addAll(mainVBox1);
+        MainMenu.mainHBox.getChildren().addAll(mainVBox1);**/
 	}
 }

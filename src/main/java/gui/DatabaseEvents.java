@@ -45,7 +45,7 @@ public class DatabaseEvents extends Window {
         Text column1Header = new Text("Read Events");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
         column1VBox.getChildren().addAll(column1Header);
-        styles.getEvents("SELECT * FROM database_read_event INNER JOIN event ON database_read_event.unique_id = event.unique_id;", column1VBox);
+        styles.getEvents("SELECT * FROM database_read_event INNER JOIN event ON database_read_event.unique_id = event.unique_id;", column1VBox, this);
         int readEventsLastIndex = column1VBox.getChildren().size() - 1;
         column1VBox.getChildren().get(readEventsLastIndex).setOnMouseClicked(event -> {new AddDatabaseEvent(this).open();});
         mainVBox1.getChildren().addAll(column1VBox);
@@ -57,7 +57,7 @@ public class DatabaseEvents extends Window {
         Text column2Header = new Text("Write Events");
         column2Header.setStyle(MainMenu.HEADER_1_STYLE);
         column2VBox.getChildren().add(column2Header);
-        styles.getEvents("SELECT * FROM database_write_event INNER JOIN event ON database_write_event.unique_id = event.unique_id;", column2VBox);
+        styles.getEvents("SELECT * FROM database_write_event INNER JOIN event ON database_write_event.unique_id = event.unique_id;", column2VBox, this);
         int writeEventsLastIndex = column2VBox.getChildren().size() - 1;
         column2VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { /** add event */ System.out.println("Write event clicked"); });
         mainVBox2.getChildren().addAll(column2VBox);
