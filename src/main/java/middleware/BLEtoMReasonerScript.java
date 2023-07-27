@@ -2,15 +2,12 @@ package middleware;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,7 +17,6 @@ import java.text.SimpleDateFormat;
 
 public class BLEtoMReasonerScript {
     public static void main(String[] args) {
-    	System.out.println("Running BLE DB to MReasoner DB Script...");
         HashMap<String, String> nameAndLocationArr = new HashMap<String, String>();
         try {
         	String latestName = "";
@@ -51,14 +47,18 @@ public class BLEtoMReasonerScript {
             File f = new File ("./lastAccessedBLE.txt");
         	if(!f.exists())
         		f.createNewFile();
-        	BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] lineSplit = line.split(",");
-                if(lineSplit.length == 2)
+        	BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fileName));
+            byte[] buffer = new byte[4096]; // Adjust buffer size as needed
+            int bytesRead;
+            while ((bytesRead = bis.read(buffer)) != -1) {
+                // Convert the bytes read to a string and print the result
+                String data = new String(buffer, 0, bytesRead);
+                for(String line : data.split("\n")) {
+                	String[] lineSplit = line.split(",");
                 	nameAndLocationArr.put(lineSplit[0], lineSplit[1]);
+                }
             }
-            bufferedReader.close();
+            bis.close();
     		connection.close(); //loading data complete
 //            	connect to postgresql jdbc
         	dbUrl = "jdbc:postgresql://localhost:5432/sensors";
@@ -87,18 +87,13 @@ public class BLEtoMReasonerScript {
             //write to file of the new location of user
             // Data to save
             StringBuilder dataToSave = new StringBuilder();
-//            for(String key : nameAndLocationArr.keySet()) {
-//            	dataToSave.append(key);
-//            	dataToSave.append(",");
-//            	dataToSave.append(nameAndLocationArr.get(key));
-//            	dataToSave.append("\n");
-//            }
-////            System.out.println(dataToSave);
-//        	FileWriter fileWriter = new FileWriter(fileName);
-//            fileWriter.write(dataToSave.toString());
-//            System.out.println("Data saved successfully.");
-//            fileWriter.close();
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("output.txt"));
+            for(String key : nameAndLocationArr.keySet()) {
+            	dataToSave.append(key);
+            	dataToSave.append(",");
+            	dataToSave.append(nameAndLocationArr.get(key));
+            	dataToSave.append("\n");
+            }
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("lastAccessedBLE.txt"));
             byte[] data = dataToSave.toString().getBytes(); // Replace with your data
             bos.write(data);
             bos.close();
@@ -106,5 +101,6 @@ public class BLEtoMReasonerScript {
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
+    	System.out.println("BLE DB to MReasoner DB Script complete");
     }
 }
