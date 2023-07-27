@@ -101,7 +101,7 @@ public class AddDatabaseEvent extends Window {
         VBox column1HBox1VBox1 = new VBox();
         column1HBox1VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
         column1HBox1VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox1VBox1Header = new Text("UniqueID");
+        Text column1HBox1VBox1Header = new Text("UniqueID"); //TODO: delete this unique id field and make it so that the db auto increments this
         VBox column1HBox1VBox2 = new VBox();
         column1HBox1VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         TextField column1HBox1VBox2TextField = new TextField();

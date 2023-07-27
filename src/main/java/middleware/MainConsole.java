@@ -27,8 +27,8 @@ public class MainConsole extends Thread {
         this.listening = true;
         mySqlDbNames.add("beacon_localisation");
         mySqlTableNames.add("record");
-        postgresqlDbNames.add("sensors");
-        postgresqlTableNames.add("incoming_events");
+//        postgresqlDbNames.add("sensors");
+//        postgresqlTableNames.add("incoming_events");
 	}
 	
 	public static void main(String[] args) {
@@ -48,28 +48,38 @@ public class MainConsole extends Thread {
 		    	int it = 0;
 	        	//initialise prevResults
 	            while (listening) {
+
+	                // Record the start time
+	                long startTime = System.currentTimeMillis();
         			//go through querying each table for the latest row in the table
 	                ArrayList<Map<String, Object>> latestResults = new ArrayList<Map<String, Object>>();
         	        connection.setDetails(DbXMLParser.dbDetailsMySql);
 	                latestResults.addAll(latestResults(connection, mySqlDbNames, mySqlTableNames));
         	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
         	        latestResults.addAll(latestResults(connection, postgresqlDbNames, postgresqlTableNames));
-        	        System.out.println(latestResults + "\n" + prevResults);
+//        	        System.out.println(latestResults + "\n" + prevResults);
         			//checks whether the latest result isn't actually previous Result
         	        if(it == 0) {
         	        	prevResults = latestResults;
             	        it++;
         	        }
         	        if(!latestResults.equals(prevResults)) {
-        	        	System.out.println("NOT EQS!\n");
+        	        	System.out.println("EVENT!\n");
         	        	prevResults = latestResults;
         	        	runRules();
         	        } else {
-        	        	System.out.println("EQS!\n");
+        	        	System.out.println("no event detected!");
         	        }
+        	        // Record the end time
+        	        long endTime = System.currentTimeMillis();
+
+        	        // Calculate the elapsed time in milliseconds
+        	        long elapsedTime = endTime - startTime;
+        	        // Print the result and the execution time
+        	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 	                Thread.sleep(1000); // Sleep for 1 second
 	                //efficiency test
-	                memoryUsage();
+//	                memoryUsage();
 	            }
 	        } catch (InterruptedException e) {
 	            e.printStackTrace();
