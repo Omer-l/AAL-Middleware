@@ -1,6 +1,9 @@
 package gui;
 
-import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import dao.DbXMLParser;
 import dao.MySqlConnection;
 import javafx.application.Application;
@@ -32,6 +35,15 @@ public class AddDatabaseEvent extends Window {
     private Button testButton = new Button("Test");
     private Button saveButton = new Button("Save");
     private String query;
+	Map<String, Object> editData = new HashMap<String, Object>();
+	
+	public void loadData(String uniqueId) {
+		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.unique_id = event.unique_id", "select").get(0);
+		System.out.println(editData);
+		//		this.editData = data;
+	}
+ 
+    
 	public AddDatabaseEvent(Window prevWindow) {
 		super(prevWindow);
 	}
@@ -44,6 +56,8 @@ public class AddDatabaseEvent extends Window {
 	public void open() {
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add Database Event");
+		
+	        
         Button button1 = new Button("Back");
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
@@ -225,6 +239,10 @@ public class AddDatabaseEvent extends Window {
         
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
+        
+        if(!editData.isEmpty()) {
+//        	loadData(field1, field2);
+        }
 	}
 
 	private void setRDBMSMenuOnAction(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu) {
@@ -320,11 +338,6 @@ public class AddDatabaseEvent extends Window {
 		
 		columnMenu.getItems().addAll(columns);
         menu5.getItems().addAll(sortByColumns);
-	}
-	
-	public static void main(String[] args) {
-		AddDatabaseEvent ade = new AddDatabaseEvent(new DatabaseEvents(null));
-		ade.open();
 	}
 	
 	private void processTestQuery(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, Menu sortByMenu, TextField valueField) {

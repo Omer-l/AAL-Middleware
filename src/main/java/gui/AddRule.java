@@ -20,6 +20,7 @@ public class AddRule extends Window {
 	ArrayList<ArrayList<String>> whenData = new ArrayList<>();
 	ArrayList<ArrayList<String>> thenData = new ArrayList<>();
 	
+	
 	public AddRule(Window prevWindow) {
 		super(prevWindow);
 	}
@@ -31,7 +32,8 @@ public class AddRule extends Window {
 	public void open() {
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add Rule");
-        Button button1 = new Button("Back");
+		
+      Button button1 = new Button("Back");
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);
