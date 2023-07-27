@@ -50,15 +50,12 @@ public class MainMenu extends Application {
 		mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
 		mainDbManager.setUsername("root");
 		mainDbManager.setPassword("root");
-<<<<<<< HEAD
     	open();
 //		AddFileEvent adr = new AddFileEvent();
 //    	adr.open();
-=======
 //    	open();
 		AddRule adr = new AddRule();
     	adr.open();
->>>>>>> 7e4bce40bab7fe7716d44ba486bae2013815c8ca
         launch(args);
     }
 
