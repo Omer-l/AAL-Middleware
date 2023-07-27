@@ -54,7 +54,7 @@ public class MainMenu extends Application {
 //		DatabaseEvents adr = new DatabaseEvents();
 //    	adr.open();
 		AddDatabaseEvent ade = new AddDatabaseEvent(new DatabaseEvents());
-		ade.loadData((String) "asdasdasdasd");
+		ade.loadData("bwhjenfio34nf");
 		ade.open();
       launch(args);
     }

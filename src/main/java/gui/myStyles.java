@@ -58,13 +58,14 @@ public class myStyles {
 	        editButton.setOnAction(event -> {
 	        	if(window instanceof DatabaseEvents) {
 	        		AddDatabaseEvent ade = new AddDatabaseEvent(window);
-	        		ade.loadData((String) readEvent.get("name"));
+	        		ade.loadData((String) readEvent.get("unique_id"));
 	        		ade.open();
 	        	}
 	        });
 	        Button removeButton = new Button("Remove");
 	        removeButton.setOnAction(event -> {
-	        	removeEventFromDatabase();
+        		AddDatabaseEvent.removeEventFromDatabaseReadEvent((String) readEvent.get("unique_id"));
+        		eventsVBox.getChildren().remove(column1HBox);
 	        });
 	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
@@ -98,11 +99,7 @@ public class myStyles {
        }
 
 	
-	public void removeEventFromDatabaseReadEvent(String uniqueID) {
-		removeData = MainMenu.mainDbManager.queryDB("DELETE FROM database_read_event WHERE database_read_event.unique_id = event.unique_id","select").get(0);
-		System.out.println(removeData);
-		
-	}
+	
 
 
 	public static void thenAndWhen(Window window) {

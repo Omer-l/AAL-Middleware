@@ -36,11 +36,38 @@ public class AddDatabaseEvent extends Window {
     private Button saveButton = new Button("Save");
     private String query;
 	Map<String, Object> editData = new HashMap<String, Object>();
-	
+	Map<String, Object> removeData = new HashMap<String, Object>();
+
 	public void loadData(String uniqueId) {
 		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.unique_id = event.unique_id", "select").get(0);
+	}
+	
+	public void loadData(String uniqueId, TextField uniqueIdField, TextField nameField, TextField descriptionField,
+			Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, TextField valueField, Menu sortByMenu) {
+		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.unique_id = event.unique_id", "select").get(0);
 		System.out.println(editData);
+		if(((String) editData.get("rdbm")).equals("MySQL"))
+			dbManager.setDetails(DbXMLParser.dbDetailsMySql);
+		else if(((String) editData.get("rdbm")).equals("PostgreSQL"))
+			dbManager.setDetails(DbXMLParser.dbDetailsPostgresql);
+		uniqueIdField.setText(uniqueId);
+		nameField.setText((String) editData.get("name"));
+		descriptionField.setText((String) editData.get("description"));
+		rdbmMenu.setText((String) editData.get("rdbm"));
+		databaseMenu.setText((String) editData.get("database"));
+		tableMenu.setText((String) editData.get("table"));
+		loadTablesMenu(tableMenu, columnMenu, (String) editData.get("database"));
+//		if(!((String) editData.get("column").equals("Whole Row"))
+		columnMenu.setText((String) editData.get("column"));
+		loadColumnsMenu(tableMenu, columnMenu, (String) editData.get("table"));
+		valueField.setText((String) editData.get("value"));
+		sortByMenu.setText((String) editData.get("sortby"));
 		//		this.editData = data;
+	}
+	
+
+	public static void removeEventFromDatabaseReadEvent(String uniqueID) {
+	  MainMenu.mainDbManager.queryDB("DELETE FROM database_read_event WHERE database_read_event.unique_id = '" + uniqueID + "'","");
 	}
  
     
@@ -219,10 +246,15 @@ public class AddDatabaseEvent extends Window {
         	String sortBy = menu5.getText();
         	boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
         	if(!emptyField) {
-	        	MainMenu.databaseQueries.add(query);
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); //TODO: Fix so that it can also insert a string
-	        	back();
+        		if(editData.isEmpty()) {
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); 
+        		} else {
+		        	MainMenu.mainDbManager.queryDB("UPDATE ", "");
+		        	MainMenu.mainDbManager.queryDB("UPDATE ", "");
+		        	}
+        		
+        		back();
         	} else {
         		logField.setText("unique id, name or description field is empty");
         	}
@@ -241,7 +273,7 @@ public class AddDatabaseEvent extends Window {
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
         
         if(!editData.isEmpty()) {
-//        	loadData(field1, field2);
+        	loadData((String) editData.get("unique_id"), column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, menu1, menu2, menu3, menu4, valueField, menu5);
         }
 	}
 

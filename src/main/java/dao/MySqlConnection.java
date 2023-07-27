@@ -220,7 +220,10 @@ public class MySqlConnection {
 					break;
 				case "":
 					stmt.executeUpdate(query);
-				   	break;
+				   	break;					
+
+					
+					
 			}
 
 		} catch (SQLException e) {
