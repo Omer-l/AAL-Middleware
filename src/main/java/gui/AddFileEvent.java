@@ -1,10 +1,12 @@
 package gui;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 
 import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
@@ -146,9 +148,9 @@ public class AddFileEvent extends Window {
         	});
         
         switch(operation) {
-	        case "run": MainMenu.setActive(runFileMethodButton); break;
-	        case "read": MainMenu.setActive(runFileMethodButton); break;
-	        case "write": MainMenu.setActive(runFileMethodButton); break;
+	        case "run": MainMenu.setActive(runFileMethodButton); openRunForm(column1VBox3); break;
+	        case "read": MainMenu.setActive(readFileMethodButton); openReadForm(column1VBox3); break;
+	        case "write": MainMenu.setActive(writeFileMethodButton); openWriteForm(column1VBox3); break;
         }
         column1ButtonBar1.getButtons().addAll(runFileMethodButton, readFileMethodButton, writeFileMethodButton);
         column1ButtonBar1HBox.getChildren().add(column1ButtonBar1);
@@ -156,7 +158,7 @@ public class AddFileEvent extends Window {
         VBox column1VBox4 = new VBox(10);
         
         ButtonBar column1ButtonBar2 = new ButtonBar();
-        testButton.setOnAction(event -> { processTestButton("run"); });
+        testButton.setOnAction(event -> { processTestButton(operation); });
         saveButton.setDisable(true);
     	saveButton.setOnAction(event -> {
         	processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox3VBox2TextField.getText(), column1HBox2VBox2TextField.getText());
@@ -167,7 +169,6 @@ public class AddFileEvent extends Window {
         
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
         column1VBox2.getChildren().addAll(column1VBox2Header, column1ButtonBar1HBox);
-        openRunForm(column1VBox3);
         column1VBox4.getChildren().addAll(column1ButtonBar2, column1HBox9);
         
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3, column1VBox4);
@@ -226,19 +227,33 @@ public class AddFileEvent extends Window {
 	}
 
 
-	private void openReadForm(VBox column1vBox2) {
-		
+	private void openReadForm(VBox column1VBox2) {
+        HBox column1Hbox4 = new HBox();
+        VBox column1Hbox4VBox1 = new VBox();
+        column1Hbox4VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1Hbox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Text column1Hbox4VBox1Header = new Text("File To Read ");
+        VBox column1Hbox4VBox2 = new VBox();
+        column1Hbox4VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        // Create a File chooser
+        Button uploadButton = new Button("Select File");
+        uploadButton.setOnAction(event -> selectFile());
+        column1Hbox4VBox1.getChildren().addAll(column1Hbox4VBox1Header);
+        column1Hbox4VBox2.getChildren().addAll(uploadButton);
+        column1Hbox4.getChildren().addAll(column1Hbox4VBox1, column1Hbox4VBox2);
+
+        column1VBox2.getChildren().addAll(column1Hbox4);
 	}
 
-	private void openWriteForm(VBox column1vBox2) {
+	private void openWriteForm(VBox column1VBox2) {
 		
 	}
 
 
 	private void processTestButton(String operation) {
+		logField.clear();
 		switch(operation) {
 			case "run":
-
 		        try {
 		        	String args = valueField.getText();
 		            ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", "java " + args, selectedFile.getAbsolutePath());
@@ -267,6 +282,20 @@ public class AddFileEvent extends Window {
 		        }
 	            break;
 			case "read":
+		        try {
+		            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(selectedFile.getAbsolutePath()));
+	                byte[] buffer = new byte[8192]; // Adjust buffer size as needed
+	                int bytesRead;
+	                while ((bytesRead = bis.read(buffer)) != -1) {
+	                    // Convert the bytes read to a string and print the result
+	                    String data = new String(buffer, 0, bytesRead);
+	                    for(String line : data.split("\n")) {
+	                    	logField.appendText(line);	   
+	                    }
+	                }
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
 				break;
 			case "write":
 				break;
