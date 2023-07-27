@@ -54,9 +54,12 @@ public class MainMenu extends Application {
 //		AddFileEvent adr = new AddFileEvent();
 //    	adr.open();
 //    	open();
-		AddRule adr = new AddRule();
-    	adr.open();
-        launch(args);
+//		DatabaseEvents adr = new DatabaseEvents();
+//    	adr.open();
+		AddDatabaseEvent ade = new AddDatabaseEvent(new DatabaseEvents());
+		ade.loadData((String) "asdasdasdasd");
+		ade.open();
+      launch(args);
     }
 
     @Override

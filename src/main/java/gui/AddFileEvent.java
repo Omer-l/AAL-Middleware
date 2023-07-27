@@ -48,6 +48,7 @@ public class AddFileEvent extends Window {
     private TextField valueField = new TextField();
     private String operation = "run"; //run, read, or write
     
+    
 	public AddFileEvent(Window prevWindow, String operation) {
 		super(prevWindow);
 		this.operation = operation;
@@ -60,7 +61,9 @@ public class AddFileEvent extends Window {
 	public void open() {
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add File Event");
-        Button button1 = new Button("Back");
+		
+		
+      Button button1 = new Button("Back");
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);

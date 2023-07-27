@@ -6,6 +6,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javafx.geometry.Pos;
@@ -15,10 +16,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 public class myStyles {
-	
+	Map<String, Object> removeData = new HashMap<String, Object>();
 	public myStyles() {
 		// TODO Auto-generated constructor stub
 	}
+	
 	
 	public static void createLogField(TextField logField, VBox mainVBox1, HBox column1HBox) {
 	 
@@ -31,7 +33,6 @@ public class myStyles {
 	
 	public static void addHover(VBox column1VBox,VBox eventsVBox) {
 		MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
-        eventsVBox.getChildren().add(column1VBox);
 	}
 	
 	public static void createAddNewEvent( VBox column1VBox2,VBox eventsVBox) {
@@ -46,12 +47,25 @@ public class myStyles {
 	public void getEvents(String query, VBox eventsVBox, Window window) {
 		ArrayList<Map<String, Object>> events = MainMenu.mainDbManager.queryDB(query, "select");
 		for(Map<String, Object> readEvent : events) {
+			HBox column1HBox = new HBox();
 			VBox column1VBox = new VBox();
 	        column1VBox.setStyle(MainMenu.MENU_BUTTON_STYLE);
 	        Text column1VBoxHeader = new Text((String) readEvent.get("name"));
 	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
 	        Text column1VBoxUniqueId = new Text((String) readEvent.get("unique_id"));
 	        Text column1VBoxDescription = new Text((String) readEvent.get("description"));
+	        Button editButton = new Button("Edit");
+	        editButton.setOnAction(event -> {
+	        	if(window instanceof DatabaseEvents) {
+	        		AddDatabaseEvent ade = new AddDatabaseEvent(window);
+	        		ade.loadData((String) readEvent.get("name"));
+	        		ade.open();
+	        	}
+	        });
+	        Button removeButton = new Button("Remove");
+	        removeButton.setOnAction(event -> {
+	        	removeEventFromDatabase();
+	        });
 	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
 	        column1VBoxUniqueId.setVisible(false);
@@ -75,7 +89,8 @@ public class myStyles {
 	        	}
 	        });
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
-	        //eventsVBox.getChildren().add(column1VBox);
+	        column1HBox.getChildren().addAll(column1VBox, editButton, removeButton);
+	        eventsVBox.getChildren().add(column1HBox);
 	        myStyles.addHover(column1VBox,eventsVBox);
 		}
 		VBox column1VBox2 = new VBox();
@@ -83,6 +98,13 @@ public class myStyles {
        }
 
 	
+	public void removeEventFromDatabaseReadEvent(String uniqueID) {
+		removeData = MainMenu.mainDbManager.queryDB("DELETE FROM database_read_event WHERE database_read_event.unique_id = event.unique_id","select").get(0);
+		System.out.println(removeData);
+		
+	}
+
+
 	public static void thenAndWhen(Window window) {
 		Button button1 = new Button("Back");
         button1.setOnAction(event -> { window.back(); });
@@ -189,4 +211,6 @@ public class myStyles {
     	mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, gridPane);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
 	}
+	
+	
 }
