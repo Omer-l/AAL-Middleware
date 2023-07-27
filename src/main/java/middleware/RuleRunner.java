@@ -11,7 +11,7 @@ import java.util.Map;
 import dao.DbXMLParser;
 import dao.MySqlConnection;
 
-public class RuleRunner {
+public class RuleRunner extends Thread{
     public static String[] referencedTableNames = {"database_read_event", "database_write_event", "rule", "system_file_read_event", "system_file_run_event", "system_file_write_event"};
 	public static MySqlConnection mainDbManager = new MySqlConnection();
 	public ArrayList<Map<String, Object>> whens;
@@ -51,7 +51,7 @@ public class RuleRunner {
 		return matchingEvents;
 	}
 	
-	public void update() { //make this a @Override and a run() function but maybe not
+	public void run() { //make this a @Override and a run() function but maybe not
 		//go through conditions
 		//boolean array to see if all WHENs are true
 		boolean[] whenReached = new boolean[whens.size()];
@@ -142,6 +142,6 @@ public class RuleRunner {
 		for (Map<String, Object> rule : rules)
 			threads.add(new RuleRunner(rule));
 		
-		threads.get(0).update();
+		threads.get(0).run();
     }
 }

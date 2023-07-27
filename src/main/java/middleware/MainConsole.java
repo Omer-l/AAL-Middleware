@@ -20,7 +20,9 @@ public class MainConsole extends Thread {
 	private ArrayList<String> postgresqlTableNames = new ArrayList<String> ();
     ArrayList<Map<String, Object>> prevResults = new ArrayList<Map<String, Object>>();
     private MySqlConnection connection;
-    private boolean listening;
+    private boolean listening;		
+    public static ArrayList<RuleRunner> ruleThreads = new ArrayList<>();
+
     
 	public MainConsole(MySqlConnection connection) {
         this.connection = connection;
@@ -35,6 +37,7 @@ public class MainConsole extends Thread {
         MySqlConnection con = new MySqlConnection();
         con.setDetails(DbXMLParser.dbDetailsMySql);
         MainConsole myDatabaseTrigger = new MainConsole(con);
+        myDatabaseTrigger.assignRules();
         myDatabaseTrigger.run();
         
     }
@@ -77,7 +80,7 @@ public class MainConsole extends Thread {
         	        long elapsedTime = endTime - startTime;
         	        // Print the result and the execution time
         	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
-	                Thread.sleep(1000); // Sleep for 1 second
+	                Thread.sleep(250); // Sleep for 1 second
 	                //efficiency test
 //	                memoryUsage();
 	            }
@@ -86,17 +89,21 @@ public class MainConsole extends Thread {
 	        }
 	    }
 
-	private void runRules() {
+	private void assignRules() {
 
 		RuleRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
 		RuleRunner.mainDbManager.setUsername("root");
 		RuleRunner.mainDbManager.setPassword("root");
 		ArrayList<Map<String, Object>> rules = RuleRunner.mainDbManager.queryDB("SELECT * from rule", "select");
-		ArrayList<RuleRunner> threads = new ArrayList<>();
-		for (Map<String, Object> rule : rules)
-			threads.add(new RuleRunner(rule));
-		
-		threads.get(0).update();
+		for (Map<String, Object> rule : rules) {
+			ruleThreads.add(new RuleRunner(rule));
+		}
+	}
+
+	private void runRules() {
+		for (RuleRunner rule : ruleThreads) {
+			rule.start();
+		}
 	}
 
 	private void memoryUsage() {
