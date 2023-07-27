@@ -21,9 +21,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 public class DatabaseEvents extends Window {
-	
+	myStyles styles = new myStyles();
 	public DatabaseEvents(Window prevWindow) {
 		super(prevWindow);
+	}
+	
+	public DatabaseEvents() {
+		
 	}
 
 	public void open() {
@@ -41,7 +45,7 @@ public class DatabaseEvents extends Window {
         Text column1Header = new Text("Read Events");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
         column1VBox.getChildren().addAll(column1Header);
-        getEvents("SELECT * FROM database_read_event INNER JOIN event ON database_read_event.unique_id = event.unique_id;", column1VBox);
+        styles.getEvents("SELECT * FROM database_read_event INNER JOIN event ON database_read_event.unique_id = event.unique_id;", column1VBox, this);
         int readEventsLastIndex = column1VBox.getChildren().size() - 1;
         column1VBox.getChildren().get(readEventsLastIndex).setOnMouseClicked(event -> {new AddDatabaseEvent(this).open();});
         mainVBox1.getChildren().addAll(column1VBox);
@@ -53,16 +57,16 @@ public class DatabaseEvents extends Window {
         Text column2Header = new Text("Write Events");
         column2Header.setStyle(MainMenu.HEADER_1_STYLE);
         column2VBox.getChildren().add(column2Header);
-        getEvents("SELECT * FROM database_write_event INNER JOIN event ON database_write_event.unique_id = event.unique_id;", column2VBox);
+        styles.getEvents("SELECT * FROM database_write_event INNER JOIN event ON database_write_event.unique_id = event.unique_id;", column2VBox, this);
         int writeEventsLastIndex = column2VBox.getChildren().size() - 1;
         column2VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { /** add event */ System.out.println("Write event clicked"); });
         mainVBox2.getChildren().addAll(column2VBox);
-
+//START
     	MainMenu.addHoverInteraction(new VBox[] {(VBox) column1VBox.getChildren().get(readEventsLastIndex), (VBox) column2VBox.getChildren().get(writeEventsLastIndex)}, "yellow", "darkgray");
         MainMenu.mainHBox.getChildren().addAll(mainVBox1, mainVBox2);
 	}
 	
-	public void getEvents(String query, VBox eventsVBox) {
+	/**public void getEvents(String query, VBox eventsVBox) {
 		ArrayList<Map<String, Object>> events = MainMenu.mainDbManager.queryDB(query, "select");
 		for(Map<String, Object> readEvent : events) {
 			VBox column1VBox = new VBox();
@@ -101,12 +105,12 @@ public class DatabaseEvents extends Window {
 		}
 		VBox column1VBox2 = new VBox();
 		myStyles.createAddNewEvent(column1VBox2,eventsVBox);
-
-        /**VBox column1VBox2 = new VBox();
+		// TILL HERE
+        VBox column1VBox2 = new VBox();
         column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
         Text column1VBox2Header = new Text("Add New Event");
         column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        
         column1VBox2.getChildren().addAll(column1VBox2Header);
-        eventsVBox.getChildren().add(column1VBox2);**/
-	}
+        eventsVBox.getChildren().add(column1VBox2);
+	}**/
 }

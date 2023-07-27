@@ -1,9 +1,11 @@
 package middleware;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -97,12 +99,10 @@ public class BLEtoMReasonerScript {
 //            fileWriter.write(dataToSave.toString());
 //            System.out.println("Data saved successfully.");
 //            fileWriter.close();
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fileName));
-                byte[] buffer = new byte[8192]; // Adjust buffer size as needed
-                int bytesRead;
-                while ((bytesRead = bis.read(buffer)) != -1) {
-                    // Process the data in the buffer
-                }
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("output.txt"));
+            byte[] data = dataToSave.toString().getBytes(); // Replace with your data
+            bos.write(data);
+            bos.close();
                 
         } catch (IOException | SQLException e) {
             e.printStackTrace();
