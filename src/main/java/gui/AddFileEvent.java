@@ -308,7 +308,7 @@ public class AddFileEvent extends Window {
 	                    	logField.appendText(line);
 	                    }
 	                }
-//	            	saveButton.setDisable(false);
+	            	saveButton.setDisable(false);
  		        } catch (IOException e) {
 		            e.printStackTrace();
 		        }
@@ -331,7 +331,16 @@ public class AddFileEvent extends Window {
 	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES ('" + uniqueIdInput + "', '" + filePath + "', '" + arguments + "');", "");
 	    	} else {
 	    		logField.setText("unique id, name or description field is empty");
-	    	}
+	    	} 
+		} else if(MainMenu.isActive(readFileMethodButton)) {
+	    	String content = valueField.getText();
+			boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
+	    	if(!emptyField) {
+	    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_read_event VALUES ('" + uniqueIdInput + "', '" + filePath + "', '" + content + "');", "");
+	    	} else {
+	    		logField.setText("unique id, name or description field is empty");
+	    	} 
 		}
 		back();
 	}
