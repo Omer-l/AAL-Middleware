@@ -79,9 +79,9 @@ public class MainConsole extends Thread {
         	        // Calculate the elapsed time in milliseconds
         	        long elapsedTime = endTime - startTime;
         	        // Print the result and the execution time
-        	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 	                Thread.sleep(250); // Sleep for 1 second
 	                //efficiency test
+//        	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 //	                memoryUsage();
 	            }
 	        } catch (InterruptedException e) {

@@ -242,7 +242,19 @@ public class AddFileEvent extends Window {
         column1Hbox4VBox2.getChildren().addAll(uploadButton);
         column1Hbox4.getChildren().addAll(column1Hbox4VBox1, column1Hbox4VBox2);
 
-        column1VBox2.getChildren().addAll(column1Hbox4);
+        HBox column1HBox7 = new HBox();
+        VBox column1HBox7VBox1 = new VBox();
+        column1HBox7VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox7VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Text column1HBox7VBox1Header = new Text("Contains (leave empty for any change in file)");
+        VBox column1HBox7VBox2 = new VBox();
+        column1HBox7VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Menu menu4 = new Menu();
+        column1HBox7VBox1.getChildren().addAll(column1HBox7VBox1Header);
+        column1HBox7VBox2.getChildren().addAll(valueField);
+        column1HBox7.getChildren().addAll(column1HBox7VBox1, column1HBox7VBox2);
+        
+        column1VBox2.getChildren().addAll(column1Hbox4, column1HBox7);
 	}
 
 	private void openWriteForm(VBox column1VBox2) {
@@ -289,11 +301,15 @@ public class AddFileEvent extends Window {
 	                while ((bytesRead = bis.read(buffer)) != -1) {
 	                    // Convert the bytes read to a string and print the result
 	                    String data = new String(buffer, 0, bytesRead);
+	                    if(!valueField.getText().isEmpty()) {
+	                    	data = data.substring(data.indexOf(valueField.getText()));
+	                    }
 	                    for(String line : data.split("\n")) {
-	                    	logField.appendText(line);	   
+	                    	logField.appendText(line);
 	                    }
 	                }
-		        } catch (IOException e) {
+//	            	saveButton.setDisable(false);
+ 		        } catch (IOException e) {
 		            e.printStackTrace();
 		        }
 				break;

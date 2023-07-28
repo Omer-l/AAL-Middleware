@@ -62,7 +62,7 @@ public class MainMenu extends Application {
 
 		AddFileEvent adf = new AddFileEvent(new FileEvents(), "read");
 		adf.open();
-      launch(args);
+		launch(args);
     }
 
     @Override
