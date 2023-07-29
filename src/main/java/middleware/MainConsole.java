@@ -14,10 +14,6 @@ import dao.MySqlConnection;
 import gui.MainMenu;
 
 public class MainConsole {
-//	private ArrayList<String> mySqlDbNames = new ArrayList<String> ();
-//	private ArrayList<String> mySqlTableNames = new ArrayList<String> ();
-//	private ArrayList<String> postgresqlDbNames = new ArrayList<String> ();
-//	private ArrayList<String> postgresqlTableNames = new ArrayList<String> ();
     ArrayList<Map<String, Object>> prevResults = new ArrayList<Map<String, Object>>();
     private MySqlConnection connection;
     private boolean listening;		
@@ -36,7 +32,6 @@ public class MainConsole {
         con.setDetails(DbXMLParser.dbDetailsMySql);
         MainConsole myDatabaseTrigger = new MainConsole(con);
         myDatabaseTrigger.listen();
-        
     }
 
     public void stopListening() {
@@ -44,48 +39,48 @@ public class MainConsole {
     }
 
 	 public void listen() {
-	        assignRules();
-		    try {
-		    	int it = 0;
-	        	//initialise prevResults
-	            while (listening) {
+        assignRules();
+	    try {
+	    	int it = 0;
+        	//initialise prevResults
+            while (listening) {
 
-	                // Record the start time
-	                long startTime = System.currentTimeMillis();
-        			//go through querying each table for the latest row in the table
-	                ArrayList<Map<String, Object>> latestResults = new ArrayList<Map<String, Object>>();
-        	        connection.setDetails(DbXMLParser.dbDetailsMySql);
-	                latestResults.addAll(latestResults(connection, DbXMLParser.mySqlDbAndTablesMap));
-        	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
-        	        latestResults.addAll(latestResults(connection, DbXMLParser.postgresqlDbAndTablesMap));
+                // Record the start time
+                long startTime = System.currentTimeMillis();
+    			//go through querying each table for the latest row in the table
+                ArrayList<Map<String, Object>> latestResults = new ArrayList<Map<String, Object>>();
+    	        connection.setDetails(DbXMLParser.dbDetailsMySql);
+                latestResults.addAll(latestResults(connection, DbXMLParser.mySqlDbAndTablesMap));
+    	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
+    	        latestResults.addAll(latestResults(connection, DbXMLParser.postgresqlDbAndTablesMap));
 //        	        System.out.println(latestResults + "\n" + prevResults);
-        			//checks whether the latest result isn't actually previous Result
-        	        if(it == 0) {
-        	        	prevResults = latestResults;
-            	        it++;
-        	        }
-        	        if(!latestResults.equals(prevResults)) {
-        	        	System.out.println("EVENT!\n");
-        	        	prevResults = latestResults;
-        	        	runRules();
-        	        } else {
-        	        	System.out.println("no event detected!");
-        	        }
-        	        // Record the end time
-        	        long endTime = System.currentTimeMillis();
+    			//checks whether the latest result isn't actually previous Result
+    	        if(it == 0) {
+    	        	prevResults = latestResults;
+        	        it++;
+    	        }
+    	        if(!latestResults.equals(prevResults)) {
+    	        	System.out.println("EVENT!\n");
+    	        	prevResults = latestResults;
+    	        	runRules();
+    	        } else {
+    	        	System.out.println("no event detected!");
+    	        }
+    	        // Record the end time
+    	        long endTime = System.currentTimeMillis();
 
-        	        // Calculate the elapsed time in milliseconds
-        	        long elapsedTime = endTime - startTime;
-        	        // Print the result and the execution time
-	                Thread.sleep(250); // Sleep for 1 second
-	                //efficiency test
+    	        // Calculate the elapsed time in milliseconds
+    	        long elapsedTime = endTime - startTime;
+    	        // Print the result and the execution time
+                Thread.sleep(250); // Sleep for 1 second
+                //efficiency test
 //        	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 //	                memoryUsage();
-	            }
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
-	    }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+	}
 
 	private void assignRules() {
 		RuleRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
