@@ -23,28 +23,25 @@ public class MainConsole {
 	public MainConsole(MySqlConnection connection) {
         this.connection = connection;
         this.listening = true;
-//        postgresqlDbNames.add("sensors");
-//        postgresqlTableNames.add("incoming_events");
 	}
 	
 	public static void main(String[] args) {
         MySqlConnection con = new MySqlConnection();
         con.setDetails(DbXMLParser.dbDetailsMySql);
-        MainConsole myDatabaseTrigger = new MainConsole(con);
-        myDatabaseTrigger.listen();
+        MainConsole mainConsole = new MainConsole(con);
+        mainConsole.listen();
     }
 
     public void stopListening() {
         this.listening = false;
     }
 
-	 public void listen() {
-        assignRules();
+	public void listen() {
+		assignRules();
 	    try {
 	    	int it = 0;
         	//initialise prevResults
             while (listening) {
-
                 // Record the start time
                 long startTime = System.currentTimeMillis();
     			//go through querying each table for the latest row in the table
@@ -53,7 +50,7 @@ public class MainConsole {
                 latestResults.addAll(latestResults(connection, DbXMLParser.mySqlDbAndTablesMap));
     	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
     	        latestResults.addAll(latestResults(connection, DbXMLParser.postgresqlDbAndTablesMap));
-//        	        System.out.println(latestResults + "\n" + prevResults);
+//        	    System.out.println(latestResults + "\n" + prevResults);
     			//checks whether the latest result isn't actually previous Result
     	        if(it == 0) {
     	        	prevResults = latestResults;
