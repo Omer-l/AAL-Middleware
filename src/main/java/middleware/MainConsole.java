@@ -13,7 +13,7 @@ import dao.DbXMLParser;
 import dao.MySqlConnection;
 import gui.MainMenu;
 
-public class MainConsole extends Thread {
+public class MainConsole {
 //	private ArrayList<String> mySqlDbNames = new ArrayList<String> ();
 //	private ArrayList<String> mySqlTableNames = new ArrayList<String> ();
 //	private ArrayList<String> postgresqlDbNames = new ArrayList<String> ();
@@ -36,15 +36,15 @@ public class MainConsole extends Thread {
         con.setDetails(DbXMLParser.dbDetailsMySql);
         MainConsole myDatabaseTrigger = new MainConsole(con);
         myDatabaseTrigger.assignRules();
-        myDatabaseTrigger.run();
+        myDatabaseTrigger.listen();
         
     }
 
     public void stopListening() {
         this.listening = false;
     }
-	 @Override
-	    public void run() {
+
+	 public void listen() {
 		    try {
 		    	int it = 0;
 	        	//initialise prevResults
@@ -58,7 +58,7 @@ public class MainConsole extends Thread {
 	                latestResults.addAll(latestResults(connection, DbXMLParser.mySqlDbAndTablesMap));
         	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
         	        latestResults.addAll(latestResults(connection, DbXMLParser.postgresqlDbAndTablesMap));
-        	        System.out.println(latestResults + "\n" + prevResults);
+//        	        System.out.println(latestResults + "\n" + prevResults);
         			//checks whether the latest result isn't actually previous Result
         	        if(it == 0) {
         	        	prevResults = latestResults;
@@ -88,14 +88,12 @@ public class MainConsole extends Thread {
 	    }
 
 	private void assignRules() {
-
 		RuleRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
 		RuleRunner.mainDbManager.setUsername("root");
 		RuleRunner.mainDbManager.setPassword("root");
 		ArrayList<Map<String, Object>> rules = RuleRunner.mainDbManager.queryDB("SELECT * from rule", "select");
-		for (Map<String, Object> rule : rules) {
+		for (Map<String, Object> rule : rules)
 			ruleThreads.add(new RuleRunner(rule));
-		}
 	}
 
 	private void runRules() {
