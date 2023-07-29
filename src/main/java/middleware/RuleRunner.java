@@ -12,7 +12,7 @@ import dao.DbXMLParser;
 import dao.MySqlConnection;
 
 public class RuleRunner extends Thread{
-    public static String[] referencedTableNames = {"database_read_event", "database_write_event", "rule", "system_file_read_event", "system_file_run_event", "system_file_write_event"};
+    public static String[] middlewareTableNames = {"database_read_event", "database_write_event", "rule", "system_file_read_event", "system_file_run_event", "system_file_write_event"};
 	public static MySqlConnection mainDbManager = new MySqlConnection();
 	public ArrayList<Map<String, Object>> whens;
 	public ArrayList<Map<String, Object>> thens;
@@ -33,7 +33,7 @@ public class RuleRunner extends Thread{
 		for(String id : ids) {
 //			Map<String, Object> when = new HashMap<String, Object>();
 			//loop through the tables
-			for(String tableName : referencedTableNames) {
+			for(String tableName : middlewareTableNames) {
 				String query = "SELECT * FROM " + tableName + " WHERE unique_id = \"" + id + "\"";
 				ArrayList<Map<String, Object>> resultList = mainDbManager.queryDB(query, "select");
 				//is there is a matching id in this table
