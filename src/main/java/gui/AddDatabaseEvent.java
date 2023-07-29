@@ -250,8 +250,16 @@ public class AddDatabaseEvent extends Window {
 		        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
 		        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); 
         		} else {
-		        	MainMenu.mainDbManager.queryDB("UPDATE ", "");
-		        	MainMenu.mainDbManager.queryDB("UPDATE ", "");
+		        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
+		        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
+		        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+		        	MainMenu.mainDbManager.queryDB("UPDATE database_read_event"
+		        			+ " SET "
+		        			+ "rdbm = '" + rdbm + "', "
+		        			+ "`database` = '" + db + "', `table` = '" + table + "',"
+		        			+ "`column` = '" + column + "', `value` = '" + value
+		        			+ "', sortby = '" + sortBy
+		        			+ "', query = \"" + this.query + "\" WHERE unique_id = '" + uniqueIdInput + "';", "");
 		        	}
         		
         		back();

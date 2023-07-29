@@ -1,7 +1,9 @@
 package middleware;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -84,7 +86,22 @@ public class RuleRunner extends Thread{
 	        	        mainDbManager.setDetails(DbXMLParser.dbDetailsPostgresql);
 					}
 					; break;
-				case "read_file_event" : ; break; //TODO: IMPLEMENT THIS
+				case "read_file_event" : 
+					System.out.println(when);
+//					BufferedInputStream bis = new BufferedInputStream(new FileInputStream());
+//	                byte[] buffer = new byte[8192]; // Adjust buffer size as needed
+//	                int bytesRead;
+//	                while ((bytesRead = bis.read(buffer)) != -1) {
+//	                    // Convert the bytes read to a string and print the result
+//	                    String data = new String(buffer, 0, bytesRead);
+//	                    if(!valueField.getText().isEmpty()) {
+//	                    	data = data.substring(data.indexOf(valueField.getText()));
+//	                    }
+//	                    for(String line : data.split("\n")) {
+//	                    }
+//	                }
+//                	}
+					; break; //TODO: IMPLEMENT THIS
 			}
 		}
 		if(areAllTrue(whenReached)) {
