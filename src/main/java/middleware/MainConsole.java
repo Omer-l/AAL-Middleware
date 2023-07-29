@@ -14,10 +14,10 @@ import dao.MySqlConnection;
 import gui.MainMenu;
 
 public class MainConsole extends Thread {
-	private ArrayList<String> mySqlDbNames = new ArrayList<String> ();
-	private ArrayList<String> mySqlTableNames = new ArrayList<String> ();
-	private ArrayList<String> postgresqlDbNames = new ArrayList<String> ();
-	private ArrayList<String> postgresqlTableNames = new ArrayList<String> ();
+//	private ArrayList<String> mySqlDbNames = new ArrayList<String> ();
+//	private ArrayList<String> mySqlTableNames = new ArrayList<String> ();
+//	private ArrayList<String> postgresqlDbNames = new ArrayList<String> ();
+//	private ArrayList<String> postgresqlTableNames = new ArrayList<String> ();
     ArrayList<Map<String, Object>> prevResults = new ArrayList<Map<String, Object>>();
     private MySqlConnection connection;
     private boolean listening;		
@@ -27,8 +27,6 @@ public class MainConsole extends Thread {
 	public MainConsole(MySqlConnection connection) {
         this.connection = connection;
         this.listening = true;
-        mySqlDbNames.add("beacon_localisation");
-        mySqlTableNames.add("record");
 //        postgresqlDbNames.add("sensors");
 //        postgresqlTableNames.add("incoming_events");
 	}
@@ -57,10 +55,10 @@ public class MainConsole extends Thread {
         			//go through querying each table for the latest row in the table
 	                ArrayList<Map<String, Object>> latestResults = new ArrayList<Map<String, Object>>();
         	        connection.setDetails(DbXMLParser.dbDetailsMySql);
-	                latestResults.addAll(latestResults(connection, mySqlDbNames, mySqlTableNames));
+	                latestResults.addAll(latestResults(connection, DbXMLParser.mySqlDbAndTablesMap));
         	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
-        	        latestResults.addAll(latestResults(connection, postgresqlDbNames, postgresqlTableNames));
-//        	        System.out.println(latestResults + "\n" + prevResults);
+        	        latestResults.addAll(latestResults(connection, DbXMLParser.postgresqlDbAndTablesMap));
+        	        System.out.println(latestResults + "\n" + prevResults);
         			//checks whether the latest result isn't actually previous Result
         	        if(it == 0) {
         	        	prevResults = latestResults;
@@ -126,11 +124,11 @@ public class MainConsole extends Thread {
         System.out.println("    Max: " + memoryUsage.getMax() / (1024 * 1024) + " MB");		
 	}
 
-	private Collection<Map<String, Object>> latestResults(MySqlConnection con, ArrayList<String> dbNames, ArrayList<String> tbNames) {
+	private Collection<Map<String, Object>> latestResults(MySqlConnection con, Map<String, ArrayList<String>> dbAndTablesMap) {
     	ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
-		for(String databaseName : dbNames) {
+		for(String databaseName : dbAndTablesMap.keySet()) {
     		con.connectToDb(databaseName);
-    		for(String tableName : tbNames) {
+    		for(String tableName : dbAndTablesMap.get(databaseName)) {
     			StringBuilder query = new StringBuilder("SELECT * FROM ");
     			query.append(tableName);
     			query.append(" ORDER BY 1 DESC LIMIT 1");

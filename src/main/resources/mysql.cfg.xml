@@ -6,6 +6,5 @@
     <password>root</password>
     <database name="beacon_localisation">
     	<table>record</table>
-    	<table>record1</table>
     </database>
 </database-configuration>
