@@ -35,7 +35,6 @@ public class MainConsole {
         MySqlConnection con = new MySqlConnection();
         con.setDetails(DbXMLParser.dbDetailsMySql);
         MainConsole myDatabaseTrigger = new MainConsole(con);
-        myDatabaseTrigger.assignRules();
         myDatabaseTrigger.listen();
         
     }
@@ -45,6 +44,7 @@ public class MainConsole {
     }
 
 	 public void listen() {
+	        assignRules();
 		    try {
 		    	int it = 0;
 	        	//initialise prevResults
