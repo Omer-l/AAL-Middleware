@@ -12,6 +12,7 @@ import java.util.Map;
 
 import dao.DbXMLParser;
 import dao.MySqlConnection;
+import gui.MainMenu;
 
 public class RuleRunner extends Thread{
     public static String[] middlewareTableNames = {"database_read_event", "database_write_event", "rule", "system_file_read_event", "system_file_run_event", "system_file_write_event"};
@@ -153,7 +154,7 @@ public class RuleRunner extends Thread{
     }
 
 	public static void main(String[] args) {
-        mainDbManager.setDetails(DbXMLParser.dbDetailsMySql);
+        mainDbManager = MainMenu.mainDbManager;
 		ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
 		ArrayList<RuleRunner> threads = new ArrayList<>();
 		for (Map<String, Object> rule : rules)

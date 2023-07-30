@@ -32,7 +32,8 @@ public class MainMenu extends Application {
 	public final static String MAIN_CONTENT_STYLE = "-fx-background-color:  #d3d3d3;";
 	public final static String GUI_BACKGROUND_STYLE = "-fx-background-color:   #FAF0DC;";
 	public final static ArrayList<String> databaseQueries = new ArrayList<String>();
-	public static MySqlConnection mainDbManager = new MySqlConnection();
+	//ensure connection to middleware is established before allowing configuring of middleware
+	public static MySqlConnection mainDbManager = new MySqlConnection("jdbc:mysql://localhost:3306/middleware", "root", "root");
 	public static VBox root = new VBox();
 	//NAVBAR
 	public static VBox menuBarVBox = new VBox();
@@ -46,10 +47,6 @@ public class MainMenu extends Application {
 	//MAIN
 	public static Stage primaryStage;
     public static void main(String[] args) {
-    	//ensure connection to middleware is established before allowing configuring of middleware
-		mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
-		mainDbManager.setUsername("root");
-		mainDbManager.setPassword("root");
     	open();
 //		AddFileEvent adr = new AddFileEvent();
 //    	adr.open();
