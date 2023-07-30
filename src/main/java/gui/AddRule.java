@@ -129,12 +129,12 @@ public class AddRule extends Window {
 	        }); //HERE
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        //eventsVBox.getChildren().add(column1VBox);
-	        myStyles.addHover(column1VBox,eventsVBox);
+	        MyStyles.addHover(column1VBox,eventsVBox);
 		}
 		
 
         VBox column1VBox2 = new VBox();
-        myStyles.createAddNewEvent(column1VBox2,eventsVBox);
+        MyStyles.createAddNewEvent(column1VBox2,eventsVBox);
         /**column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
         Text column1VBox2Header = new Text("Add New Event");
         column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        

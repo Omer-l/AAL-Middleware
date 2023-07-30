@@ -237,7 +237,7 @@ public class AddDatabaseEvent extends Window {
         saveButton.setOnAction(event -> { processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText(), menu1.getText(), menu2.getText(), menu3.getText(), menu4.getText(), valueField.getText(), menu5.getText());});
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
         HBox column1HBox9 = new HBox();
-        myStyles.createLogField(logField, mainVBox1, column1HBox9);
+        MyStyles.createLogField(logField, mainVBox1, column1HBox9);
         
         
         setRDBMSMenuOnAction(menu1, menu2, menu3, menu4);

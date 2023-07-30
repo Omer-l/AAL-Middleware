@@ -15,9 +15,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-public class myStyles {
+public class MyStyles {
 	Map<String, Object> removeData = new HashMap<String, Object>();
-	public myStyles() {
+	public MyStyles() {
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -92,10 +92,10 @@ public class myStyles {
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        column1HBox.getChildren().addAll(column1VBox, editButton, removeButton);
 	        eventsVBox.getChildren().add(column1HBox);
-	        myStyles.addHover(column1VBox,eventsVBox);
+	        MyStyles.addHover(column1VBox,eventsVBox);
 		}
 		VBox column1VBox2 = new VBox();
-		myStyles.createAddNewEvent(column1VBox2,eventsVBox);
+		MyStyles.createAddNewEvent(column1VBox2,eventsVBox);
        }
 
 	
