@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -81,29 +82,30 @@ public class RuleRunner extends Thread{
 							if(whenVal.equals(resultVal))
 								whenReached[whenIndex] = true;
 						}
-						whenIndex++;
 						
 					} else {
 	        	        mainDbManager.setDetails(DbXMLParser.dbDetailsPostgresql);
 					}
 					; break;
-				case "read_file_event" : 
+				case "system_file_read_event" : 
 					System.out.println(when);
-//					BufferedInputStream bis = new BufferedInputStream(new FileInputStream());
-//	                byte[] buffer = new byte[8192]; // Adjust buffer size as needed
-//	                int bytesRead;
-//	                while ((bytesRead = bis.read(buffer)) != -1) {
-//	                    // Convert the bytes read to a string and print the result
-//	                    String data = new String(buffer, 0, bytesRead);
-//	                    if(!valueField.getText().isEmpty()) {
-//	                    	data = data.substring(data.indexOf(valueField.getText()));
-//	                    }
-//	                    for(String line : data.split("\n")) {
-//	                    }
-//	                }
-//                	}
+					try {
+						BufferedInputStream bis = new BufferedInputStream(new FileInputStream((String) when.get("path")));
+		                byte[] buffer = new byte[8192]; // Adjust buffer size as needed
+		                int bytesRead;
+		                while ((bytesRead = bis.read(buffer)) != -1) {
+		                    // Convert the bytes read to a string and print the result
+		                    String data = new String(buffer, 0, bytesRead);
+		                    if(data.contains((String)when.get("content"))) {
+		                    	whenReached[whenIndex] = true;
+		                    }
+		                }
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 					; break; //TODO: IMPLEMENT THIS
 			}
+			whenIndex++;
 		}
 		if(areAllTrue(whenReached)) {
 			runThens();
