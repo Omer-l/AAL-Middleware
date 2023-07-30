@@ -253,30 +253,6 @@ public class AddDatabaseEvent extends Window {
         }
 	}
 
-	private void processSaveButton(String uniqueIdInput, String nameInput, String descriptionInput, String rdbm, String db, String table, String column, String value, String sortBy) {
-		boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
-    	if(!emptyField) {
-    		if(editData.isEmpty()) {
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); 
-    		} else {
-	        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
-	        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
-	        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
-	        	MainMenu.mainDbManager.queryDB("UPDATE database_read_event"
-	        			+ " SET "
-	        			+ "rdbm = '" + rdbm + "', "
-	        			+ "`database` = '" + db + "', `table` = '" + table + "',"
-	        			+ "`column` = '" + column + "', `value` = '" + value
-	        			+ "', sortby = '" + sortBy
-	        			+ "', query = \"" + this.query + "\" WHERE unique_id = '" + uniqueIdInput + "';", "");
-	        	}
-    		back();
-    	} else {
-    		logField.setText("unique id, name or description field is empty");
-    	}
-	}
-
 	private void setRDBMSMenuOnAction(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu) {
 	    Menu[] menusToReset = {databaseMenu, tableMenu, columnMenu};
 		rdbmMenu.getItems().get(0).setOnAction(event -> {
@@ -402,5 +378,29 @@ public class AddDatabaseEvent extends Window {
         	} else
         		System.out.println("Blank");
     	}
+	}
+
+	private void processSaveButton(String uniqueIdInput, String nameInput, String descriptionInput, String rdbm, String db, String table, String column, String value, String sortBy) {
+		boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
+		if(!emptyField) {
+			if(editData.isEmpty()) {
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); 
+			} else {
+	        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
+	        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
+	        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+	        	MainMenu.mainDbManager.queryDB("UPDATE database_read_event"
+	        			+ " SET "
+	        			+ "rdbm = '" + rdbm + "', "
+	        			+ "`database` = '" + db + "', `table` = '" + table + "',"
+	        			+ "`column` = '" + column + "', `value` = '" + value
+	        			+ "', sortby = '" + sortBy
+	        			+ "', query = \"" + this.query + "\" WHERE unique_id = '" + uniqueIdInput + "';", "");
+	        	}
+			back();
+		} else {
+			logField.setText("unique id, name or description field is empty");
+		}
 	}
 }
