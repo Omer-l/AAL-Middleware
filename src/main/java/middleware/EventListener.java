@@ -1,9 +1,7 @@
 package middleware;
 
-public class EventListener {
+public interface EventListener {
 
-	public EventListener() {
-		// TODO Auto-generated constructor stub
-	}
+	void onEvent(Event event);
 
 }
