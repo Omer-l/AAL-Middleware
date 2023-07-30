@@ -23,15 +23,14 @@ public class MyStyles {
 	
 	
 	public static void createLogField(TextField logField, VBox mainVBox1, HBox column1HBox) {
-	 
-     Text logText = new Text("LOG: ");
-     logField.prefWidthProperty().bind(mainVBox1.widthProperty().multiply(0.9));
-     logField.prefHeightProperty().bind(mainVBox1.heightProperty().multiply(0.1));
-     logField.setEditable(false);
-     column1HBox.getChildren().addAll(logText,logField);
+	     Text logText = new Text("LOG: ");
+	     logField.prefWidthProperty().bind(mainVBox1.widthProperty().multiply(0.9));
+	     logField.prefHeightProperty().bind(mainVBox1.heightProperty().multiply(0.1));
+	     logField.setEditable(false);
+	     column1HBox.getChildren().addAll(logText,logField);
 	}
 	
-	public static void addHover(VBox column1VBox,VBox eventsVBox) {
+	public static void addHover(VBox column1VBox) {
 		MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	}
 	
@@ -78,7 +77,7 @@ public class MyStyles {
 	        		whenEvent.add(column1VBoxDescription.getText());
 	        		((AddRule) window.prevWindow.prevWindow).whenData.add(whenEvent);
 	        		window.back().back();
-	        		window.back().back();
+//	        		window.back().back();
 	        	} if(window.prevWindow instanceof AddThen) {//add uniqueID
 	        		ArrayList<String> thenEvent = new ArrayList<String>();
 	        		thenEvent.add(column1VBoxHeader.getText());
@@ -86,13 +85,13 @@ public class MyStyles {
 	        		thenEvent.add(column1VBoxDescription.getText());
 	        		((AddRule) window.prevWindow.prevWindow).thenData.add(thenEvent);
 	        		window.back().back();
-	        		window.back().back();
+//	        		window.back().back();
 	        	}
 	        });
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        column1HBox.getChildren().addAll(column1VBox, editButton, removeButton);
 	        eventsVBox.getChildren().add(column1HBox);
-	        MyStyles.addHover(column1VBox,eventsVBox);
+	        MyStyles.addHover(column1VBox);
 		}
 		VBox column1VBox2 = new VBox();
 		MyStyles.createAddNewEvent(column1VBox2,eventsVBox);

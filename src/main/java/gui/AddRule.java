@@ -114,13 +114,13 @@ public class AddRule extends Window {
 	}
 	
 	public void getEvents(VBox eventsVBox, ArrayList<ArrayList<String>> events) {
-		for(ArrayList<String> readEvent : events) {
+		for(ArrayList<String> event : events) {
 			VBox column1VBox = new VBox();
 	        column1VBox.setStyle(MainMenu.MENU_BUTTON_STYLE);
-	        Text column1VBoxHeader = new Text((String) readEvent.get(1));
+	        Text column1VBoxHeader = new Text((String) event.get(1));
 	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
-	        Text column1VBoxUniqueId = new Text((String) readEvent.get(0));
-	        Text column1VBoxDescription = new Text((String) readEvent.get(2));
+	        Text column1VBoxUniqueId = new Text((String) event.get(0));
+	        Text column1VBoxDescription = new Text((String) event.get(2));
 	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
 	        column1VBoxUniqueId.setVisible(false);
@@ -129,7 +129,7 @@ public class AddRule extends Window {
 	        }); //HERE
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        //eventsVBox.getChildren().add(column1VBox);
-	        MyStyles.addHover(column1VBox,eventsVBox);
+	        MyStyles.addHover(column1VBox);
 		}
 		
 
