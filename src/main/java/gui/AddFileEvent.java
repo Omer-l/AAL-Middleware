@@ -165,7 +165,7 @@ public class AddFileEvent extends Window {
     	});
         column1ButtonBar2.getButtons().addAll(testButton, saveButton);
        HBox column1HBox9 = new HBox();
-        myStyles.createLogField(logField, mainVBox1,column1HBox9);
+        MyStyles.createLogField(logField, mainVBox1,column1HBox9);
         
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
         column1VBox2.getChildren().addAll(column1VBox2Header, column1ButtonBar1HBox);

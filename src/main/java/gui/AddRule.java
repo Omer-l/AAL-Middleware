@@ -114,27 +114,28 @@ public class AddRule extends Window {
 	}
 	
 	public void getEvents(VBox eventsVBox, ArrayList<ArrayList<String>> events) {
-		for(ArrayList<String> readEvent : events) {
+		for(ArrayList<String> event : events) {
 			VBox column1VBox = new VBox();
 	        column1VBox.setStyle(MainMenu.MENU_BUTTON_STYLE);
-	        Text column1VBoxHeader = new Text((String) readEvent.get(1));
+	        Text column1VBoxHeader = new Text((String) event.get(1));
 	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
-	        Text column1VBoxUniqueId = new Text((String) readEvent.get(0));
-	        Text column1VBoxDescription = new Text((String) readEvent.get(2));
+	        Text column1VBoxUniqueId = new Text((String) event.get(0));
+	        Text column1VBoxDescription = new Text((String) event.get(2));
 	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
 	        column1VBoxUniqueId.setVisible(false);
-	        column1VBox.setOnMouseClicked(event -> {
+	        column1VBox.setOnMouseClicked(e -> {
 	        	//remove from list or edit?
 	        }); //HERE
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        //eventsVBox.getChildren().add(column1VBox);
-	        myStyles.addHover(column1VBox,eventsVBox);
+	        MyStyles.addHover(column1VBox);
+	        eventsVBox.getChildren().add(column1VBox);
 		}
 		
 
         VBox column1VBox2 = new VBox();
-        myStyles.createAddNewEvent(column1VBox2,eventsVBox);
+        MyStyles.createAddNewEvent(column1VBox2,eventsVBox);
         /**column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
         Text column1VBox2Header = new Text("Add New Event");
         column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        

@@ -15,23 +15,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
-public class myStyles {
+public class MyStyles {
 	Map<String, Object> removeData = new HashMap<String, Object>();
-	public myStyles() {
+	public MyStyles() {
 		// TODO Auto-generated constructor stub
 	}
 	
 	
 	public static void createLogField(TextField logField, VBox mainVBox1, HBox column1HBox) {
-	 
-     Text logText = new Text("LOG: ");
-     logField.prefWidthProperty().bind(mainVBox1.widthProperty().multiply(0.9));
-     logField.prefHeightProperty().bind(mainVBox1.heightProperty().multiply(0.1));
-     logField.setEditable(false);
-     column1HBox.getChildren().addAll(logText,logField);
+	     Text logText = new Text("LOG: ");
+	     logField.prefWidthProperty().bind(mainVBox1.widthProperty().multiply(0.9));
+	     logField.prefHeightProperty().bind(mainVBox1.heightProperty().multiply(0.1));
+	     logField.setEditable(false);
+	     column1HBox.getChildren().addAll(logText,logField);
 	}
 	
-	public static void addHover(VBox column1VBox,VBox eventsVBox) {
+	public static void addHover(VBox column1VBox) {
 		MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	}
 	
@@ -78,7 +77,7 @@ public class myStyles {
 	        		whenEvent.add(column1VBoxDescription.getText());
 	        		((AddRule) window.prevWindow.prevWindow).whenData.add(whenEvent);
 	        		window.back().back();
-	        		window.back().back();
+//	        		window.back().back();
 	        	} if(window.prevWindow instanceof AddThen) {//add uniqueID
 	        		ArrayList<String> thenEvent = new ArrayList<String>();
 	        		thenEvent.add(column1VBoxHeader.getText());
@@ -86,16 +85,16 @@ public class myStyles {
 	        		thenEvent.add(column1VBoxDescription.getText());
 	        		((AddRule) window.prevWindow.prevWindow).thenData.add(thenEvent);
 	        		window.back().back();
-	        		window.back().back();
+//	        		window.back().back();
 	        	}
 	        });
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        column1HBox.getChildren().addAll(column1VBox, editButton, removeButton);
 	        eventsVBox.getChildren().add(column1HBox);
-	        myStyles.addHover(column1VBox,eventsVBox);
+	        MyStyles.addHover(column1VBox);
 		}
 		VBox column1VBox2 = new VBox();
-		myStyles.createAddNewEvent(column1VBox2,eventsVBox);
+		MyStyles.createAddNewEvent(column1VBox2,eventsVBox);
        }
 
 	

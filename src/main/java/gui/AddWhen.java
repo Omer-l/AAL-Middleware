@@ -17,7 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 
 public class AddWhen extends Window {
-	myStyles styles = new myStyles();
+	MyStyles styles = new MyStyles();
 	public AddWhen(Window prevWindow) {
 		super(prevWindow);
 	}
@@ -29,7 +29,7 @@ public class AddWhen extends Window {
 	public void open() {
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add When");
-		myStyles.thenAndWhen(this);
+		MyStyles.thenAndWhen(this);
         /**Button button1 = new Button("Back");
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left

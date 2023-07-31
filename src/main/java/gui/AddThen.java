@@ -29,7 +29,7 @@ public class AddThen extends Window {
 	public void open() {
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add Then");
-		myStyles.thenAndWhen(this);
+		MyStyles.thenAndWhen(this);
         /**Button button1 = new Button("Back");
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left

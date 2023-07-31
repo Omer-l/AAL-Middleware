@@ -22,7 +22,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 public class DatabaseEvents extends Window {
-	myStyles styles = new myStyles();
+	MyStyles styles = new MyStyles();
 	public DatabaseEvents(Window prevWindow) {
 		super(prevWindow);
 	}

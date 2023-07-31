@@ -1,7 +1,10 @@
 package middleware;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -10,6 +13,7 @@ import java.util.Map;
 
 import dao.DbXMLParser;
 import dao.MySqlConnection;
+import gui.MainMenu;
 
 public class RuleRunner extends Thread{
     public static String[] middlewareTableNames = {"database_read_event", "database_write_event", "rule", "system_file_read_event", "system_file_run_event", "system_file_write_event"};
@@ -78,14 +82,30 @@ public class RuleRunner extends Thread{
 							if(whenVal.equals(resultVal))
 								whenReached[whenIndex] = true;
 						}
-						whenIndex++;
 						
 					} else {
 	        	        mainDbManager.setDetails(DbXMLParser.dbDetailsPostgresql);
 					}
 					; break;
-				case "read_file_event" : ; break; //TODO: IMPLEMENT THIS
+				case "system_file_read_event" : 
+					System.out.println(when);
+					try {
+						BufferedInputStream bis = new BufferedInputStream(new FileInputStream((String) when.get("path")));
+		                byte[] buffer = new byte[8192]; // Adjust buffer size as needed
+		                int bytesRead;
+		                while ((bytesRead = bis.read(buffer)) != -1) {
+		                    // Convert the bytes read to a string and print the result
+		                    String data = new String(buffer, 0, bytesRead);
+		                    if(data.contains((String)when.get("content"))) {
+		                    	whenReached[whenIndex] = true;
+		                    }
+		                }
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					; break; //TODO: IMPLEMENT THIS
 			}
+			whenIndex++;
 		}
 		if(areAllTrue(whenReached)) {
 			runThens();
@@ -136,7 +156,7 @@ public class RuleRunner extends Thread{
     }
 
 	public static void main(String[] args) {
-        mainDbManager.setDetails(DbXMLParser.dbDetailsMySql);
+        mainDbManager = MainMenu.mainDbManager;
 		ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
 		ArrayList<RuleRunner> threads = new ArrayList<>();
 		for (Map<String, Object> rule : rules)

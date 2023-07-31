@@ -21,7 +21,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 public class FileEvents extends Window {
-	myStyles styles = new myStyles();
+	MyStyles styles = new MyStyles();
 	
 	public FileEvents(Window prevWindow) {
 		super(prevWindow);
