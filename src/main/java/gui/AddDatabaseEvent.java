@@ -231,7 +231,7 @@ public class AddDatabaseEvent extends Window {
         
         VBox column1VBox3 = new VBox(10);
         
-        ButtonBar column1ButtonBar = new ButtonBar();
+        ButtonBar column1ButtonBar = new ButtonBar(); 
         testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, valueField); });
         saveButton.setDisable(true);
         saveButton.setOnAction(event -> {
@@ -250,8 +250,10 @@ public class AddDatabaseEvent extends Window {
 		        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
 		        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); 
         		} else {
-		        	MainMenu.mainDbManager.queryDB("UPDATE ", "");
-		        	MainMenu.mainDbManager.queryDB("UPDATE ", "");
+		        	MainMenu.mainDbManager.queryDB("UPDATE event SET unique_id = '" + uniqueIdInput + "' , name = '" + nameInput + "', description = '" + descriptionInput + "'  WHERE unique_id = '" + uniqueIdInput + "'", "");
+		        	//MainMenu.mainDbManager.queryDB("UPDATE event SET ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
+
+		        	//MainMenu.mainDbManager.queryDB("UPDATE database_read_event SET ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); 
 		        	}
         		
         		back();
