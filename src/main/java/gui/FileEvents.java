@@ -1,6 +1,7 @@
 package gui;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import javafx.application.Application;
@@ -21,7 +22,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 public class FileEvents extends Window {
-	MyStyles styles = new MyStyles();
+	Map<String, Object> editData = new HashMap<String, Object>();
+
 	
 	public FileEvents(Window prevWindow) {
 		super(prevWindow);
@@ -47,7 +49,7 @@ public class FileEvents extends Window {
         Text column1Header = new Text("Run Events");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
         column1VBox.getChildren().addAll(column1Header);
-        styles.getEvents("SELECT * FROM system_file_run_event INNER JOIN event ON system_file_run_event.unique_id = event.unique_id;", column1VBox, this);
+        MyStyles.getEvents("SELECT * FROM system_file_run_event INNER JOIN event ON system_file_run_event.unique_id = event.unique_id;", column1VBox, this);
         int runEventsLastIndex = column1VBox.getChildren().size() - 1;
         column1VBox.getChildren().get(runEventsLastIndex).setOnMouseClicked(event -> {new AddFileEvent(this, "run").open();});
         mainVBox1.getChildren().addAll(column1VBox);
@@ -59,7 +61,7 @@ public class FileEvents extends Window {
         Text column2Header = new Text("Read Events");
         column2Header.setStyle(MainMenu.HEADER_1_STYLE);
         column2VBox.getChildren().addAll(column2Header);
-        styles.getEvents("SELECT * FROM system_file_read_event INNER JOIN event ON system_file_read_event.unique_id = event.unique_id;", column2VBox, this);
+        MyStyles.getEvents("SELECT * FROM system_file_read_event INNER JOIN event ON system_file_read_event.unique_id = event.unique_id;", column2VBox, this);
         int readEventsLastIndex = column2VBox.getChildren().size() - 1;
         column2VBox.getChildren().get(readEventsLastIndex).setOnMouseClicked(event -> {new AddFileEvent(this, "read").open();});
         mainVBox2.getChildren().addAll(column2VBox);
@@ -71,57 +73,18 @@ public class FileEvents extends Window {
         Text column3Header = new Text("Write Events");
         column3Header.setStyle(MainMenu.HEADER_1_STYLE);
         column3VBox.getChildren().add(column3Header);
-        styles.getEvents("SELECT * FROM system_file_write_event INNER JOIN event ON system_file_write_event.unique_id = event.unique_id;", column3VBox, this);
+        MyStyles.getEvents("SELECT * FROM system_file_write_event INNER JOIN event ON system_file_write_event.unique_id = event.unique_id;", column3VBox, this);
         int writeEventsLastIndex = column3VBox.getChildren().size() - 1;
         column3VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { new AddFileEvent(this, "write").open(); });
         mainVBox3.getChildren().addAll(column3VBox);
-//START
     	MainMenu.addHoverInteraction(new VBox[] {(VBox) column1VBox.getChildren().get(runEventsLastIndex), (VBox) column2VBox.getChildren().get(readEventsLastIndex), (VBox) column3VBox.getChildren().get(writeEventsLastIndex)}, "yellow", "darkgray");
         MainMenu.mainHBox.getChildren().addAll(mainVBox1, mainVBox2, mainVBox3);
 	}
 	
-	/**public void getEvents(String query, VBox eventsVBox) {
-		ArrayList<Map<String, Object>> events = MainMenu.mainDbManager.queryDB(query, "select");
-		for(Map<String, Object> readEvent : events) {
-			VBox column1VBox = new VBox();
-	        column1VBox.setStyle(MainMenu.MENU_BUTTON_STYLE);
-	        Text column1VBoxHeader = new Text((String) readEvent.get("name"));
-	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
-	        Text column1VBoxUniqueId = new Text((String) readEvent.get("unique_id"));
-	        Text column1VBoxDescription = new Text((String) readEvent.get("description"));
-	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
-	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
-	        column1VBoxUniqueId.setVisible(false);
-	        column1VBox.setOnMouseClicked(event -> {
-	        	if(this.prevWindow instanceof AddWhen) { //add uniqueID//add uniqueID
-	        		ArrayList<String> whenEvent = new ArrayList<String>();
-	        		whenEvent.add(column1VBoxHeader.getText());
-	        		whenEvent.add(column1VBoxUniqueId.getText());
-	        		whenEvent.add(column1VBoxDescription.getText());
-	        		((AddRule) this.prevWindow.prevWindow).whenData.add(whenEvent);
-	        		this.back().back();
-	        		this.back().back();
-	        	} if(this.prevWindow instanceof AddThen) {//add uniqueID
-	        		ArrayList<String> thenEvent = new ArrayList<String>();
-	        		thenEvent.add(column1VBoxHeader.getText());
-	        		thenEvent.add(column1VBoxUniqueId.getText());
-	        		thenEvent.add(column1VBoxDescription.getText());
-	        		((AddRule) this.prevWindow.prevWindow).thenData.add(thenEvent);
-	        		this.back().back();
-	        		this.back().back();
-	        	}
-	        });
-	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
-	        //eventsVBox.getChildren().add(column1VBox);
-	        myStyles.addHover(column1VBox,eventsVBox);
-		}
-		VBox column1VBox2 = new VBox();
-		myStyles.createAddNewEvent(column1VBox2,eventsVBox);
-        //TILL HERE
-        column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
-        Text column1VBox2Header = new Text("Add New Event");
-        column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        
-        column1VBox2.getChildren().addAll(column1VBox2Header);
-        eventsVBox.getChildren().add(column1VBox2);
-	}**/
+	public void loadData(String uniqueId) {
+		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_run_event JOIN event ON database_read_event.unique_id = event.unique_id", "select").get(0);
+	}
+	
+	
+	
 }

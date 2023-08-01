@@ -48,7 +48,7 @@ public class AddFileEvent extends Window {
     private String query;
     private File selectedFile;
     private TextField valueField = new TextField();
-    private String operation = "run"; //run, read, or write
+    private static String operation ; //run, read, or write
     
     
 	public AddFileEvent(Window prevWindow, String operation) {
@@ -59,6 +59,22 @@ public class AddFileEvent extends Window {
 	public AddFileEvent() {
 		
 	}
+	
+	public static void removeEventFromDatabaseReadEvent(String uniqueID) {
+		try {
+			if(operation == "run") {
+				  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_run_event WHERE system_file_run_event.unique_id = '" + uniqueID + "'","");
+			}else if(operation == "read") {
+			  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_read_event WHERE system_file_read_event.unique_id = '" + uniqueID + "'","");
+			}else if(operation == "write") {
+			  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_write_event WHERE system_file_write_event.unique_id = '" + uniqueID + "'","");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		}
 
 	public void open() {
 		MainMenu.clearMainBox();
