@@ -1,4 +1,4 @@
+,kitchen
 Sara,toilet
 Omer,bedroom
-,kitchen
 Oscar,bedroom
