@@ -62,7 +62,7 @@ public class MainConsole {
     	        	System.out.println("EVENT!\n");
     	        	Map<String, Object> event = getNewEvent(prevResultsDB, latestResultsDB);
     	        	prevResultsDB = latestResultsDB;
-    	        	event.put("event_type", "database_write_event");
+    	        	event.put("event_type", "database_read_event");
     	        	runRules(event);
     	        } else {
     	        	System.out.println("no event detected!");
@@ -137,10 +137,14 @@ public class MainConsole {
     			StringBuilder query = new StringBuilder("SELECT * FROM ");
     			query.append(tableName);
     			query.append(" ORDER BY 1 DESC LIMIT 1");
-    			ArrayList<Map<String, Object>> newRow = con.queryDB(query.toString(), "select");
-    			if(newRow.size() > 0) 
-    				latestResults.add(newRow.get(0));
-    			else
+    			ArrayList<Map<String, Object>> result = con.queryDB(query.toString(), "select");
+    			if(result.size() > 0) {
+    				Map<String, Object> newRow = result.get(0);
+    				newRow.put("event_type", "database_read_event");
+    				newRow.put("database", databaseName);
+    				newRow.put("table", tableName);
+    				latestResults.add(newRow);
+    			} else
     				latestResults.add(null); //placeholder
     		}
     	}
