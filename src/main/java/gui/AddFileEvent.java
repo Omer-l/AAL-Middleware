@@ -75,6 +75,10 @@ public class AddFileEvent extends Window {
 		}
 
 		}
+	
+	public void loadData() {
+		
+	}
 
 	public void open() {
 		MainMenu.clearMainBox();
