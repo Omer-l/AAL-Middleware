@@ -60,7 +60,7 @@ public class AddFileEvent extends Window {
 		
 	}
 	
-	public static void removeEventFromDatabaseReadEvent(String uniqueID) {
+	public static void removeEventFromFileEvent(String uniqueID) {
 		try {
 			if(operation == "run") {
 				  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_run_event WHERE system_file_run_event.unique_id = '" + uniqueID + "'","");
@@ -82,6 +82,8 @@ public class AddFileEvent extends Window {
 		
 		
       Button button1 = new Button("Back");
+      button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);
@@ -90,7 +92,7 @@ public class AddFileEvent extends Window {
         mainVBox1.prefWidthProperty().bind(MainMenu.root.widthProperty());
         //column1urations
         VBox column1VBox1 = new VBox(2);
-        Text column1Header = new Text("Description");
+        Text column1Header = new Text("Details");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
 
         HBox column1HBox1 = new HBox();

@@ -23,6 +23,8 @@ public class Rules extends Window {
 		MainMenu.clearMainBox();
     	MainMenu.changeTitle("Rules");
         Button button1 = new Button("Back");
+        button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.getChildren().addAll(button1);

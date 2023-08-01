@@ -34,6 +34,8 @@ public class AddRule extends Window {
 		MainMenu.changeTitle("Add Rule");
 		
       Button button1 = new Button("Back");
+      button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);

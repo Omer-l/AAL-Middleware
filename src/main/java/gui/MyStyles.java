@@ -54,6 +54,7 @@ public class MyStyles {
 	        Text column1VBoxUniqueId = new Text((String) readEvent.get("unique_id"));
 	        Text column1VBoxDescription = new Text((String) readEvent.get("description"));
 	        Button editButton = new Button("Edit");
+	        editButton.setStyle("-fx-font: 15 arial;-fx-base: #FFE4E1");
 	        editButton.setOnAction(event -> {
 	        	if(window instanceof DatabaseEvents) {
 	        		AddDatabaseEvent ade = new AddDatabaseEvent(window);
@@ -62,18 +63,20 @@ public class MyStyles {
 	        	} else if(window instanceof FileEvents) {
 	        		FileEvents fileEvents = new FileEvents(window);
 	        		fileEvents.loadData((String) readEvent.get("unique_id"));
+	        		fileEvents.open();
 
 	        		
 	        		
 	        	}
 	        });
 	        Button removeButton = new Button("Remove");
+	        removeButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
 	        removeButton.setOnAction(event -> {
 	        	if(window instanceof DatabaseEvents) {
 	        		AddDatabaseEvent.removeEventFromDatabaseReadEvent((String) readEvent.get("unique_id"));
 	        		eventsVBox.getChildren().remove(column1HBox);
 	        	}else if(window instanceof FileEvents) {
-	        		AddFileEvent.removeEventFromDatabaseReadEvent((String) readEvent.get("unique_id"));
+	        		AddFileEvent.removeEventFromFileEvent((String) readEvent.get("unique_id"));
 	        		eventsVBox.getChildren().remove(column1HBox);
 	        		
 	        		
@@ -117,6 +120,8 @@ public class MyStyles {
 
 	public static void thenAndWhen(Window window) {
 		Button button1 = new Button("Back");
+        button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+
         button1.setOnAction(event -> { window.back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);
