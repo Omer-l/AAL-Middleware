@@ -64,14 +64,10 @@ public class RuleRunner extends Thread{
 			if(((String) event.get("event_type")).equals("database_read_event")
 					&& ((String) when.get("event_type")).equals("database_read_event")
 					&& ((String) event.get("database")).equals(((String) when.get("database")))
-					&& ((String) event.get("table")).equals(((when.get("table"))))) {
+					&& ((String) event.get("table")).equals(((when.get("table")))))
 				if( ((String) when.get("column")).equals("Whole Row") || event.get(when.get("column")).toString().equals(when.get("value").toString()))
 					when.put("reached", true);
 					
-				
-//				if(event.get((String) when.get("table")))
-			}
-			//set 'when' map's reached key to true if match
 		}
 		
 	}
