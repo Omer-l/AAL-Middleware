@@ -43,7 +43,7 @@ public class MyStyles {
 	        eventsVBox.getChildren().add(column1VBox2);
 	}
 	
-	public void getEvents(String query, VBox eventsVBox, Window window) {
+	public static void getEvents(String query, VBox eventsVBox, Window window) {
 		ArrayList<Map<String, Object>> events = MainMenu.mainDbManager.queryDB(query, "select");
 		for(Map<String, Object> readEvent : events) {
 			HBox column1HBox = new HBox();
@@ -59,12 +59,26 @@ public class MyStyles {
 	        		AddDatabaseEvent ade = new AddDatabaseEvent(window);
 	        		ade.loadData((String) readEvent.get("unique_id"));
 	        		ade.open();
+	        	} else if(window instanceof FileEvents) {
+	        		FileEvents fileEvents = new FileEvents(window);
+	        		fileEvents.loadData((String) readEvent.get("unique_id"));
+
+	        		
+	        		
 	        	}
 	        });
 	        Button removeButton = new Button("Remove");
 	        removeButton.setOnAction(event -> {
-        		AddDatabaseEvent.removeEventFromDatabaseReadEvent((String) readEvent.get("unique_id"));
-        		eventsVBox.getChildren().remove(column1HBox);
+	        	if(window instanceof DatabaseEvents) {
+	        		AddDatabaseEvent.removeEventFromDatabaseReadEvent((String) readEvent.get("unique_id"));
+	        		eventsVBox.getChildren().remove(column1HBox);
+	        	}else if(window instanceof FileEvents) {
+	        		AddFileEvent.removeEventFromDatabaseReadEvent((String) readEvent.get("unique_id"));
+	        		eventsVBox.getChildren().remove(column1HBox);
+	        		
+	        		
+	        	}
+        		
 	        });
 	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
