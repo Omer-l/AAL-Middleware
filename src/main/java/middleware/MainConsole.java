@@ -49,9 +49,9 @@ public class MainConsole {
     			//go through querying each table for the latest row in the table
                 ArrayList<Map<String, Object>> latestResults = new ArrayList<Map<String, Object>>();
     	        connection.setDetails(DbXMLParser.dbDetailsMySql);
-                latestResults.addAll(latestResults(connection, DbXMLParser.mySqlDbAndTablesMap));
+                latestResults.addAll(latestResults(DbXMLParser.mySqlDbAndTablesMap));
     	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
-    	        latestResults.addAll(latestResults(connection, DbXMLParser.postgresqlDbAndTablesMap));
+    	        latestResults.addAll(latestResults(DbXMLParser.postgresqlDbAndTablesMap));
 //        	    System.out.println(latestResults + "\n" + prevResults);
     			//checks whether the latest result isn't actually previous Result
     	        if(it == 0) { //only for first iteration
@@ -128,27 +128,27 @@ public class MainConsole {
         System.out.println("    Max: " + memoryUsage.getMax() / (1024 * 1024) + " MB");		
 	}
 
-	private Collection<Map<String, Object>> latestResults(MySqlConnection con, Map<String, ArrayList<String>> dbAndTablesMap) {
+	private Collection<Map<String, Object>> latestResults(Map<String, ArrayList<String>> dbAndTablesMap) {
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
-    	if(!con.equals(null)) {
-			for(String databaseName : dbAndTablesMap.keySet()) {
-	    		con.connectToDb(databaseName);
-	    		for(String tableName : dbAndTablesMap.get(databaseName)) {
-	    			StringBuilder query = new StringBuilder("SELECT * FROM ");
-	    			query.append(tableName);
-	    			query.append(" ORDER BY 1 DESC LIMIT 1");
-	    			ArrayList<Map<String, Object>> result = con.queryDB(query.toString(), "select");
-	    			if(result.size() > 0) {
-	    				Map<String, Object> newRow = result.get(0);
-	    				newRow.put("event_type", "database_read_event");
-	    				newRow.put("database", databaseName);
-	    				newRow.put("table", tableName);
-	    				latestResults.add(newRow);
-	    			} else
-	    				latestResults.add(null); //placeholder
-	    		}
-	    	}
+		for(String databaseName : dbAndTablesMap.keySet()) {
+    		connection.connectToDb(databaseName);
+    		for(String tableName : dbAndTablesMap.get(databaseName)) {
+    			StringBuilder query = new StringBuilder("SELECT * FROM ");
+    			query.append(tableName);
+    			query.append(" ORDER BY 1 DESC LIMIT 1");
+    			ArrayList<Map<String, Object>> result = connection.queryDB(query.toString(), "select");
+    			if(result.size() > 0) {
+    				Map<String, Object> newRow = result.get(0);
+    				newRow.put("event_type", "database_read_event");
+    				newRow.put("database", databaseName);
+    				newRow.put("table", tableName);
+    				latestResults.add(newRow);
+    			} else
+    				latestResults.add(null); //placeholder
+    		}
     	}
+		//get file read events
+		ArrayList<Map<String, Object>> latestResultsFiles = RuleRunner.mainDbManager.queryDB("SELECT * FROM system_file_read_event ORDER BY 1 DESC LIMIT 1", "select");
 		return latestResults;
 	}
 }
