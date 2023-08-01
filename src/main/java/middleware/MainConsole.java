@@ -7,14 +7,16 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import dao.DbXMLParser;
 import dao.MySqlConnection;
 import gui.MainMenu;
 
 public class MainConsole {
-    ArrayList<Map<String, Object>> prevResults = new ArrayList<Map<String, Object>>();
+    ArrayList<Map<String, Object>> prevResultsDB = new ArrayList<Map<String, Object>>();
     private MySqlConnection connection;
     private boolean listening;		
     public static ArrayList<RuleRunner> ruleThreads = new ArrayList<>();
@@ -45,21 +47,23 @@ public class MainConsole {
                 // Record the start time
                 long startTime = System.currentTimeMillis();
     			//go through querying each table for the latest row in the table
-                ArrayList<Map<String, Object>> latestResults = new ArrayList<Map<String, Object>>();
+                ArrayList<Map<String, Object>> latestResultsDB = new ArrayList<Map<String, Object>>();
     	        connection.setDetails(DbXMLParser.dbDetailsMySql);
-                latestResults.addAll(latestResults(connection, DbXMLParser.mySqlDbAndTablesMap));
+                latestResultsDB.addAll(latestResults(connection, DbXMLParser.mySqlDbAndTablesMap));
     	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
-    	        latestResults.addAll(latestResults(connection, DbXMLParser.postgresqlDbAndTablesMap));
+    	        latestResultsDB.addAll(latestResults(connection, DbXMLParser.postgresqlDbAndTablesMap));
 //        	    System.out.println(latestResults + "\n" + prevResults);
     			//checks whether the latest result isn't actually previous Result
-    	        if(it == 0) {
-    	        	prevResults = latestResults;
+    	        if(it == 0) { //only for first iteration
+    	        	prevResultsDB = latestResultsDB;
         	        it++;
     	        }
-    	        if(!latestResults.equals(prevResults)) {
+    	        if(!latestResultsDB.equals(prevResultsDB)) {
     	        	System.out.println("EVENT!\n");
-    	        	prevResults = latestResults;
-    	        	runRules();
+    	        	Map<String, Object> event = getNewEvent(prevResultsDB, latestResultsDB);
+    	        	prevResultsDB = latestResultsDB;
+    	        	event.put("event_type", "database_write_event");
+    	        	runRules(event);
     	        } else {
     	        	System.out.println("no event detected!");
     	        }
@@ -79,6 +83,16 @@ public class MainConsole {
         }
 	}
 
+	private Map<String, Object> getNewEvent(ArrayList<Map<String, Object>> prevResults, ArrayList<Map<String, Object>> latestResults) {
+		Map<String, Object> event = new HashMap<String, Object>();
+		Set<Map<String, Object>> set1 = new HashSet<>(prevResults);
+        Set<Map<String, Object>> set2 = new HashSet<>(latestResults);
+
+        // Find elements in new results that are not in previous results
+        set2.removeAll(set1);
+		return new ArrayList<>(set2).get(0);
+	}
+
 	private void assignRules() {
 		RuleRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
 		RuleRunner.mainDbManager.setUsername("root");
@@ -88,8 +102,9 @@ public class MainConsole {
 			ruleThreads.add(new RuleRunner(rule));
 	}
 
-	private void runRules() {
+	private void runRules(Map<String, Object> event) {
 		for (RuleRunner rule : ruleThreads) {
+			rule.event = event;
 			rule.start();
 		}
 	}

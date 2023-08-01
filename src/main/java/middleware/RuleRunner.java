@@ -20,6 +20,7 @@ public class RuleRunner extends Thread{
 	public static MySqlConnection mainDbManager = new MySqlConnection();
 	public ArrayList<Map<String, Object>> whens;
 	public ArrayList<Map<String, Object>> thens;
+	public Map<String, Object> event; // the new event to evaluate
 
     public RuleRunner(Map<String, Object> rule) {
         getWhensAndThens(rule);
@@ -55,63 +56,18 @@ public class RuleRunner extends Thread{
 		return matchingEvents;
 	}
 	
+	@Override
 	public void run() { //make this a @Override and a run() function but maybe not
-		//go through conditions
-		//boolean array to see if all WHENs are true
-		boolean[] whenReached = new boolean[whens.size()];
-		int whenIndex = 0;
-		//loop through whens
+		//get relevant when to new event
 		for(Map<String, Object> when : whens) {
-			switch((String) when.get("event_type")) {
-				case "database_read_event": 
-					//then go to that database table and read the latest row
-					if(when.get("rdbm").equals("MySQL")) {
-	        	        mainDbManager.setDetails(DbXMLParser.dbDetailsMySql);
-						Map<String, Object> result = mainDbManager.queryDB((String) when.get("query"), "select").get(0);
-						//process boolean
-						if(when.get("column").equals("Whole Row")) {
-							if(when.get("previous_result") == null) { //newly detected
-								when.put("previous_result", result);
-								whenReached[whenIndex] = true;
-							} else if(when.get("previous_result") != result) {
-								when.replace("previous_result", result);
-							}
-						} else if (when.get("value") != "") {
-							String whenVal = (String) when.get("value");
-							String resultVal = (String) result.get((String) when.get("column"));
-							if(whenVal.equals(resultVal))
-								whenReached[whenIndex] = true;
-						}
-						
-					} else {
-	        	        mainDbManager.setDetails(DbXMLParser.dbDetailsPostgresql);
-					}
-					; break;
-				case "system_file_read_event" : 
-					System.out.println(when);
-					try {
-						BufferedInputStream bis = new BufferedInputStream(new FileInputStream((String) when.get("path")));
-		                byte[] buffer = new byte[8192]; // Adjust buffer size as needed
-		                int bytesRead;
-		                while ((bytesRead = bis.read(buffer)) != -1) {
-		                    // Convert the bytes read to a string and print the result
-		                    String data = new String(buffer, 0, bytesRead);
-		                    if(data.contains((String)when.get("content"))) {
-		                    	whenReached[whenIndex] = true;
-		                    }
-		                }
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					; break; //TODO: IMPLEMENT THIS
+			//depending on the event_type, send in for evaluation with its relevant when
+			if(when.get("event_type") == "database_read_event"
+					&& event.containsKey("database")) {
+				
 			}
-			whenIndex++;
+			//set 'when' map's reached key to true if match
 		}
-		if(areAllTrue(whenReached)) {
-			runThens();
-		}
-		//if all when booleans are true
-			//then run thens
+		
 	}
 	
 	private void runThens() {
@@ -161,7 +117,16 @@ public class RuleRunner extends Thread{
 		ArrayList<RuleRunner> threads = new ArrayList<>();
 		for (Map<String, Object> rule : rules)
 			threads.add(new RuleRunner(rule));
-		
+		Map<String, Object> testEvent = new HashMap<>();
+		testEvent.put("database", "beacon_localisation");
+		testEvent.put("unique_id", "emfwerkwlem");
+		testEvent.put("query", "SELECT * FROM record ORDER BY dateTime DESC LIMIT 1");
+		testEvent.put("rdbm", "MySQL");
+		testEvent.put("table", "record");
+		testEvent.put("column", "Whole Row");
+		testEvent.put("value", "");
+		testEvent.put("sortby", "dateTime");
+		threads.get(0).event = testEvent;
 		threads.get(0).run();
-    }
+   }
 }
