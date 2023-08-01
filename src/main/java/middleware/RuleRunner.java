@@ -61,11 +61,13 @@ public class RuleRunner extends Thread{
 		//get relevant when to new event
 		for(Map<String, Object> when : whens) {
 			//depending on the event_type, send in for evaluation with its relevant when
-			if(event.get("event_type") == "database_read_event"
-					&& when.get("event_type") == "database_read_event") {
-//				if(event.get((String) when.get("table")))
-			}
-			//set 'when' map's reached key to true if match
+			if(((String) event.get("event_type")).equals("database_read_event")
+					&& ((String) when.get("event_type")).equals("database_read_event")
+					&& ((String) event.get("database")).equals(((String) when.get("database")))
+					&& ((String) event.get("table")).equals(((when.get("table")))))
+				if( ((String) when.get("column")).equals("Whole Row") || event.get(when.get("column")).toString().equals(when.get("value").toString()))
+					when.put("reached", true);
+					
 		}
 		
 	}

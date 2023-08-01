@@ -16,7 +16,7 @@ import dao.MySqlConnection;
 import gui.MainMenu;
 
 public class MainConsole {
-    ArrayList<Map<String, Object>> prevResultsDB = new ArrayList<Map<String, Object>>();
+    ArrayList<Map<String, Object>> prevResults = new ArrayList<Map<String, Object>>();
     private MySqlConnection connection;
     private boolean listening;		
     public static ArrayList<RuleRunner> ruleThreads = new ArrayList<>();
@@ -47,22 +47,21 @@ public class MainConsole {
                 // Record the start time
                 long startTime = System.currentTimeMillis();
     			//go through querying each table for the latest row in the table
-                ArrayList<Map<String, Object>> latestResultsDB = new ArrayList<Map<String, Object>>();
+                ArrayList<Map<String, Object>> latestResults = new ArrayList<Map<String, Object>>();
     	        connection.setDetails(DbXMLParser.dbDetailsMySql);
-                latestResultsDB.addAll(latestResults(connection, DbXMLParser.mySqlDbAndTablesMap));
+                latestResults.addAll(latestResults(connection, DbXMLParser.mySqlDbAndTablesMap));
     	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
-    	        latestResultsDB.addAll(latestResults(connection, DbXMLParser.postgresqlDbAndTablesMap));
+    	        latestResults.addAll(latestResults(connection, DbXMLParser.postgresqlDbAndTablesMap));
 //        	    System.out.println(latestResults + "\n" + prevResults);
     			//checks whether the latest result isn't actually previous Result
     	        if(it == 0) { //only for first iteration
-    	        	prevResultsDB = latestResultsDB;
+    	        	prevResults = latestResults;
         	        it++;
     	        }
-    	        if(!latestResultsDB.equals(prevResultsDB)) {
+    	        if(!latestResults.equals(prevResults)) {
     	        	System.out.println("EVENT!\n");
-    	        	Map<String, Object> event = getNewEvent(prevResultsDB, latestResultsDB);
-    	        	prevResultsDB = latestResultsDB;
-    	        	event.put("event_type", "database_read_event");
+    	        	Map<String, Object> event = getNewEvent(prevResults, latestResults);
+    	        	prevResults = latestResults;
     	        	runRules(event);
     	        } else {
     	        	System.out.println("no event detected!");
@@ -130,23 +129,25 @@ public class MainConsole {
 	}
 
 	private Collection<Map<String, Object>> latestResults(MySqlConnection con, Map<String, ArrayList<String>> dbAndTablesMap) {
-    	ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
-		for(String databaseName : dbAndTablesMap.keySet()) {
-    		con.connectToDb(databaseName);
-    		for(String tableName : dbAndTablesMap.get(databaseName)) {
-    			StringBuilder query = new StringBuilder("SELECT * FROM ");
-    			query.append(tableName);
-    			query.append(" ORDER BY 1 DESC LIMIT 1");
-    			ArrayList<Map<String, Object>> result = con.queryDB(query.toString(), "select");
-    			if(result.size() > 0) {
-    				Map<String, Object> newRow = result.get(0);
-    				newRow.put("event_type", "database_read_event");
-    				newRow.put("database", databaseName);
-    				newRow.put("table", tableName);
-    				latestResults.add(newRow);
-    			} else
-    				latestResults.add(null); //placeholder
-    		}
+		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
+    	if(!con.equals(null)) {
+			for(String databaseName : dbAndTablesMap.keySet()) {
+	    		con.connectToDb(databaseName);
+	    		for(String tableName : dbAndTablesMap.get(databaseName)) {
+	    			StringBuilder query = new StringBuilder("SELECT * FROM ");
+	    			query.append(tableName);
+	    			query.append(" ORDER BY 1 DESC LIMIT 1");
+	    			ArrayList<Map<String, Object>> result = con.queryDB(query.toString(), "select");
+	    			if(result.size() > 0) {
+	    				Map<String, Object> newRow = result.get(0);
+	    				newRow.put("event_type", "database_read_event");
+	    				newRow.put("database", databaseName);
+	    				newRow.put("table", tableName);
+	    				latestResults.add(newRow);
+	    			} else
+	    				latestResults.add(null); //placeholder
+	    		}
+	    	}
     	}
 		return latestResults;
 	}
