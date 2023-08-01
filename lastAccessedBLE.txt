@@ -1,4 +1,0 @@
-,kitchen
-Sara,toilet
-Omer,bedroom
-Oscar,bedroom

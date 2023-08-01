@@ -1,5 +1,8 @@
 package middleware;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
@@ -49,9 +52,10 @@ public class MainConsole {
     			//go through querying each table for the latest row in the table
                 ArrayList<Map<String, Object>> latestResults = new ArrayList<Map<String, Object>>();
     	        connection.setDetails(DbXMLParser.dbDetailsMySql);
-                latestResults.addAll(latestResults(DbXMLParser.mySqlDbAndTablesMap));
+                latestResults.addAll(latestResultsDB(DbXMLParser.mySqlDbAndTablesMap));
     	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
-    	        latestResults.addAll(latestResults(DbXMLParser.postgresqlDbAndTablesMap));
+    	        latestResults.addAll(latestResultsDB(DbXMLParser.postgresqlDbAndTablesMap));
+    	        latestResults.addAll(latestResultsFiles());
 //        	    System.out.println(latestResults + "\n" + prevResults);
     			//checks whether the latest result isn't actually previous Result
     	        if(it == 0) { //only for first iteration
@@ -128,7 +132,7 @@ public class MainConsole {
         System.out.println("    Max: " + memoryUsage.getMax() / (1024 * 1024) + " MB");		
 	}
 
-	private Collection<Map<String, Object>> latestResults(Map<String, ArrayList<String>> dbAndTablesMap) {
+	private Collection<Map<String, Object>> latestResultsDB(Map<String, ArrayList<String>> dbAndTablesMap) {
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
 		for(String databaseName : dbAndTablesMap.keySet()) {
     		connection.connectToDb(databaseName);
@@ -147,8 +151,38 @@ public class MainConsole {
     				latestResults.add(null); //placeholder
     		}
     	}
-		//get file read events
-		ArrayList<Map<String, Object>> latestResultsFiles = RuleRunner.mainDbManager.queryDB("SELECT * FROM system_file_read_event ORDER BY 1 DESC LIMIT 1", "select");
+		return latestResults;
+	}
+
+	private ArrayList<Map<String, Object>> latestResultsFiles(int iteration) {
+		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
+		
+		ArrayList<Map<String, Object>> results = RuleRunner.mainDbManager.queryDB("SELECT * FROM system_file_read_event ORDER BY 1 DESC", "select");
+		
+		for(Map<String, Object> result : results) {
+
+            try {
+	            BufferedInputStream bis = new BufferedInputStream(new FileInputStream((String) result.get("path")));
+	            byte[] buffer = new byte[8192]; // Adjust buffer size as needed
+	            int bytesRead;
+				while ((bytesRead = bis.read(buffer)) != -1) {
+					Map<String, Object> fileResult = new HashMap<String, Object>();
+				    // Convert the bytes read to a string and print the result
+				    String data = new String(buffer, 0, bytesRead);
+				    if(data.contains(((String)result.get("content")))) {
+				    	fileResult.put("previous_result", true);
+				    }
+				    
+				    if(iteration == 0)
+				    	fileResult.put("previous_result", true);
+				    else
+				    	fileResult.put("previous_result", false);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return latestResults;
 	}
 }

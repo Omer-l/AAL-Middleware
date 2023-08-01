@@ -67,9 +67,7 @@ public class RuleRunner extends Thread{
 					&& ((String) event.get("table")).equals(((when.get("table")))))
 				if( ((String) when.get("column")).equals("Whole Row") || event.get(when.get("column")).toString().equals(when.get("value").toString()))
 					when.put("reached", true);
-					
 		}
-		
 	}
 	
 	private void runThens() {
