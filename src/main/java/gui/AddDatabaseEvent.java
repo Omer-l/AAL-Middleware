@@ -87,6 +87,8 @@ public class AddDatabaseEvent extends Window {
 	        
         Button button1 = new Button("Back");
         button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+        saveButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
+        testButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
 
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left

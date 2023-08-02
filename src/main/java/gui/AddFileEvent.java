@@ -44,6 +44,7 @@ public class AddFileEvent extends Window {
     private TextField logField = new TextField();
     private Button testButton = new Button("Test");
     private Button saveButton = new Button("Save");
+
     private Button runFileMethodButton = new Button("Run");
     private Button readFileMethodButton = new Button("Read");
     private Button writeFileMethodButton = new Button("Write");
@@ -119,6 +120,12 @@ public class AddFileEvent extends Window {
       Button button1 = new Button("Back");
         button1.setOnAction(event -> { back(); });
         button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+        saveButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
+        testButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
+        runFileMethodButton.setStyle("-fx-font: 15 arial ; -fx-base: #E9967A");
+        readFileMethodButton.setStyle("-fx-font: 15 arial ; -fx-base: #E9967A");
+        writeFileMethodButton.setStyle("-fx-font: 15 arial ; -fx-base: #E9967A");
+
 
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);
@@ -239,6 +246,8 @@ public class AddFileEvent extends Window {
         column1Hbox4VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         // Create a File chooser
         Button uploadButton = new Button("Select File");
+        uploadButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
+
         uploadButton.setOnAction(event -> selectFile());
         column1Hbox4VBox1.getChildren().addAll(column1Hbox4VBox1Header);
         column1Hbox4VBox2.getChildren().addAll(uploadButton);
