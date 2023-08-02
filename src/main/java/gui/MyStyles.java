@@ -76,8 +76,20 @@ public class MyStyles {
 	        		AddDatabaseEvent.removeEventFromDatabaseReadEvent((String) readEvent.get("unique_id"));
 	        		eventsVBox.getChildren().remove(column1HBox);
 	        	}else if(window instanceof FileEvents) {
-	        		AddFileEvent.removeEventFromFileEvent((String) readEvent.get("unique_id"));
-	        		eventsVBox.getChildren().remove(column1HBox);
+	        		String header = ((Text) eventsVBox.getChildren().get(0)).getText();
+	        		if(header.equals("Read Events")) {
+	        			AddFileEvent.removeEventFromFileEvent((String) readEvent.get("unique_id"),"read");
+		        		eventsVBox.getChildren().remove(column1HBox);
+	        		} else if (header.equals("Run Events")) {
+	        			AddFileEvent.removeEventFromFileEvent((String) readEvent.get("unique_id"), "run");
+		        		eventsVBox.getChildren().remove(column1HBox);
+	        		} else if (header.equals("Write Events")) {
+	        			AddFileEvent.removeEventFromFileEvent((String) readEvent.get("unique_id"),"write");
+		        		eventsVBox.getChildren().remove(column1HBox);
+		        		eventsVBox.getChildren().remove(column1HBox);
+
+	        		}
+	        				
 	        		
 	        		
 	        	}

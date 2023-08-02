@@ -48,7 +48,7 @@ public class AddFileEvent extends Window {
     private String query;
     private File selectedFile;
     private TextField valueField = new TextField();
-    private static String operation ; //run, read, or write
+    private  String operation ; //run, read, or write
     
     
 	public AddFileEvent(Window prevWindow, String operation) {
@@ -60,7 +60,7 @@ public class AddFileEvent extends Window {
 		
 	}
 	
-	public static void removeEventFromFileEvent(String uniqueID) {
+	public static void removeEventFromFileEvent(String uniqueID, String operation) {
 		try {
 			if(operation == "run") {
 				  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_run_event WHERE system_file_run_event.unique_id = '" + uniqueID + "'","");
@@ -75,10 +75,6 @@ public class AddFileEvent extends Window {
 		}
 
 		}
-	
-	public void loadData() {
-		
-	}
 
 	public void open() {
 		MainMenu.clearMainBox();
@@ -86,8 +82,6 @@ public class AddFileEvent extends Window {
 		
 		
       Button button1 = new Button("Back");
-      button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
-
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);
@@ -96,7 +90,7 @@ public class AddFileEvent extends Window {
         mainVBox1.prefWidthProperty().bind(MainMenu.root.widthProperty());
         //column1urations
         VBox column1VBox1 = new VBox(2);
-        Text column1Header = new Text("Details");
+        Text column1Header = new Text("Description");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
 
         HBox column1HBox1 = new HBox();
@@ -127,7 +121,7 @@ public class AddFileEvent extends Window {
         VBox column1HBox3VBox1 = new VBox();
         column1HBox3VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
         column1HBox3VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox3VBox1Header = new Text("Description");
+        Text column1HBox3VBox1Header = new Text("Details");
         VBox column1HBox3VBox2 = new VBox();
         column1HBox3VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         TextField column1HBox3VBox2TextField = new TextField();
