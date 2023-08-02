@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.HashMap;
+import java.util.Map;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 
@@ -49,7 +51,10 @@ public class AddFileEvent extends Window {
     private File selectedFile;
     private TextField valueField = new TextField();
     private  String operation ; //run, read, or write
-    
+	Map<String, Object> editRunData = new HashMap<String, Object>();
+	Map<String, Object> editReadData = new HashMap<String, Object>();
+	Map<String, Object> editWriteData = new HashMap<String, Object>();
+
     
 	public AddFileEvent(Window prevWindow, String operation) {
 		super(prevWindow);
@@ -70,11 +75,41 @@ public class AddFileEvent extends Window {
 			  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_write_event WHERE system_file_write_event.unique_id = '" + uniqueID + "'","");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		}
+	
+	public void loadData(String uniqueId) {
+		editRunData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_run_event JOIN event ON system_file_run_event.unique_id = event.unique_id", "select").get(0);
+		editReadData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_read_event JOIN event ON system_file_read_event.unique_id = event.unique_id", "select").get(0);
+		editWriteData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_write_event JOIN event ON system_file_write_event.unique_id = event.unique_id", "select").get(0);
+	}
+	
+	public void loadRunData(String uniqueId, TextField uniqueIdField,String name, TextField nameField,
+			String description, TextField descriptionField, String path, TextField pathField,String argument,
+			TextField argumentField) {
+//		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.unique_id = event.unique_id", "select").get(0);
+//		System.out.println(editData);
+//		if(((String) editData.get("rdbm")).equals("MySQL"))
+//			dbManager.setDetails(DbXMLParser.dbDetailsMySql);
+//		else if(((String) editData.get("rdbm")).equals("PostgreSQL"))
+//			dbManager.setDetails(DbXMLParser.dbDetailsPostgresql);
+//		uniqueIdField.setText(uniqueId);
+//		nameField.setText((String) editData.get("name"));
+//		descriptionField.setText((String) editData.get("description"));
+//		rdbmMenu.setText((String) editData.get("rdbm"));
+//		databaseMenu.setText((String) editData.get("database"));
+//		tableMenu.setText((String) editData.get("table"));
+//		loadTablesMenu(tableMenu, columnMenu, (String) editData.get("database"));
+////		if(!((String) editData.get("column").equals("Whole Row"))
+//		columnMenu.setText((String) editData.get("column"));
+//		loadColumnsMenu(tableMenu, columnMenu, (String) editData.get("table"));
+//		valueField.setText((String) editData.get("value"));
+//		sortByMenu.setText((String) editData.get("sortby"));
+		//		this.editData = data;
+	}
+	
 
 	public void open() {
 		MainMenu.clearMainBox();
@@ -83,6 +118,8 @@ public class AddFileEvent extends Window {
 		
       Button button1 = new Button("Back");
         button1.setOnAction(event -> { back(); });
+        button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);
         //LEFT SIDE MAIN
@@ -90,7 +127,7 @@ public class AddFileEvent extends Window {
         mainVBox1.prefWidthProperty().bind(MainMenu.root.widthProperty());
         //column1urations
         VBox column1VBox1 = new VBox(2);
-        Text column1Header = new Text("Description");
+        Text column1Header = new Text("Details");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
 
         HBox column1HBox1 = new HBox();
@@ -121,7 +158,7 @@ public class AddFileEvent extends Window {
         VBox column1HBox3VBox1 = new VBox();
         column1HBox3VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
         column1HBox3VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox3VBox1Header = new Text("Details");
+        Text column1HBox3VBox1Header = new Text("Description");
         VBox column1HBox3VBox2 = new VBox();
         column1HBox3VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         TextField column1HBox3VBox2TextField = new TextField();
