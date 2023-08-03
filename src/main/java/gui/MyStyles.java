@@ -61,6 +61,9 @@ public class MyStyles {
 	        		ade.loadData((String) readEvent.get("unique_id"));
 	        		ade.open();
 	        	} else if(window instanceof FileEvents) {
+	        		AddFileEvent afe = new AddFileEvent();
+	        		afe.loadData((String) readEvent.get("unique_id"));
+	        		afe.open();
 
 	        		
 	        		
