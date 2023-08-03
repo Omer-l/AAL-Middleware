@@ -69,12 +69,42 @@ public class RuleRunner extends Thread{
 			if(((String) event.get("event_type")).equals("database_read_event")
 					&& ((String) when.get("event_type")).equals("database_read_event")
 					&& ((String) event.get("database")).equals(((String) when.get("database")))
-					&& ((String) event.get("table")).equals(((when.get("table")))))
+					&& ((String) event.get("table")).equals(((when.get("table"))))) {
 				if( ((String) when.get("column")).equals("Whole Row") || event.get(when.get("column")).toString().equals(when.get("value").toString()))
 					when.put("reached", true);
+			} else if(event.get("unique_id").equals(when.get("unique_id"))) {
+				when.put("reached", true);
+			}
 		}
 	}
 	
+	public static void main(String[] args) {
+	        mainDbManager = MainMenu.mainDbManager;
+			ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
+			ArrayList<RuleRunner> threads = new ArrayList<>();
+			for (Map<String, Object> rule : rules)
+				threads.add(new RuleRunner(rule));
+			Map<String, Object> testEvent = new HashMap<>();
+//			testEvent.put("database", "beacon_localisation");
+//			testEvent.put("unique_id", "emfwerkwlem");
+//			testEvent.put("query", "SELECT * FROM record ORDER BY dateTime DESC LIMIT 1");
+//			testEvent.put("rdbm", "MySQL");
+//			testEvent.put("table", "record");
+//			testEvent.put("column", "Whole Row");
+//			testEvent.put("value", "");
+//			testEvent.put("sortby", "dateTime");
+//			threads.get(0).event = testEvent;
+
+			testEvent.put("path", "C:/Users/ASUS/git/AAL-Middleware/lastAccessedBLE.txt");
+			testEvent.put("previous_result", 1691063796908l);
+			testEvent.put("unique_id", "kewnfkwjen");
+			testEvent.put("event_type", "system_file_read_event");
+			testEvent.put("content", "");
+
+			threads.get(0).event = testEvent;
+			threads.get(0).run();
+	   }
+
 	private void runThens() {
 		for(Map<String, Object> then : thens) {
 			switch((String) then.get("event_type")) {
@@ -115,23 +145,4 @@ public class RuleRunner extends Thread{
         }
         return true;
     }
-
-	public static void main(String[] args) {
-        mainDbManager = MainMenu.mainDbManager;
-		ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
-		ArrayList<RuleRunner> threads = new ArrayList<>();
-		for (Map<String, Object> rule : rules)
-			threads.add(new RuleRunner(rule));
-		Map<String, Object> testEvent = new HashMap<>();
-		testEvent.put("database", "beacon_localisation");
-		testEvent.put("unique_id", "emfwerkwlem");
-		testEvent.put("query", "SELECT * FROM record ORDER BY dateTime DESC LIMIT 1");
-		testEvent.put("rdbm", "MySQL");
-		testEvent.put("table", "record");
-		testEvent.put("column", "Whole Row");
-		testEvent.put("value", "");
-		testEvent.put("sortby", "dateTime");
-		threads.get(0).event = testEvent;
-		threads.get(0).run();
-   }
 }

@@ -81,7 +81,7 @@ public class MainConsole {
                 prevResultsIndex = 0;
                 it++;
                 //efficiency test
-//        	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
+        	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 //	                memoryUsage();
             }
         } catch (InterruptedException e) {
@@ -111,7 +111,7 @@ public class MainConsole {
 	private void runRules(Map<String, Object> event) {
 		for (RuleRunner rule : ruleThreads) {
 			//clone first to avoid IllegalThreadStateException
-			RuleRunner ruleThread = new RuleRunner(rule.whens, rule.thens);
+			RuleRunner ruleThread = new RuleRunner(rule.whens, rule.thens); //carry of the whens and thens to the clone
 			ruleThread.event = event;
 			ruleThread.start();
 		}
