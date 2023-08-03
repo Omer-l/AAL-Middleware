@@ -81,20 +81,22 @@ public class AddFileEvent extends Window {
 
 		}
 	
-	public void loadData(String uniqueId) {
-		editRunData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_run_event JOIN event ON system_file_run_event.unique_id = event.unique_id WHERE event.unique_id =  \"" + uniqueId + "\"", "select").get(0);
-		
-		//editReadData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_read_event JOIN event ON system_file_read_event.unique_id = event.unique_id WHERE event.unique_id = \"" + uniqueId + "\"", "select").get(0);
-		//editWriteData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_write_event JOIN event ON system_file_write_event.unique_id = event.unique_id WHERE event.unique_id = \"" + uniqueId + "\"", "select").get(0);
+	public void loadData(String uniqueId, String operation) {
+		this.operation = operation;
+		if(operation == "run") {
+			editRunData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_run_event JOIN event ON system_file_run_event.unique_id = event.unique_id WHERE event.unique_id =  \"" + uniqueId + "\"", "select").get(0);
+		} else if(operation == "read") {
+			editReadData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_read_event JOIN event ON system_file_read_event.unique_id = event.unique_id WHERE event.unique_id = \"" + uniqueId + "\"", "select").get(0);
+		} else if(operation == "write") {
+			editWriteData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_write_event JOIN event ON system_file_write_event.unique_id = event.unique_id WHERE event.unique_id = \"" + uniqueId + "\"", "select").get(0);
+		}
 	}
 	
 	public void loadData(String uniqueId, TextField uniqueIdField, TextField nameField,
 			 TextField descriptionField, VBox column1VBox3) {
 		
 		try {
-		if(operation == "run") {
-//			editRunData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_run_event JOIN event ON system_file_run_event.unique_id  WHERE event.unique_id = \"" + uniqueId + "\"", "select").get(0);
-//			System.out.println(editRunData);
+		if(operation  == "run") {
 			uniqueIdField.setText(uniqueId);
 			nameField.setText((String) editRunData.get("name"));
 			descriptionField.setText((String) editRunData.get("description"));
@@ -106,13 +108,19 @@ public class AddFileEvent extends Window {
         	processTestButton("run");
         	readFileMethodButton.setDisable(true);
         	writeFileMethodButton.setDisable(true);
-			
-			//openRunForm();
-
-			
-		}else if(operation.equals("Read")) {
-			
-		}else if(operation.equals("Write")) {
+	    }else if( operation == "read") {
+	    	uniqueIdField.setText(uniqueId);
+			nameField.setText((String) editReadData.get("name"));
+			descriptionField.setText((String) editReadData.get("description"));
+			selectedFile = new File((String) editReadData.get("path"));
+			valueField.setText((String) editReadData.get("content"));
+			logField.setText((String) editReadData.get("path"));
+			MainMenu.setActive(readFileMethodButton);
+        	openReadForm(column1VBox3);
+        	processTestButton("read");
+        	runFileMethodButton.setDisable(true);
+        	writeFileMethodButton.setDisable(true);
+		}else if(operation == "write") {
 			
 		}
 		}catch(Exception e) {
@@ -253,8 +261,13 @@ public class AddFileEvent extends Window {
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3, column1VBox4);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
         if(!editRunData.isEmpty()) {
+    		column1VBox3.getChildren().clear();
         	operation = "run";
         	loadData((String) editRunData.get("unique_id"), column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, column1VBox3);
+        }else if(!editReadData.isEmpty()) {
+    		column1VBox3.getChildren().clear();
+        	loadData((String) editReadData.get("unique_id"), column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, column1VBox3);
+
         }
 	}
 
@@ -386,7 +399,7 @@ public class AddFileEvent extends Window {
 	                while ((bytesRead = bis.read(buffer)) != -1) {
 	                    // Convert the bytes read to a string and print the result
 	                    String data = new String(buffer, 0, bytesRead);
-	                    if(!valueField.getText().isEmpty()) {
+	                    if(!valueField.getText().isEmpty() && data.indexOf(valueField.getText()) != -1) {
 	                    	data = data.substring(data.indexOf(valueField.getText()));
 	                    }
 	                    for(String line : data.split("\n")) {
@@ -430,9 +443,18 @@ public class AddFileEvent extends Window {
 	    	String content = valueField.getText();
 			boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
 	    	if(!emptyField) {
+	    		if(editReadData.isEmpty()) {
 	    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
 	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_read_event VALUES ('" + uniqueIdInput + "', '" + filePath + "', '" + content + "');", "");
 	    	} else {
+    			MainMenu.mainDbManager.queryDB("UPDATE event SET"
+	        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
+	        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+    			MainMenu.mainDbManager.queryDB("UPDATE system_file_read_event SET"
+	        			+ " unique_id = '" + uniqueIdInput + "', path = '" + filePath + "', "
+	        			+ "content = '" + content + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+    		}
+	    	}else {
 	    		logField.setText("unique id, name or description field is empty");
 	    	} 
 		}

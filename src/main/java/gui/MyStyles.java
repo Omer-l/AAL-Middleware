@@ -61,9 +61,14 @@ public class MyStyles {
 	        		ade.loadData((String) readEvent.get("unique_id"));
 	        		ade.open();
 	        	} else if(window instanceof FileEvents) {
+	        		String header = ((Text) eventsVBox.getChildren().get(0)).getText();
 	        		AddFileEvent afe = new AddFileEvent();
-	        		afe.loadData((String) readEvent.get("unique_id"));
-	        		afe.open();
+	        		if(header.equals("Run Events")) {
+	        			afe.loadData((String) readEvent.get("unique_id"), "run");
+	        		} else if (header.equals("Read Events")) {
+	        			afe.loadData((String) readEvent.get("unique_id"), "read");
+	        		}
+	        			afe.open();
 
 	        		
 	        		
