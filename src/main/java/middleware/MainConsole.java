@@ -110,8 +110,10 @@ public class MainConsole {
 
 	private void runRules(Map<String, Object> event) {
 		for (RuleRunner rule : ruleThreads) {
-			rule.event = event;
-			rule.start();
+			//clone first to avoid IllegalThreadStateException
+			RuleRunner ruleThread = new RuleRunner(rule.whens, rule.thens);
+			ruleThread.event = event;
+			ruleThread.start();
 		}
 	}
 
@@ -178,7 +180,8 @@ public class MainConsole {
 				    else
 				    	result.put("previous_result", (long) prevResults.get(prevResultsIndex).get("previous_result"));
 
-				    latestResults.add(result);
+    				result.put("event_type", "system_file_read_event");
+    				latestResults.add(result);
 				    prevResultsIndex++;
 				}
 				bis.close();

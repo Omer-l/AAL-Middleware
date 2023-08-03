@@ -26,6 +26,11 @@ public class RuleRunner extends Thread{
         getWhensAndThens(rule);
     }
     
+    public RuleRunner(ArrayList<Map<String, Object>> whens, ArrayList<Map<String, Object>> thens) {
+    	this.whens = whens;
+    	this.thens = thens;
+    }
+    
     private void getWhensAndThens(Map<String, Object> rule) {
 	    String[] whenIds = ((String) rule.get("when_event_ids")).split("\\s*,\\s*");
 	    String[] thenIds = ((String) rule.get("then_event_ids")).split("\\s*,\\s*");
