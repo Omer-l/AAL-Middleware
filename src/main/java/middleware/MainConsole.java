@@ -1,6 +1,7 @@
 package middleware;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -20,6 +21,7 @@ import gui.MainMenu;
 
 public class MainConsole {
     ArrayList<Map<String, Object>> prevResults = new ArrayList<Map<String, Object>>();
+    private int prevResultsIndex = 0;
     private MySqlConnection connection;
     private boolean listening;		
     public static ArrayList<RuleRunner> ruleThreads = new ArrayList<>();
@@ -44,7 +46,7 @@ public class MainConsole {
 	public void listen() {
 		assignRules();
 	    try {
-	    	int it = 0;
+	    	long it = 0;
         	//initialise prevResults
             while (listening) {
                 // Record the start time
@@ -55,13 +57,12 @@ public class MainConsole {
                 latestResults.addAll(latestResultsDB(DbXMLParser.mySqlDbAndTablesMap));
     	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
     	        latestResults.addAll(latestResultsDB(DbXMLParser.postgresqlDbAndTablesMap));
-    	        latestResults.addAll(latestResultsFiles());
+    	        latestResults.addAll(latestResultsFiles(it));
 //        	    System.out.println(latestResults + "\n" + prevResults);
     			//checks whether the latest result isn't actually previous Result
-    	        if(it == 0) { //only for first iteration
+    	        if(it == 0) //only for first iteration
     	        	prevResults = latestResults;
-        	        it++;
-    	        }
+    	        
     	        if(!latestResults.equals(prevResults)) {
     	        	System.out.println("EVENT!\n");
     	        	Map<String, Object> event = getNewEvent(prevResults, latestResults);
@@ -77,6 +78,8 @@ public class MainConsole {
     	        long elapsedTime = endTime - startTime;
     	        // Print the result and the execution time
                 Thread.sleep(250); // Sleep for 1 second
+                prevResultsIndex = 0;
+                it++;
                 //efficiency test
 //        	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 //	                memoryUsage();
@@ -147,6 +150,7 @@ public class MainConsole {
     				newRow.put("database", databaseName);
     				newRow.put("table", tableName);
     				latestResults.add(newRow);
+    				prevResultsIndex++;
     			} else
     				latestResults.add(null); //placeholder
     		}
@@ -154,30 +158,30 @@ public class MainConsole {
 		return latestResults;
 	}
 
-	private ArrayList<Map<String, Object>> latestResultsFiles(int iteration) {
+	private ArrayList<Map<String, Object>> latestResultsFiles(long iteration) {
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
-		
 		ArrayList<Map<String, Object>> results = RuleRunner.mainDbManager.queryDB("SELECT * FROM system_file_read_event ORDER BY 1 DESC", "select");
-		
 		for(Map<String, Object> result : results) {
-
             try {
-	            BufferedInputStream bis = new BufferedInputStream(new FileInputStream((String) result.get("path")));
+            	File file = new File((String) result.get("path"));
+	            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
 	            byte[] buffer = new byte[8192]; // Adjust buffer size as needed
 	            int bytesRead;
 				while ((bytesRead = bis.read(buffer)) != -1) {
-					Map<String, Object> fileResult = new HashMap<String, Object>();
+//					Map<String, Object> fileResult = new HashMap<String, Object>();
 				    // Convert the bytes read to a string and print the result
 				    String data = new String(buffer, 0, bytesRead);
-				    if(data.contains(((String)result.get("content")))) {
-				    	fileResult.put("previous_result", true);
-				    }
-				    
-				    if(iteration == 0)
-				    	fileResult.put("previous_result", true);
+				    long lastModified = file.lastModified();
+//				    !(((String) result.get("content")).isEmpty()) && 
+				    if(data.contains((String) result.get("content")) || prevResults.size() < prevResultsIndex)
+				    	result.put("previous_result", lastModified);
 				    else
-				    	fileResult.put("previous_result", false);
+				    	result.put("previous_result", (long) prevResults.get(prevResultsIndex).get("previous_result"));
+
+				    latestResults.add(result);
+				    prevResultsIndex++;
 				}
+				bis.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
