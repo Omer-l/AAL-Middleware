@@ -70,7 +70,8 @@ public class RuleRunner extends Thread{
 					&& ((String) when.get("event_type")).equals("database_read_event")
 					&& ((String) event.get("database")).equals(((String) when.get("database")))
 					&& ((String) event.get("table")).equals(((when.get("table"))))) {
-				if( ((String) when.get("column")).equals("Whole Row") || event.get(when.get("column")).toString().equals(when.get("value").toString()))
+				if( ( when.get("column")).equals("Whole Row") 
+						|| ( ((String) event.get("column")).equals(((String) when.get("column"))) && ((String) event.get("column")).equals(((String) when.get("column")))))
 					when.put("reached", true);
 			} else if(event.get("unique_id").equals(when.get("unique_id"))) {
 				when.put("reached", true);
@@ -85,15 +86,20 @@ public class RuleRunner extends Thread{
 			for (Map<String, Object> rule : rules)
 				threads.add(new RuleRunner(rule));
 			Map<String, Object> testEvent = new HashMap<>();
-//			testEvent.put("database", "beacon_localisation");
-//			testEvent.put("unique_id", "emfwerkwlem");
-//			testEvent.put("query", "SELECT * FROM record ORDER BY dateTime DESC LIMIT 1");
-//			testEvent.put("rdbm", "MySQL");
-//			testEvent.put("table", "record");
-//			testEvent.put("column", "Whole Row");
-//			testEvent.put("value", "");
-//			testEvent.put("sortby", "dateTime");
-//			threads.get(0).event = testEvent;
+			testEvent.put("database", "beacon_localisation");
+			testEvent.put("unique_id", "emfwerkwlem");
+			testEvent.put("query", "SELECT * FROM record ORDER BY dateTime DESC LIMIT 1");
+			testEvent.put("rdbm", "MySQL");
+			testEvent.put("table", "record");
+			testEvent.put("column", "Whole Row");
+			testEvent.put("value", "");
+//			testEvent.put("column", "MAC");
+//			testEvent.put("value", "C5:39:2D:D9:C1:B8");
+			testEvent.put("sortby", "dateTime");
+			testEvent.put("event_type", "database_read_event");
+			threads.get(0).event = testEvent;
+			threads.get(0).event = testEvent;
+			threads.get(0).run();
 
 			testEvent.put("path", "C:/Users/ASUS/git/AAL-Middleware/lastAccessedBLE.txt");
 			testEvent.put("previous_result", 1691063796908l);
