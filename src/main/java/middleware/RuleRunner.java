@@ -71,11 +71,17 @@ public class RuleRunner extends Thread{
 					&& ((String) event.get("database")).equals(((String) when.get("database")))
 					&& ((String) event.get("table")).equals(((when.get("table"))))) {
 				if( ( when.get("column")).equals("Whole Row") 
-						|| ( ((String) event.get("column")).equals(((String) when.get("column"))) && ((String) event.get("column")).equals(((String) when.get("column")))))
+						|| ( event.keySet().contains((String) when.get("column")) 
+								&& ((String) event.get(when.get("column"))).equals(((String) when.get("value")))))
 					when.put("reached", true);
-			} else if(event.get("unique_id").equals(when.get("unique_id"))) {
+			} else if(event.get("unique_id") != null && event.get("unique_id").equals(when.get("unique_id"))) {
 				when.put("reached", true);
 			}
+		}
+		
+		if(areAllTrue()) {
+			runThens();
+			reset();
 		}
 	}
 	
@@ -91,10 +97,10 @@ public class RuleRunner extends Thread{
 			testEvent.put("query", "SELECT * FROM record ORDER BY dateTime DESC LIMIT 1");
 			testEvent.put("rdbm", "MySQL");
 			testEvent.put("table", "record");
-			testEvent.put("column", "Whole Row");
-			testEvent.put("value", "");
-//			testEvent.put("column", "MAC");
-//			testEvent.put("value", "C5:39:2D:D9:C1:B8");
+//			testEvent.put("column", "Whole Row");
+//			testEvent.put("value", "");
+			testEvent.put("column", "MAC");
+			testEvent.put("value", "C5:39:2D:D9:C1:B8");
 			testEvent.put("sortby", "dateTime");
 			testEvent.put("event_type", "database_read_event");
 			threads.get(0).event = testEvent;
@@ -110,7 +116,7 @@ public class RuleRunner extends Thread{
 			threads.get(0).event = testEvent;
 			threads.get(0).run();
 	   }
-
+	
 	private void runThens() {
 		for(Map<String, Object> then : thens) {
 			switch((String) then.get("event_type")) {
@@ -143,12 +149,15 @@ public class RuleRunner extends Thread{
 		}
 	}
 
-	public static boolean areAllTrue(boolean[] array) {
-        for (boolean value : array) {
-            if (!value) {
+	public boolean areAllTrue() {
+        for (Map<String, Object> when : whens)
+            if (when.get("reached") == null || ! ((boolean) when.get("reached")))
                 return false;
-            }
-        }
         return true;
     }
+
+	private void reset() {
+		for(Map<String, Object> when : whens)
+			when.put("reached", false);
+	}
 }
