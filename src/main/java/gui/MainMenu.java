@@ -47,9 +47,14 @@ public class MainMenu extends Application {
 	//MAIN
 	public static Stage primaryStage;
     public static void main(String[] args) {
-    	open();
-//		AddFileEvent adr = new AddFileEvent();
-//    	adr.open();
+    	
+    		open();
+    		Rules r = new Rules();
+    		r.open();
+//    		AddFileEvent adr = new AddFileEvent();
+//        	adr.open();
+    		launch(args);
+        	
 //    	open();
 //		DatabaseEvents adr = new DatabaseEvents();
 //    	adr.open();
@@ -57,9 +62,11 @@ public class MainMenu extends Application {
 //		ade.loadData("bwhjenfio34nf");
 //		ade.open();
 
-		AddFileEvent adf = new AddFileEvent(new FileEvents(), "read");
-		adf.open();
-		launch(args);
+		//AddFileEvent adf = new AddFileEvent(new FileEvents(), "read");
+    	//Rules adf = new Rules();
+		//adf.open();
+    	 
+    
     }
 
     @Override

@@ -28,6 +28,8 @@ public class AddRule extends Window {
 	public AddRule() {
 		
 	}
+	
+
 
 	public void open() {
 		MainMenu.clearMainBox();
@@ -126,13 +128,17 @@ public class AddRule extends Window {
 	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
 	        column1VBoxUniqueId.setVisible(false);
+	  
 	        column1VBox.setOnMouseClicked(e -> {
 	        	//remove from list or edit?
+	        	
+	    	
+	        	
 	        }); //HERE
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        //eventsVBox.getChildren().add(column1VBox);
 	        MyStyles.addHover(column1VBox);
-	        eventsVBox.getChildren().add(column1VBox);
+	        eventsVBox.getChildren().addAll(column1VBox);
 		}
 		
 
@@ -172,4 +178,6 @@ public class AddRule extends Window {
 		}
 		return uniqueIds.toString();
 	}
+
+	
 }

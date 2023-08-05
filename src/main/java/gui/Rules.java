@@ -18,12 +18,18 @@ public class Rules extends Window {
     public Rules() {
     	
     }
-
+    
+    public  static void removeRule(String uniqueId) {
+        MainMenu.mainDbManager.queryDB("DELETE FROM rule WHERE rule.unique_id = '" + uniqueId + "'", "");		
+   	}
+    
 	public void open() {
 		MainMenu.clearMainBox();
     	MainMenu.changeTitle("Rules");
         Button button1 = new Button("Back");
         button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+        
+        
 
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         button1.setOnAction(event -> { back(); });
@@ -33,13 +39,16 @@ public class Rules extends Window {
         mainVBox1.prefWidthProperty().bind(MainMenu.root.widthProperty());
         //Configurations
         VBox configVBox = new VBox(2);
-        Text configHeader = new Text("Read Events");
+        Text configHeader = new Text("Read Rule Events");
         configHeader.setStyle(MainMenu.HEADER_1_STYLE);
         configVBox.getChildren().addAll(configHeader);
-
+        Button removeButton = new Button("Remove");
+        removeButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
 //        VBox configVBox1 = new VBox();
-        getEvents("SELECT * FROM rule INNER JOIN event ON rule.unique_id = event.unique_id;", configVBox);        
+//        getEvents("SELECT * FROM rule INNER JOIN event ON rule.unique_id = event.unique_id;", configVBox,removeButton);        
+        MyStyles.getEvents("SELECT * FROM rule INNER JOIN event ON rule.unique_id = event.unique_id;", configVBox, this);
         int rulesLastIndex = configVBox.getChildren().size() - 1;
+       
         configVBox.getChildren().get(rulesLastIndex).setOnMouseClicked(event -> {new AddRule(this).open();});
 
         mainVBox1.getChildren().addAll(configVBox);
@@ -59,7 +68,7 @@ public class Rules extends Window {
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
 	        column1VBoxUniqueId.setVisible(false);
 	    	MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
-	        eventsVBox.getChildren().add(column1VBox);
+	        eventsVBox.getChildren().addAll(column1VBox);
 		}
 		
         VBox column1VBox2 = new VBox();

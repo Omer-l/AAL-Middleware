@@ -53,6 +53,7 @@ public class MyStyles {
 	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
 	        Text column1VBoxUniqueId = new Text((String) readEvent.get("unique_id"));
 	        Text column1VBoxDescription = new Text((String) readEvent.get("description"));
+	        
 	        Button editButton = new Button("Edit");
 	        editButton.setStyle("-fx-font: 15 arial;-fx-base: #FFE4E1");
 	        editButton.setOnAction(event -> {
@@ -69,11 +70,14 @@ public class MyStyles {
 	        			afe.loadData((String) readEvent.get("unique_id"), "read");
 	        		}
 	        			afe.open();
-
-	        		
-	        		
-	        	}
+	        		}else if(window instanceof Rules) {
+	        			Rules rules = new Rules();
+	        			rules.editData((String) readEvent.get("unique_id"))
+	        			
+	        			
+	        		}
 	        });
+	        
 	        Button removeButton = new Button("Remove");
 	        removeButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
 	        removeButton.setOnAction(event -> {
@@ -91,20 +95,17 @@ public class MyStyles {
 	        		} else if (header.equals("Write Events")) {
 	        			AddFileEvent.removeEventFromFileEvent((String) readEvent.get("unique_id"),"write");
 		        		eventsVBox.getChildren().remove(column1HBox);
-		        		eventsVBox.getChildren().remove(column1HBox);
-
-	        		}
-	        				
-	        		
-	        		
-	        	}
-        		
+	        		} 
+	            }else if (window instanceof Rules) {
+        			Rules.removeRule((String) readEvent.get("unique_id"));
+	        		eventsVBox.getChildren().remove(column1HBox);
+        		}
 	        });
 	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
 	        column1VBoxUniqueId.setVisible(false);
 	        column1VBox.setOnMouseClicked(event -> {
-	        	if(window.prevWindow instanceof AddWhen) { //add uniqueID//add uniqueID
+	        	if(window.prevWindow instanceof AddWhen) { //add uniqueId
 	        		ArrayList<String> whenEvent = new ArrayList<String>();
 	        		whenEvent.add(column1VBoxHeader.getText());
 	        		whenEvent.add(column1VBoxUniqueId.getText());
