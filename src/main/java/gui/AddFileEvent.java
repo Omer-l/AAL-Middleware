@@ -366,8 +366,16 @@ public class AddFileEvent extends Window {
 			case "run":
 		        try {
 		        	String args = valueField.getText();
-		            ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", "java " + args, selectedFile.getAbsolutePath());
-		            Process process = processBuilder.start();
+		        	String nameOfFile = selectedFile.getName().substring(0, selectedFile.getName().indexOf("."));
+		        	if(!args.contains(nameOfFile))
+		        		args += selectedFile.getAbsolutePath();
+	        		ProcessBuilder processBuilder = new ProcessBuilder("-classpath \"C:\\Users\\ASUS\\AppData\\Roaming\\DBeaverData\\drivers\\maven\\maven-central\\mysql\\mysql-connector-java-8.0.29.jar;C:\\Users\\ASUS\\AppData\\Roaming\\DBeaverData\\drivers\\maven\\maven-central\\org.postgresql\\postgresql-42.5.0.jar\" " + "C:/Users/ASUS/Documents/BLEtoMReasonerScript.java");
+//		            processBuilder.directory(new File("C:/MREASONER/lfpubs/target/classes/"));
+	        		Process process = processBuilder.start();
+		          
+		            // Redirect error stream to separate stream
+		            processBuilder.redirectErrorStream(true);
+		            System.out.println(processBuilder.command());
 
 		            // Get the output stream of the process
 		            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -386,7 +394,7 @@ public class AddFileEvent extends Window {
 		            if(exitCode == 0)
 		            	saveButton.setDisable(false);
 		            else
-		            	saveButton.setDisable(true);
+  		            	saveButton.setDisable(true);
 		        } catch (IOException | InterruptedException e) {
 		            e.printStackTrace();
 		        }

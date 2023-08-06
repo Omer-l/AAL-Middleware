@@ -93,14 +93,8 @@ public class RuleRunner extends Thread{
 				threads.add(new RuleRunner(rule));
 			Map<String, Object> testEvent = new HashMap<>();
 			testEvent.put("database", "beacon_localisation");
-			testEvent.put("unique_id", "emfwerkwlem");
-			testEvent.put("query", "SELECT * FROM record ORDER BY dateTime DESC LIMIT 1");
-			testEvent.put("rdbm", "MySQL");
 			testEvent.put("table", "record");
-//			testEvent.put("column", "Whole Row");
-//			testEvent.put("value", "");
-			testEvent.put("column", "MAC");
-			testEvent.put("value", "C5:39:2D:D9:C1:B8");
+			testEvent.put("MAC", "C5:39:2D:D9:C1:B8");
 			testEvent.put("sortby", "dateTime");
 			testEvent.put("event_type", "database_read_event");
 			threads.get(0).event = testEvent;
