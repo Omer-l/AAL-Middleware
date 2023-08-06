@@ -18,6 +18,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -42,6 +43,8 @@ public class AddFileEvent extends Window {
 	private MySqlConnection dbManager = new MySqlConnection();
     private Menu menu5 = new Menu();
     private TextField logField = new TextField();
+    private TextField valueField = new TextField();
+    private TextField currentWorkingDirectyField = new TextField();
     private Button testButton = new Button("Test");
     private Button saveButton = new Button("Save");
 
@@ -50,7 +53,6 @@ public class AddFileEvent extends Window {
     private Button writeFileMethodButton = new Button("Write");
     private String query;
     private File selectedFile;
-    private TextField valueField = new TextField();
     private  String operation; //run, read, or write
 	Map<String, Object> editRunData = new HashMap<String, Object>();
 	Map<String, Object> editReadData = new HashMap<String, Object>();
@@ -100,9 +102,9 @@ public class AddFileEvent extends Window {
 			uniqueIdField.setText(uniqueId);
 			nameField.setText((String) editRunData.get("name"));
 			descriptionField.setText((String) editRunData.get("description"));
-			selectedFile = new File((String) editRunData.get("path"));
-			valueField.setText((String) editRunData.get("arguments"));
-			logField.setText((String) editRunData.get("path"));
+			currentWorkingDirectyField.setText((String) editRunData.get("current_working_directory"));
+			valueField.setText((String) editRunData.get("command"));
+			logField.setText((String) editRunData.get("command"));
 			MainMenu.setActive(runFileMethodButton);
         	openRunForm(column1VBox3);
         	processTestButton("run");
@@ -273,35 +275,30 @@ public class AddFileEvent extends Window {
 
 
 	private void openRunForm(VBox column1VBox3) {
-        HBox column1Hbox4 = new HBox();
-        VBox column1Hbox4VBox1 = new VBox();
-        column1Hbox4VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        column1Hbox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1Hbox4VBox1Header = new Text("Java File To Run ");
-        VBox column1Hbox4VBox2 = new VBox();
-        column1Hbox4VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        // Create a File chooser
-        Button uploadButton = new Button("Select File");
-        uploadButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
-
-        uploadButton.setOnAction(event -> selectFile());
-        column1Hbox4VBox1.getChildren().addAll(column1Hbox4VBox1Header);
-        column1Hbox4VBox2.getChildren().addAll(uploadButton);
-        column1Hbox4.getChildren().addAll(column1Hbox4VBox1, column1Hbox4VBox2);
 
         HBox column1HBox7 = new HBox();
         VBox column1HBox7VBox1 = new VBox();
         column1HBox7VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
         column1HBox7VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox7VBox1Header = new Text("Arguments");
+        Text column1HBox7VBox1Header = new Text("Working Directory of Command");
         VBox column1HBox7VBox2 = new VBox();
         column1HBox7VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Menu menu4 = new Menu();
         column1HBox7VBox1.getChildren().addAll(column1HBox7VBox1Header);
-        column1HBox7VBox2.getChildren().addAll(valueField);
+		column1HBox7VBox2.getChildren().addAll(currentWorkingDirectyField );
         column1HBox7.getChildren().addAll(column1HBox7VBox1, column1HBox7VBox2);
 
-        column1VBox3.getChildren().addAll(column1Hbox4, column1HBox7);
+        HBox column1HBox8 = new HBox();
+        VBox column1HBox8VBox1 = new VBox();
+        column1HBox8VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox8VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Text column1HBox8VBox1Header = new Text("Command (including classpath, args etc)");
+        VBox column1HBox8VBox2 = new VBox();
+        column1HBox8VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        column1HBox8VBox1.getChildren().addAll(column1HBox8VBox1Header);
+        column1HBox8VBox2.getChildren().addAll(valueField);
+        column1HBox8.getChildren().addAll(column1HBox8VBox1, column1HBox8VBox2);
+
+        column1VBox3.getChildren().addAll(column1HBox7, column1HBox8);
 	}
 
 
@@ -366,11 +363,15 @@ public class AddFileEvent extends Window {
 			case "run":
 		        try {
 		        	String args = valueField.getText();
-		        	String nameOfFile = selectedFile.getName().substring(0, selectedFile.getName().indexOf("."));
-		        	if(!args.contains(nameOfFile))
-		        		args += selectedFile.getAbsolutePath();
-	        		ProcessBuilder processBuilder = new ProcessBuilder("-classpath \"C:\\Users\\ASUS\\AppData\\Roaming\\DBeaverData\\drivers\\maven\\maven-central\\mysql\\mysql-connector-java-8.0.29.jar;C:\\Users\\ASUS\\AppData\\Roaming\\DBeaverData\\drivers\\maven\\maven-central\\org.postgresql\\postgresql-42.5.0.jar\" " + "C:/Users/ASUS/Documents/BLEtoMReasonerScript.java");
-//		            processBuilder.directory(new File("C:/MREASONER/lfpubs/target/classes/"));
+//		        	String nameOfFile = selectedFile.getName().substring(0, selectedFile.getName().indexOf("."));
+//		        	if(!args.contains(nameOfFile))
+//		        		args += selectedFile.getAbsolutePath();
+		        	String command = valueField.getText();
+		            String currentWorkingDirectory = currentWorkingDirectyField.getText();
+	        		ProcessBuilder processBuilder = new ProcessBuilder("cmd" ,"/c", command);
+	        		if(!currentWorkingDirectory.isEmpty())
+	        			processBuilder.directory(new File(currentWorkingDirectory));
+	        		
 	        		Process process = processBuilder.start();
 		          
 		            // Redirect error stream to separate stream
@@ -425,8 +426,9 @@ public class AddFileEvent extends Window {
 	}
 
 	private void processSaveButton(String uniqueIdInput, String nameInput, String descriptionInput) {
-		String filePath = selectedFile.getAbsolutePath().replaceAll("\\\\", "/");
-		System.out.println(filePath);
+		String command = valueField.getText().replaceAll("\\\\", "/");
+		String currentWorkingDirectory = currentWorkingDirectyField.getText().replaceAll("\\\\", "/");
+//		System.out.println(filePath);
 		System.out.println("WRITING");
 		if(MainMenu.isActive(runFileMethodButton)) {
 	    	String arguments = valueField.getText();
@@ -435,34 +437,35 @@ public class AddFileEvent extends Window {
 	    	if(!emptyField) {
 	    		if(editRunData.isEmpty()) {
 		    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-		        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES ('" + uniqueIdInput + "', '" + filePath + "', '" + arguments + "');", "");
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES ('" + uniqueIdInput + "', '" + command + "', '" + currentWorkingDirectory + "');", "");
 	    		} else {
 	    			MainMenu.mainDbManager.queryDB("UPDATE event SET"
 		        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
 		        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
 	    			MainMenu.mainDbManager.queryDB("UPDATE system_file_run_event SET"
-		        			+ " unique_id = '" + uniqueIdInput + "', path = '" + filePath + "', "
-		        			+ "arguments = '" + arguments + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+		        			+ " unique_id = '" + uniqueIdInput + "', path = '" + command + "', "
+		        			+ "current_working_directory = '" + currentWorkingDirectory + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
 	    		}
 	    	} else {
 	    		logField.setText("unique id, name or description field is empty");
 	    	} 
 		} else if(MainMenu.isActive(readFileMethodButton)) {
-	    	String content = valueField.getText();
+			String filePath = selectedFile.getAbsolutePath().replaceAll("\\\\", "/");
+			String content = valueField.getText();
 			boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
 	    	if(!emptyField) {
 	    		if(editReadData.isEmpty()) {
 	    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
 	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_read_event VALUES ('" + uniqueIdInput + "', '" + filePath + "', '" + content + "');", "");
-	    	} else {
-    			MainMenu.mainDbManager.queryDB("UPDATE event SET"
-	        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
-	        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
-    			MainMenu.mainDbManager.queryDB("UPDATE system_file_read_event SET"
-	        			+ " unique_id = '" + uniqueIdInput + "', path = '" + filePath + "', "
-	        			+ "content = '" + content + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
-    		}
-	    	}else {
+		    	} else {
+	    			MainMenu.mainDbManager.queryDB("UPDATE event SET"
+		        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
+		        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+	    			MainMenu.mainDbManager.queryDB("UPDATE system_file_read_event SET"
+		        			+ " unique_id = '" + uniqueIdInput + "', path = '" + filePath + "', "
+		        			+ "content = '" + content + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+	    		}
+	    	} else { 
 	    		logField.setText("unique id, name or description field is empty");
 	    	} 
 		}

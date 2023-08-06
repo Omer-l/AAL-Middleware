@@ -49,10 +49,10 @@ public class MainMenu extends Application {
     public static void main(String[] args) {
     	
     		open();
-    		Rules r = new Rules();
-    		r.open();
-//    		AddFileEvent adr = new AddFileEvent();
-//        	adr.open();
+//    		Rules r = new Rules();
+//    		r.open();
+    		AddFileEvent adr = new AddFileEvent(new FileEvents(null), "run");
+        	adr.open();
     		launch(args);
         	
 //    	open();

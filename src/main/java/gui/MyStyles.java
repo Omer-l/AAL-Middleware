@@ -72,7 +72,7 @@ public class MyStyles {
 	        			afe.open();
 	        		}else if(window instanceof Rules) {
 	        			Rules rules = new Rules();
-	        			rules.editData((String) readEvent.get("unique_id"))
+//	        			rules.editData((String) readEvent.get("unique_id"))
 	        			
 	        			
 	        		}
