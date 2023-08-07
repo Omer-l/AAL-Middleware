@@ -51,8 +51,10 @@ public class MainMenu extends Application {
     		open();
 //    		Rules r = new Rules();
 //    		r.open();
-    		AddFileEvent adr = new AddFileEvent(new FileEvents(null), "run");
-        	adr.open();
+//    		AddFileEvent adr = new AddFileEvent(new FileEvents(null), "run");
+//        	adr.open();
+    		MainMenu mm = new MainMenu();
+    		mm.open();
     		launch(args);
         	
 //    	open();
@@ -116,6 +118,7 @@ public class MainMenu extends Application {
     	configVBox3Header.setStyle(HEADER_2_STYLE);
     	Text configVBox3Details = new Text("Schedules to keep track of");
     	configVBox3.getChildren().addAll(configVBox3Header, configVBox3Details);
+    	configVBox3.setOnMouseClicked(event -> { new Schedules(null).open();});
     	VBox configVBox4 = new VBox();
     	configVBox4.setStyle(MENU_BUTTON_STYLE);
     	Text configVBox4Header = new Text("Hardware & Services");
