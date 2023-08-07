@@ -157,7 +157,6 @@ public class AddDatabaseEvent extends Window {
         MenuItem option2 = new MenuItem("PostgreSQL");
         menu1.getItems().addAll(option1, option2);
         column1HBox4VBox2MenuBar.getMenus().add(menu1);
-        
         column1Hbox4VBox1.getChildren().addAll(column1Hbox4VBox1Header);
         column1Hbox4VBox2.getChildren().addAll(column1HBox4VBox2MenuBar);
         column1Hbox4.getChildren().addAll(column1Hbox4VBox1, column1Hbox4VBox2);
