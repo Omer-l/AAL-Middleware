@@ -232,9 +232,12 @@ public class MyStyles {
         	FileEvents de = new FileEvents(window);
         	de.open();
         } );
+
         
-        //DELETE THESE TWO
-        text3VBox.setOnMouseClicked(event -> { VBox label = (VBox) event.getSource(); System.out.println("CLICKED: " + label.getChildren().get(0));} );
+        text3VBox.setOnMouseClicked(event -> { 
+        	new Schedules(window).open();
+        } );
+        
         text4VBox.setOnMouseClicked(event -> { VBox label = (VBox) event.getSource(); System.out.println("CLICKED: " + label.getChildren().get(0));} );
         
         column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
