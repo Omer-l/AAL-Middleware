@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 public class AddRule extends Window {
 	ArrayList<ArrayList<String>> whenData = new ArrayList<>();
 	ArrayList<ArrayList<String>> thenData = new ArrayList<>();
+	ArrayList<ArrayList<String>> editRules = new ArrayList<>();
 	
 	
 	public AddRule(Window prevWindow) {
@@ -29,6 +30,12 @@ public class AddRule extends Window {
 		
 	}
 	
+	public void loadData(String uniqueId, TextField uniqueIdField, TextField nameField,
+			 TextField descriptionField, VBox column1VBox3) {
+		
+		
+		
+	}
 
 
 	public void open() {
@@ -46,7 +53,7 @@ public class AddRule extends Window {
         mainVBox1.prefWidthProperty().bind(MainMenu.root.widthProperty());
         //column1urations
         VBox column1VBox1 = new VBox(2);
-        Text column1Header = new Text("Description");
+        Text column1Header = new Text("Details");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
 
         HBox column1HBox1 = new HBox();

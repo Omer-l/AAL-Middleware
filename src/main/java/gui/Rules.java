@@ -78,4 +78,9 @@ public class Rules extends Window {
         column1VBox2.getChildren().addAll(column1VBox2Header);
         eventsVBox.getChildren().add(column1VBox2);
 	}
+
+	public void editData(String uniqueId) {
+	 MainMenu.mainDbManager.queryDB("SELECT * FROM rule JOIN event ON rule.unique_id = event.unique_id WHERE event.unique_id =  \"" + uniqueId + "\"", "select").get(0);
+		
+	}
 }
