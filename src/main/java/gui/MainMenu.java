@@ -53,8 +53,8 @@ public class MainMenu extends Application {
 //    		r.open();
 //    		AddFileEvent adr = new AddFileEvent(new FileEvents(null), "run");
 //        	adr.open();
-    		MainMenu mm = new MainMenu();
-    		mm.open();
+    		AddSchedule as = new AddSchedule(new Schedules());
+    		as.open();
     		launch(args);
         	
 //    	open();

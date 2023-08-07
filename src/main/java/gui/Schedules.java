@@ -45,7 +45,7 @@ public class Schedules extends Window {
         MyStyles.getEvents("SELECT * FROM schedule INNER JOIN event ON schedule.unique_id = event.unique_id;", configVBox, this);
         int schedulesLastIndex = configVBox.getChildren().size() - 1;
        
-        configVBox.getChildren().get(schedulesLastIndex).setOnMouseClicked(event -> {new AddRule(this).open();});
+        configVBox.getChildren().get(schedulesLastIndex).setOnMouseClicked(event -> {new AddSchedule(this).open();});
 
         mainVBox1.getChildren().addAll(configVBox);
     	MainMenu.mainHBox.getChildren().addAll(mainVBox1);
