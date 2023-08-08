@@ -119,7 +119,7 @@ public class RuleRunner extends Thread{
 						mainDbManager.connectToDb("middleware");
 						Map<String, Object> row = mainDbManager.queryDB("SELECT * FROM system_file_run_event WHERE unique_id = '" + (String) then.get("unique_id") + "'", "select").get(0);						
 						String command = (String) row.get("command");
-			            String currentWorkingDirectory = (String) row.get("path");
+			            String currentWorkingDirectory = (String) row.get("current_working_directory");
 		        		ProcessBuilder processBuilder = new ProcessBuilder("cmd" ,"/c", command);
 		        		if(currentWorkingDirectory != null)
 		        			processBuilder.directory(new File(currentWorkingDirectory));
