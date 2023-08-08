@@ -16,7 +16,7 @@ import dao.MySqlConnection;
 import gui.MainMenu;
 
 public class RuleRunner extends Thread{
-    public static String[] middlewareTableNames = {"database_read_event", "database_write_event", "rule", "system_file_read_event", "system_file_run_event", "system_file_write_event"};
+    public static String[] middlewareTableNames = {"database_read_event", "database_write_event", "rule", "system_file_read_event", "system_file_run_event", "system_file_write_event", "schedule"};
 	public static MySqlConnection mainDbManager = new MySqlConnection();
 	public ArrayList<Map<String, Object>> whens;
 	public ArrayList<Map<String, Object>> thens;
@@ -66,7 +66,7 @@ public class RuleRunner extends Thread{
 		//get relevant when to new event
 		for(Map<String, Object> when : whens) {
 			//depending on the event_type, send in for evaluation with its relevant when
-			if(((String) event.get("event_type")).equals("database_read_event")
+			if(event.get("event_type") != null && ((String) event.get("event_type")).equals("database_read_event")
 					&& ((String) when.get("event_type")).equals("database_read_event")
 					&& ((String) event.get("database")).equals(((String) when.get("database")))
 					&& ((String) event.get("table")).equals(((when.get("table"))))) {
@@ -117,11 +117,13 @@ public class RuleRunner extends Thread{
 				case "system_file_run_event": 
 					try { //TODO: duplicate code with AddFileEvent.java
 						mainDbManager.connectToDb("middleware");
-						Map<String, Object> row = mainDbManager.queryDB("SELECT * FROM system_file_run_event WHERE unique_id = '" + (String) then.get("unique_id") + "'", "select").get(0);
-						String filePath = (String) row.get("path");
-						String args = (String) row.get("arguments");
-						System.out.println("java " + args);
-			            ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/c", "java " + args + " " + filePath);
+						Map<String, Object> row = mainDbManager.queryDB("SELECT * FROM system_file_run_event WHERE unique_id = '" + (String) then.get("unique_id") + "'", "select").get(0);						
+						String command = (String) row.get("command");
+			            String currentWorkingDirectory = (String) row.get("path");
+		        		ProcessBuilder processBuilder = new ProcessBuilder("cmd" ,"/c", command);
+		        		if(currentWorkingDirectory != null)
+		        			processBuilder.directory(new File(currentWorkingDirectory));
+		        		System.out.println(command);
 			            Process process = processBuilder.start();
 
 			            // Get the output stream of the process

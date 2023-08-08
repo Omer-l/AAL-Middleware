@@ -8,12 +8,15 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.sql.Connection;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import dao.DbXMLParser;
 import dao.MySqlConnection;
@@ -25,7 +28,7 @@ public class MainConsole {
     private MySqlConnection connection;
     private boolean listening;		
     public static ArrayList<RuleRunner> ruleThreads = new ArrayList<>();
-
+    private static long iteration;
     
 	public MainConsole(MySqlConnection connection) {
         this.connection = connection;
@@ -46,7 +49,6 @@ public class MainConsole {
 	public void listen() {
 		assignRules();
 	    try {
-	    	long it = 0;
         	//initialise prevResults
             while (listening) {
                 // Record the start time
@@ -57,10 +59,11 @@ public class MainConsole {
                 latestResults.addAll(latestResultsDB(DbXMLParser.mySqlDbAndTablesMap));
     	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
     	        latestResults.addAll(latestResultsDB(DbXMLParser.postgresqlDbAndTablesMap));
-    	        latestResults.addAll(latestResultsFiles(it));
+    	        latestResults.addAll(latestResultsFiles());
+    	        latestResults.addAll(latestResultsSchedules());
 //        	    System.out.println(latestResults + "\n" + prevResults);
     			//checks whether the latest result isn't actually previous Result
-    	        if(it == 0) //only for first iteration
+    	        if(iteration == 0) //only for first iteration
     	        	prevResults = latestResults;
     	        
     	        if(!latestResults.equals(prevResults)) {
@@ -79,7 +82,7 @@ public class MainConsole {
     	        // Print the result and the execution time
                 Thread.sleep(250); // Sleep for 1 second
                 prevResultsIndex = 0;
-                it++;
+                iteration++;
                 //efficiency test
         	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 //	                memoryUsage();
@@ -160,7 +163,7 @@ public class MainConsole {
 		return latestResults;
 	}
 
-	private ArrayList<Map<String, Object>> latestResultsFiles(long iteration) {
+	private ArrayList<Map<String, Object>> latestResultsFiles() {
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
 		ArrayList<Map<String, Object>> results = RuleRunner.mainDbManager.queryDB("SELECT * FROM system_file_read_event ORDER BY 1 DESC", "select");
 		for(Map<String, Object> result : results) {
@@ -189,6 +192,27 @@ public class MainConsole {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		return latestResults;
+	}
+	
+	private ArrayList<Map<String, Object>> latestResultsSchedules() {
+		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
+		ArrayList<Map<String, Object>> results = RuleRunner.mainDbManager.queryDB("SELECT * FROM schedule ORDER BY 1 DESC", "select");
+		for(Map<String, Object> result : results) {
+            LocalDateTime now = LocalDateTime.now();
+            //do some calculations to solve startDateTime by using the  result.get("start_date_time") and result.get("repetition") attribute
+            LocalDateTime startDateTime = (LocalDateTime) result.get("start_date_time");
+			LocalDateTime endDateTime = (LocalDateTime) result.get("end_date_time");
+        	result.put("event_type", "schedule");
+        	//also check result.get("updated_at") in case code is rerun and event ends up running twice in the repetition period
+            if ( iteration != 0 && (now.isEqual(startDateTime) || now.isAfter(startDateTime)) && now.isBefore(endDateTime))
+            	result.put("achieved", true);
+            else
+            	result.put("unique_id", null); //nullify the result, in case previously it was set to true
+        	latestResults.add(result);
+        	prevResultsIndex++;
+	        System.out.println(result);
 		}
 		return latestResults;
 	}
