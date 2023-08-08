@@ -180,19 +180,22 @@ public class AddSchedule extends Window {
         //test the query
         testButton.setOnAction(event -> {
         	 
-        	    processTestQuery(column1HBox1VBox2TextField.getText(),column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText(),
-        		 (startDatePicker.getValue() + " " +  startTimeField.getText()),  (endDatePicker.getValue() + " " + endTimeField.getText()),menu1.getText()); 
+        	   // processTestQuery(column1HBox1VBox2TextField.getText(),column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText(),
+        		// (startDatePicker.getValue() + " " +  startTimeField.getText()),  (endDatePicker.getValue() + " " + endTimeField.getText()),menu1.getText()); 
         	    boolean isValid = validateInput(column1HBox1VBox2TextField.getText(),column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText(),
                   		 (startDatePicker.getValue() + " " +  startTimeField.getText()),  (endDatePicker.getValue() + " " + endTimeField.getText()),menu1.getText());
         	    if (isValid) {
                     showAlert("Success", "Details are valid.");
+                    saveButton.setDisable(false);
                 } else {
                     showAlert("Error", "Invalid details. Please check your input.");
+                    saveButton.setDisable(true);
                 }
         	   
         });
         saveButton.setDisable(true);
-        saveButton.setOnAction(event -> { processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText());});
+        saveButton.setOnAction(event -> { processSaveButton(column1HBox1VBox2TextField.getText(),column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText(),
+       		 (startDatePicker.getValue() + " " +  startTimeField.getText()),  (endDatePicker.getValue() + " " + endTimeField.getText()),menu1.getText());});
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
         HBox column1HBox9 = new HBox();
         
@@ -228,26 +231,28 @@ public class AddSchedule extends Window {
 	}
 
 
-	private void processTestQuery(String uniqueId, String name, String description, String startDate, 
-			String endDate, String repeat) {
+//	private void processTestQuery(String uniqueId, String name, String description, String startDate, 
+//			String endDate, String repeat) {
+//
+//		boolean noblankFields = !(uniqueId.isEmpty() || name.isEmpty() || description.isEmpty() ||
+//				startDate.isEmpty() || endDate.isEmpty() || repeat.isEmpty());
+//		
+//		if(noblankFields) {
+//			System.out.println(uniqueId + ", " + name + ", " + description + ", " + startDate +
+//					", " + endDate + ", " + repeat);
+//			}
+//        saveButton.setDisable(false);
+//		
+//		}
 
-		boolean noblankFields = !(uniqueId.isEmpty() || name.isEmpty() || description.isEmpty() ||
-				startDate.isEmpty() || endDate.isEmpty() || repeat.isEmpty());
-		
-		if(noblankFields) {
-			System.out.println(uniqueId + ", " + name + ", " + description + ", " + startDate +
-					", " + endDate + ", " + repeat);
+
+	private void processSaveButton(String uniqueId, String name, String description, String startDate, String endDate, String repeat) {
+		boolean emptyField = uniqueId.isEmpty() || name.isEmpty() || description.isEmpty();
+			if(!emptyField) {
+				MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueId + "', '" + name + "', '" + description + "');", "");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO schedule VALUES ('" + uniqueId + "', '" + startDate + "', '" + endDate + "', '" + repeat + "');", ""); 
+			
 			}
-		
-		}
-
-
-	private void processSaveButton(String text, String text2, String text3) {
-
-		
-		
-		
-		
 	}
 	
 	private void showAlert(String title, String content) {
