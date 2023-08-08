@@ -1,9 +1,13 @@
 package gui;
 
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import dao.DbXMLParser;
 import dao.MySqlConnection;
@@ -12,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -33,7 +38,9 @@ import javafx.geometry.Pos;
 public class AddSchedule extends Window {
 	private Button testButton = new Button("Test");
     private Button saveButton = new Button("Save");
-//    private Calendar eventTime = new Calendar().getInstance();
+    private static final Pattern VALID_ID_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+$");
+
+    
     public static void removeEventFromDatabaseReadEvent(String uniqueID) {
 	  MainMenu.mainDbManager.queryDB("DELETE FROM database_read_event WHERE database_read_event.unique_id = '" + uniqueID + "'","");
 	}
@@ -170,7 +177,20 @@ public class AddSchedule extends Window {
         VBox column1VBox3 = new VBox(10);
         
         ButtonBar column1ButtonBar = new ButtonBar(); 
-        testButton.setOnAction(event -> { processTestQuery(); });
+        //test the query
+        testButton.setOnAction(event -> {
+        	 
+        	    processTestQuery(column1HBox1VBox2TextField.getText(),column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText(),
+        		 (startDatePicker.getValue() + " " +  startTimeField.getText()),  (endDatePicker.getValue() + " " + endTimeField.getText()),menu1.getText()); 
+        	    boolean isValid = validateInput(column1HBox1VBox2TextField.getText(),column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText(),
+                  		 (startDatePicker.getValue() + " " +  startTimeField.getText()),  (endDatePicker.getValue() + " " + endTimeField.getText()),menu1.getText());
+        	    if (isValid) {
+                    showAlert("Success", "Details are valid.");
+                } else {
+                    showAlert("Error", "Invalid details. Please check your input.");
+                }
+        	   
+        });
         saveButton.setDisable(true);
         saveButton.setOnAction(event -> { processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText());});
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
@@ -187,14 +207,54 @@ public class AddSchedule extends Window {
 	}
 
 
-	private void processTestQuery() {
-		// TODO Auto-generated method stub
-		
+	private boolean validateInput(String uniqueId, String name, String description, String startDate, String endDate,
+			String repeat) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+		LocalDateTime startDateString = LocalDateTime.parse(startDate,formatter);
+        LocalDateTime endDateString = LocalDateTime.parse(endDate,formatter);
+        
+		if (uniqueId.isEmpty() || name.isEmpty() || description.isEmpty() || startDate == null || endDate == null || repeat.isEmpty()) {
+            return false;
+           }
+		if (!VALID_ID_PATTERN.matcher(uniqueId).matches()) {
+            return false; // Unique ID doesn't match the expected pattern
+        }
+		if(endDateString.isBefore(startDateString)) {
+            showAlert("Error.","End date cannot be before start date. Please try again.");
+			return false;
+		}
+		return true;
 	}
+
+
+	private void processTestQuery(String uniqueId, String name, String description, String startDate, 
+			String endDate, String repeat) {
+
+		boolean noblankFields = !(uniqueId.isEmpty() || name.isEmpty() || description.isEmpty() ||
+				startDate.isEmpty() || endDate.isEmpty() || repeat.isEmpty());
+		
+		if(noblankFields) {
+			System.out.println(uniqueId + ", " + name + ", " + description + ", " + startDate +
+					", " + endDate + ", " + repeat);
+			}
+		
+		}
 
 
 	private void processSaveButton(String text, String text2, String text3) {
-		// TODO Auto-generated method stub
+
+		
+		
+		
 		
 	}
+	
+	private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }
