@@ -231,19 +231,7 @@ public class AddSchedule extends Window {
 	}
 
 
-//	private void processTestQuery(String uniqueId, String name, String description, String startDate, 
-//			String endDate, String repeat) {
-//
-//		boolean noblankFields = !(uniqueId.isEmpty() || name.isEmpty() || description.isEmpty() ||
-//				startDate.isEmpty() || endDate.isEmpty() || repeat.isEmpty());
-//		
-//		if(noblankFields) {
-//			System.out.println(uniqueId + ", " + name + ", " + description + ", " + startDate +
-//					", " + endDate + ", " + repeat);
-//			}
-//        saveButton.setDisable(false);
-//		
-//		}
+
 
 
 	private void processSaveButton(String uniqueId, String name, String description, String startDate, String endDate, String repeat) {

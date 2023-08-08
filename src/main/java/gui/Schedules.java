@@ -38,8 +38,8 @@ public class Schedules extends Window {
         Text configHeader = new Text("Events");
         configHeader.setStyle(MainMenu.HEADER_1_STYLE);
         configVBox.getChildren().addAll(configHeader);
-        Button removeButton = new Button("Remove");
-        removeButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
+       // Button removeButton = new Button("Remove");
+        //removeButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
 //        VBox configVBox1 = new VBox();
 //        getEvents("SELECT * FROM rule INNER JOIN event ON rule.unique_id = event.unique_id;", configVBox,removeButton);        
         MyStyles.getEvents("SELECT * FROM schedule INNER JOIN event ON schedule.unique_id = event.unique_id;", configVBox, this);
@@ -69,9 +69,15 @@ public class Schedules extends Window {
 		
         VBox column1VBox2 = new VBox();
         column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
-        Text column1VBox2Header = new Text("Add New Rule");
+        Text column1VBox2Header = new Text("Add New Schedule");
         column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        
         column1VBox2.getChildren().addAll(column1VBox2Header);
         eventsVBox.getChildren().add(column1VBox2);
+	}
+
+	public static void removeSchedule(String uniqueID) {
+		  MainMenu.mainDbManager.queryDB("DELETE FROM schedule WHERE schedule.unique_id = '" + uniqueID + "'","");
+
+		
 	}
 }

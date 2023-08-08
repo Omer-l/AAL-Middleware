@@ -99,6 +99,10 @@ public class MyStyles {
 	            }else if (window instanceof Rules) {
         			Rules.removeRule((String) readEvent.get("unique_id"));
 	        		eventsVBox.getChildren().remove(column1HBox);
+        		}else if(window instanceof Schedules) {
+        			Schedules.removeSchedule((String) readEvent.get("unique_id"));
+        			eventsVBox.getChildren().remove(column1HBox);
+        			
         		}
 	        });
 	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
