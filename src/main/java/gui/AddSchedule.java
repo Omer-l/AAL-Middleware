@@ -39,12 +39,12 @@ public class AddSchedule extends Window {
 	private Button testButton = new Button("Test");
     private Button saveButton = new Button("Save");
     private static final Pattern VALID_ID_PATTERN = Pattern.compile("^[a-zA-Z0-9_]+$");
-
-    
-    public static void removeEventFromDatabaseReadEvent(String uniqueID) {
-	  MainMenu.mainDbManager.queryDB("DELETE FROM database_read_event WHERE database_read_event.unique_id = '" + uniqueID + "'","");
-	}
- 
+    Map<String, Object> editData = new HashMap<String, Object>();
+    DatePicker startDatePicker = new DatePicker();
+    DatePicker endDatePicker = new DatePicker();
+    TextField startTimeField = new TextField();
+    TextField endTimeField = new TextField();
+    Menu menu1 =  new Menu();
     
 	public AddSchedule(Window prevWindow) {
 		super(prevWindow);
@@ -54,10 +54,26 @@ public class AddSchedule extends Window {
 	public AddSchedule() {
 		
 	}
+	
+	public void loadData(String uniqueId, TextField uniqueIdField, TextField nameField, TextField descriptionField, 
+			String startTime, String endTime, String repeat) {
+		System.out.println(editData);
+		uniqueIdField.setText(uniqueId);
+		nameField.setText((String) editData.get("name"));
+		descriptionField.setText((String) editData.get("description"));
+		menu1.setText((String) editData.get("repetition"));
+		startDatePicker.setValue(((LocalDateTime)editData.get("start_date_time")).toLocalDate());
+	    endDatePicker.setValue(((LocalDateTime)editData.get("end_date_time")).toLocalDate());
+	    startTimeField.setText(((LocalDateTime)editData.get("start_date_time")).toLocalTime().toString());
+	    endTimeField.setText(((LocalDateTime)editData.get("end_date_time")).toLocalTime().toString());
+
+		
+		
+	}
 
 	public void open() {
 		MainMenu.clearMainBox();
-		MainMenu.changeTitle("Add Database Event");
+		MainMenu.changeTitle("Add Schedule Event");
 		
 	        
         Button button1 = new Button("Back");
@@ -126,9 +142,8 @@ public class AddSchedule extends Window {
         column1Hbox4HBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
         // Create a MenuItem
         MenuBar column1HBox4VBox2MenuBar = new MenuBar();
-        DatePicker startDatePicker = new DatePicker();
+        //DatePicker startDatePicker = new DatePicker();
         startDatePicker.setPromptText("Select a date");
-        TextField startTimeField = new TextField();
         column1Hbox4VBox1.getChildren().addAll(column1Hbox4VBox1Header);
         column1Hbox4HBox2.getChildren().addAll(startDatePicker, startTimeField);
         column1Hbox4.getChildren().addAll(column1Hbox4VBox1, column1Hbox4HBox2);
@@ -143,9 +158,8 @@ public class AddSchedule extends Window {
         column1Hbox5HBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
         // Create a MenuItem
         MenuBar column1Hbox5VBox2MenuBar = new MenuBar();
-        DatePicker endDatePicker = new DatePicker();
+       // DatePicker endDatePicker = new DatePicker();
         endDatePicker.setPromptText("Select a date");
-        TextField endTimeField = new TextField();
         column1Hbox5VBox1.getChildren().addAll(column1Hbox5VBox1Header);
         column1Hbox5HBox2.getChildren().addAll(endDatePicker, endTimeField);
         column1Hbox5.getChildren().addAll(column1Hbox5VBox1, column1Hbox5HBox2);
@@ -159,7 +173,6 @@ public class AddSchedule extends Window {
         column1Hbox6VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         // Create a MenuItem
         MenuBar column1Hbox6VBox2MenuBar = new MenuBar();
-        Menu menu1 =  new Menu();
         // Create MenuItems for the dropdown menu
         MenuItem option1 = new MenuItem("Daily");
         MenuItem option2 = new MenuItem("Weekly");
@@ -207,7 +220,16 @@ public class AddSchedule extends Window {
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
         
+        if(!editData.isEmpty()) {
+        	loadData((String) editData.get("unique_id"),column1HBox1VBox2TextField, column1HBox2VBox2TextField,column1HBox3VBox2TextField,
+        			(startDatePicker.getValue() + " " +  startTimeField.getText()),  (endDatePicker.getValue() + " " + endTimeField.getText())
+        			,menu1.toString());
+        }
+        
 	}
+
+
+	
 
 
 	private boolean validateInput(String uniqueId, String name, String description, String startDate, String endDate,
@@ -237,10 +259,19 @@ public class AddSchedule extends Window {
 	private void processSaveButton(String uniqueId, String name, String description, String startDate, String endDate, String repeat) {
 		boolean emptyField = uniqueId.isEmpty() || name.isEmpty() || description.isEmpty();
 			if(!emptyField) {
-				MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueId + "', '" + name + "', '" + description + "');", "");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO schedule VALUES ('" + uniqueId + "', '" + startDate + "', '" + endDate + "', '" + repeat + "');", ""); 
-			
+				if(editData.isEmpty()) {
+					MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueId + "', '" + name + "', '" + description + "');", "");
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO schedule VALUES ('" + uniqueId + "', '" + startDate + "', '" + endDate + "', '" + repeat + "');", ""); 
+				} else {
+		        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
+		        			+ " unique_id = '" + uniqueId + "', name = '" + name + "', "
+		        			+ "description = '" + description + "' WHERE unique_id = '" + uniqueId + "';", "");
+		        	MainMenu.mainDbManager.queryDB("UPDATE schedule SET"
+		        			+ " unique_id = '" + uniqueId + "', start_date_time = '" + startDate + "', "
+		        			+ "end_date_time = '" + endDate + "' WHERE unique_id = '" + uniqueId + "';", "");
+				}
 			}
+			back();
 	}
 	
 	private void showAlert(String title, String content) {
@@ -250,4 +281,12 @@ public class AddSchedule extends Window {
         alert.setContentText(content);
         alert.showAndWait();
     }
+	
+	public  void loadData(String Uniqueid) {
+	editData = MainMenu.mainDbManager.queryDB("SELECT * FROM schedule JOIN event ON schedule.unique_id = event.unique_id", "select").get(0);
+
+	}
+	
+	
+	
 }

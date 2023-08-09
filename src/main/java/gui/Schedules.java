@@ -78,6 +78,5 @@ public class Schedules extends Window {
 	public static void removeSchedule(String uniqueID) {
 		  MainMenu.mainDbManager.queryDB("DELETE FROM schedule WHERE schedule.unique_id = '" + uniqueID + "'","");
 
-		
 	}
 }
