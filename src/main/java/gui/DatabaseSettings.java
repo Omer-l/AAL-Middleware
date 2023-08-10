@@ -1,5 +1,8 @@
 package gui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -215,7 +218,8 @@ public class DatabaseSettings extends Window {
 }
 
 	public boolean testRdbm(String url, String username, String password, HashMap<String, ArrayList<String>> dbAndTablesMap) {
-			MySqlConnection dbManager = new MySqlConnection(url, username, password);
+		
+		dao.MySqlConnection dbManager = new dao.MySqlConnection(url, username, password);
 
 				ArrayList<String> databases = dbManager.getDatabaseNames();
 
