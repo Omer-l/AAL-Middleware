@@ -1,12 +1,14 @@
 package gui;
 
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -25,7 +27,7 @@ public class DatabaseSettings extends Window {
 	
 	public void open() {
 		MainMenu.clearMainBox();
-		MainMenu.changeTitle("Add Database Settings");
+		MainMenu.changeTitle("Add Database Configurations");
 		
 	        
         Button button1 = new Button("Back");
@@ -33,17 +35,20 @@ public class DatabaseSettings extends Window {
         saveButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
         testButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
 
-        button1.setOnAction(event -> { back(); });
+        button1.setOnAction(event -> { 
+        	back();
+        });
+        
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);
-        //LEFT SIDE MAIN
+        
         VBox mainVBox1 = new VBox(2);
         mainVBox1.prefWidthProperty().bind(MainMenu.root.widthProperty());
-        //column1urations
         VBox column1VBox1 = new VBox(2);
         Text column1Header = new Text("MySQL");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
 
+    
         HBox column1HBox1 = new HBox();
         VBox column1HBox1VBox1 = new VBox();
         column1HBox1VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
@@ -79,25 +84,150 @@ public class DatabaseSettings extends Window {
         column1HBox3VBox1.getChildren().addAll(column1HBox3VBox1Header);
         column1HBox3VBox2.getChildren().addAll(column1HBox3VBox2TextField);
         column1HBox3.getChildren().addAll(column1HBox3VBox1, column1HBox3VBox2);
-
-        //column1urations
-        VBox column1VBox2 = new VBox(2);
-        Text column1VBox2Header = new Text("PostgreSQL");
-        column1VBox2Header.setStyle(MainMenu.HEADER_1_STYLE);
-        HBox column1Hbox4 = new HBox();
         
-        VBox column1Hbox4VBox1 = new VBox();
-        column1Hbox4VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        column1Hbox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1Hbox4VBox1Header = new Text("URL (with database) ");
-        VBox column1Hbox4VBox2 = new VBox();
-        column1Hbox4VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        HBox column1HBox4 = new HBox();
+        VBox column1HBox4VBox1 = new VBox();
+        column1HBox4VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Text column1HBox4VBox1Header = new Text("Tracked Database and tables");
+        VBox column1HBox4VBox2 = new VBox();
+        column1HBox4VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         TextField column1HBox4VBox2TextField = new TextField();
-        column1Hbox4VBox1.getChildren().addAll(column1Hbox4VBox1Header);
-        column1HBox1VBox2.getChildren().addAll(column1HBox4VBox2TextField);
-        column1HBox1.getChildren().addAll(column1Hbox4VBox1, column1Hbox4VBox2);
+        column1HBox4VBox1.getChildren().addAll(column1HBox4VBox1Header);
+        column1HBox4VBox2.getChildren().addAll(column1HBox4VBox2TextField);
+        column1HBox4.getChildren().addAll(column1HBox4VBox1, column1HBox4VBox2);
+        
+        
+        
+
+        column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3,column1HBox4);
+        VBox column1VBox1P = new VBox(2);
+        Text column1HeaderP = new Text("PostgreSQL");
+        column1HeaderP.setStyle(MainMenu.HEADER_1_STYLE);
+
+    
+        HBox column1HBox1P = new HBox();
+        VBox column1HBox1VBox1P = new VBox();
+        column1HBox1VBox1P.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox1VBox1P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Text column1HBox1VBox1HeaderP = new Text("URL (with database)"); //TODO: delete this unique id field and make it so that the db auto increments this
+        VBox column1HBox1VBox2P = new VBox();
+        column1HBox1VBox2P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        TextField column1HBox1VBox2TextFieldP = new TextField();
+        column1HBox1VBox1P.getChildren().addAll(column1HBox1VBox1HeaderP);
+        column1HBox1VBox2P.getChildren().addAll(column1HBox1VBox2TextFieldP);
+        column1HBox1P.getChildren().addAll(column1HBox1VBox1P, column1HBox1VBox2P);
+
+        HBox column1HBox2P = new HBox();
+        VBox column1HBox2VBox1P = new VBox();
+        column1HBox2VBox1P.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox2VBox1P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Text column1HBox2VBox1HeaderP = new Text("Username");
+        VBox column1HBox2VBox2P = new VBox();
+        column1HBox2VBox2P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        TextField column1HBox2VBox2TextFieldP = new TextField();
+        column1HBox2VBox1P.getChildren().addAll(column1HBox2VBox1HeaderP);
+        column1HBox2VBox2P.getChildren().addAll(column1HBox2VBox2TextFieldP);
+        column1HBox2P.getChildren().addAll(column1HBox2VBox1P, column1HBox2VBox2P);
+
+        HBox column1HBox3P = new HBox();
+        VBox column1HBox3VBox1P = new VBox();
+        column1HBox3VBox1P.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox3VBox1P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Text column1HBox3VBox1HeaderP = new Text("Password");
+        VBox column1HBox3VBox2P = new VBox();
+        column1HBox3VBox2P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        TextField column1HBox3VBox2TextFieldP = new TextField();
+        column1HBox3VBox1P.getChildren().addAll(column1HBox3VBox1HeaderP);
+        column1HBox3VBox2P.getChildren().addAll(column1HBox3VBox2TextFieldP);
+        column1HBox3P.getChildren().addAll(column1HBox3VBox1P, column1HBox3VBox2P);
+        
+        HBox column1HBox4P = new HBox();
+        VBox column1HBox4VBox1P = new VBox();
+        column1HBox4VBox1P.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox4VBox1P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        Text column1HBox4VBox1HeaderP = new Text("Tracked Database and tables");
+        VBox column1HBox4VBox2P = new VBox();
+        column1HBox4VBox2P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        TextField column1HBox4VBox2TextFieldP = new TextField();
+        column1HBox4VBox1P.getChildren().addAll(column1HBox4VBox1HeaderP);
+        column1HBox4VBox2P.getChildren().addAll(column1HBox4VBox2TextFieldP);
+        column1HBox4P.getChildren().addAll(column1HBox4VBox1P, column1HBox4VBox2P);
+        
+        VBox column1VBox3 = new VBox(10);
+        
+        ButtonBar column1ButtonBar = new ButtonBar(); 
+        column1ButtonBar.getButtons().addAll(testButton, saveButton);
 
         
+        testButton.setOnAction(event -> {
+        	processTestButton(column1HBox1VBox2TextField.getText(),column1HBox2VBox2TextField.getText(),
+        			column1HBox3VBox2TextField.getText());
+        	
+        	
+        });
+        saveButton.setDisable(true);
+
+        
+        saveButton.setOnAction(event -> {
+        	processSaveButton();
+        });
+        
+        column1VBox3.getChildren().addAll(column1ButtonBar);
+        column1VBox1P.getChildren().addAll(column1HeaderP, column1HBox1P, column1HBox2P, column1HBox3P,column1HBox4P);
+        mainVBox1.getChildren().addAll(column1VBox1,column1VBox1P,column1VBox3);
+        MainMenu.mainHBox.getChildren().addAll(mainVBox1);
+
+
+        
+	}
+	
+	private void processSaveButton() {
+
+		
+		
+	}
+
+	private void processTestButton(String url,String user, String password) {
+		
+		
+	}
+
+	public static HashMap<String, ArrayList<String>> parseDbTb(String dbTb) {
+        String[] rows = dbTb.split("\n");
+        int rowCount = rows.length;
+        int colCount = 100;
+        
+        HashMap<String, ArrayList<String>> array =  new HashMap<>(rowCount,colCount);		        
+        for (int i = 0; i < rowCount; i++) {
+            String[] cols = rows[i].split(",");
+            ArrayList<String> values = new ArrayList<>();
+            
+            for(int j = 1; j < cols.length; j++) {
+            	String col = cols[j];
+            	values.add(col);
+            }
+            
+            array.put(cols[0], values);
+        }
+
+        return array;
+}
+
+	public boolean testRdbm(String url, String username, String password, HashMap<String, ArrayList<String>> dbAndTablesMap) {
+			MySqlConnection dbManager = new MySqlConnection(url, username, password);
+
+				ArrayList<String> databases = dbManager.getDatabaseNames();
+
+				if(!databases.containsAll(dbAndTablesMap.keySet()))
+					return false;
+				for(String db : dbAndTablesMap.keySet()) {
+					ArrayList<String> tables = dbAndTablesMap.get(db);
+					ArrayList<String> allTables = dbManager.getTableNames(db);
+					if(!allTables.containsAll(tables))
+						return false;
+				}
+				return true;
 	}
 
 }
