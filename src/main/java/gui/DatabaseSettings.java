@@ -2,9 +2,16 @@ package gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.awt.Label;
+import java.awt.TextArea;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Menu;
@@ -88,22 +95,11 @@ public class DatabaseSettings extends Window {
         column1HBox3VBox2.getChildren().addAll(column1HBox3VBox2TextField);
         column1HBox3.getChildren().addAll(column1HBox3VBox1, column1HBox3VBox2);
         
-        HBox column1HBox4 = new HBox();
-        VBox column1HBox4VBox1 = new VBox();
-        column1HBox4VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        column1HBox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox4VBox1Header = new Text("Tracked Database and tables");
-        VBox column1HBox4VBox2 = new VBox();
-        column1HBox4VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        TextField column1HBox4VBox2TextField = new TextField();
-        column1HBox4VBox1.getChildren().addAll(column1HBox4VBox1Header);
-        column1HBox4VBox2.getChildren().addAll(column1HBox4VBox2TextField);
-        column1HBox4.getChildren().addAll(column1HBox4VBox1, column1HBox4VBox2);
         
         
         
 
-        column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3,column1HBox4);
+        column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
         VBox column1VBox1P = new VBox(2);
         Text column1HeaderP = new Text("PostgreSQL");
         column1HeaderP.setStyle(MainMenu.HEADER_1_STYLE);
@@ -145,17 +141,6 @@ public class DatabaseSettings extends Window {
         column1HBox3VBox2P.getChildren().addAll(column1HBox3VBox2TextFieldP);
         column1HBox3P.getChildren().addAll(column1HBox3VBox1P, column1HBox3VBox2P);
         
-        HBox column1HBox4P = new HBox();
-        VBox column1HBox4VBox1P = new VBox();
-        column1HBox4VBox1P.setStyle(MainMenu.MENU_BUTTON_STYLE);
-        column1HBox4VBox1P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox4VBox1HeaderP = new Text("Tracked Database and tables");
-        VBox column1HBox4VBox2P = new VBox();
-        column1HBox4VBox2P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        TextField column1HBox4VBox2TextFieldP = new TextField();
-        column1HBox4VBox1P.getChildren().addAll(column1HBox4VBox1HeaderP);
-        column1HBox4VBox2P.getChildren().addAll(column1HBox4VBox2TextFieldP);
-        column1HBox4P.getChildren().addAll(column1HBox4VBox1P, column1HBox4VBox2P);
         
         VBox column1VBox3 = new VBox(10);
         
@@ -177,7 +162,7 @@ public class DatabaseSettings extends Window {
         });
         
         column1VBox3.getChildren().addAll(column1ButtonBar);
-        column1VBox1P.getChildren().addAll(column1HeaderP, column1HBox1P, column1HBox2P, column1HBox3P,column1HBox4P);
+        column1VBox1P.getChildren().addAll(column1HeaderP, column1HBox1P, column1HBox2P, column1HBox3P);
         mainVBox1.getChildren().addAll(column1VBox1,column1VBox1P,column1VBox3);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
 
@@ -191,9 +176,27 @@ public class DatabaseSettings extends Window {
 		
 	}
 
-	private void processTestButton(String url,String user, String password) {
+	private void processTestButton(String url, String username, String password) {
+		 try {
+		        Connection connection = DriverManager.getConnection(url, username, password);
+				//dao.MySqlConnection dbManager = new dao.MySqlConnection(url, username, password);
+
+		        showAlert("Connection Successful", "Database connection is successful!", Alert.AlertType.INFORMATION);
+		        connection.close();
+		    } catch (SQLException e) {
+		        showAlert("Connection Failed", "Unable to connect to the database.\nError: " + e.getMessage(), Alert.AlertType.ERROR);
+		    }
 		
-		
+	}
+	
+	
+	
+	private void showAlert(String title, String content, Alert.AlertType alertType) {
+	    Alert alert = new Alert(alertType);
+	    alert.setTitle(title);
+	    alert.setContentText(content);
+	    alert.setHeaderText(null);
+	    alert.showAndWait();
 	}
 
 	public static HashMap<String, ArrayList<String>> parseDbTb(String dbTb) {
