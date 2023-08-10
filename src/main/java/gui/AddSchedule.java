@@ -261,7 +261,7 @@ public class AddSchedule extends Window {
 			if(!emptyField) {
 				if(editData.isEmpty()) {
 					MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueId + "', '" + name + "', '" + description + "');", "");
-		        	MainMenu.mainDbManager.queryDB("INSERT INTO schedule VALUES ('" + uniqueId + "', '" + startDate + "', '" + endDate + "', '" + repeat + "');", ""); 
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO schedule VALUES ('" + uniqueId + "', '" + startDate + "', '" + endDate + "', '" + repeat + "', '" + LocalDateTime.now() + "');", ""); 
 				} else {
 		        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
 		        			+ " unique_id = '" + uniqueId + "', name = '" + name + "', "

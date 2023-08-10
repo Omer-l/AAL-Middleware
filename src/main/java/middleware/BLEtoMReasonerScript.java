@@ -60,7 +60,7 @@ public class BLEtoMReasonerScript {
             }
             bis.close();
     		connection.close(); //loading data complete
-//            	connect to postgresql jdbc
+//          connect to postgresql jdbc
         	dbUrl = "jdbc:postgresql://localhost:5432/sensors";
             username = "postgres";
             password = "123456";

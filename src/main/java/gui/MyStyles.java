@@ -69,7 +69,7 @@ public class MyStyles {
 	        		} else if (header.equals("Read Events")) {
 	        			afe.loadData((String) readEvent.get("unique_id"), "read");
 	        		}
-	        			afe.open();
+	        		afe.open();
 	        	}else if(window instanceof Rules) {
 	        			Rules rules = new Rules();
 //	        			rules.editData((String) readEvent.get("unique_id"))

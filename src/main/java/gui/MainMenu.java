@@ -1,7 +1,6 @@
 package gui;
 
 import java.util.ArrayList;
-
 import dao.DbXMLParser;
 import dao.MySqlConnection;
 import javafx.application.Application;
@@ -39,7 +38,6 @@ public class MainMenu extends Application {
 	public static VBox menuBarVBox = new VBox();
 	public static HBox menuBarHBox = new HBox();
 	public static HBox titleHBox = new HBox();
-	
 	//MAIN
 	public static HBox mainHBox = new HBox(10);
 	//MAIN
