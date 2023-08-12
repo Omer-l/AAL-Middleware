@@ -48,7 +48,12 @@ public class MainMenu extends Application {
     	Settings s = new Settings();
 		String dbTb = "beacon_localisation,record\nmiddleware,schedule";
 		System.out.print(s.parseDbTb(dbTb));
+    	
     		open();
+    		
+    		DatabaseSettings s = new DatabaseSettings();
+    		s.open();
+    		
 //    		Rules r = new Rules();
 //    		r.open();
 //    		AddFileEvent adr = new AddFileEvent(new FileEvents(null), "run");
@@ -146,7 +151,7 @@ public class MainMenu extends Application {
     	VBox settingsVBox = new VBox(2);
     	Text settingsHeader = new Text("Settings");
     	settingsHeader.setStyle(HEADER_1_STYLE);
-    	settingsVBox.setOnMouseClicked(event -> { new Settings(null).open();});
+    	settingsVBox.setOnMouseClicked(event -> { new DatabaseSettings(null).open();});
     	VBox settingsVBox1 = new VBox(2);
     	settingsVBox1.setStyle(MENU_BUTTON_STYLE);
     	Text settingsVBox1Header = new Text("Database");
