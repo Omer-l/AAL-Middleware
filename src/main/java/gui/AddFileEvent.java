@@ -250,7 +250,7 @@ public class AddFileEvent extends Window {
         testButton.setOnAction(event -> { processTestButton(operation); });
         saveButton.setDisable(true);
     	saveButton.setOnAction(event -> {
-        	processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox3VBox2TextField.getText(), column1HBox2VBox2TextField.getText());
+        	processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText());
     	});
         column1ButtonBar2.getButtons().addAll(testButton, saveButton);
        HBox column1HBox9 = new HBox();
@@ -443,7 +443,7 @@ public class AddFileEvent extends Window {
 		        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
 		        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
 	    			MainMenu.mainDbManager.queryDB("UPDATE system_file_run_event SET"
-		        			+ " unique_id = '" + uniqueIdInput + "', path = '" + command + "', "
+		        			+ " unique_id = '" + uniqueIdInput + "', command = '" + command + "', "
 		        			+ "current_working_directory = '" + currentWorkingDirectory + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
 	    		}
 	    	} else {

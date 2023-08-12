@@ -45,9 +45,9 @@ public class MainMenu extends Application {
 	//MAIN
 	public static Stage primaryStage;
     public static void main(String[] args) {
-    	Settings s = new Settings();
+//    	Settings s = new Settings();
 		String dbTb = "beacon_localisation,record\nmiddleware,schedule";
-		System.out.print(s.parseDbTb(dbTb));
+//		System.out.print(s.parseDbTb(dbTb));
     	
     		open();
     		
