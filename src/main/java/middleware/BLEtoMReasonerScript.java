@@ -72,7 +72,7 @@ public class BLEtoMReasonerScript {
             // Convert the date to the desired time format
             String formattedTime = timeFormat.format(date);
 //            	send relevant data to incoming_events postgresql, if user was in a different room before, send a second command confirming that previosu room is now false
-            query = "INSERT INTO public.incoming_events (state,value, iteration, date_old, time_old) VALUES ('" + latestName + "In" + latestLocation + "',true, 85732,'" + formattedDate + "','" + formattedTime + "');";
+            query = "SELECT * FROM public.results (state,value, iteration, date_old, time_old) VALUES ('" + latestName + "In" + latestLocation + "',true, 85732,'" + formattedDate + "','" + formattedTime + "');";
             statement = connection.createStatement();
             statement.executeUpdate(query);
             String previousLocation = nameAndLocationArr.get(latestName);

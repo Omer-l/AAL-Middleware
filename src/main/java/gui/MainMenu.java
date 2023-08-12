@@ -48,7 +48,7 @@ public class MainMenu extends Application {
     	Settings s = new Settings();
 		String dbTb = "beacon_localisation,record\nmiddleware,schedule";
 		System.out.print(s.parseDbTb(dbTb));
-//    		open();
+    		open();
 //    		Rules r = new Rules();
 //    		r.open();
 //    		AddFileEvent adr = new AddFileEvent(new FileEvents(null), "run");
