@@ -72,7 +72,7 @@ public class MainConsole {
     	        	prevResults = latestResults;
     	        	runRules(event);
     	        } else {
-    	        	System.out.println("no event detected!");
+//    	        	System.out.println("no event detected!");
     	        }
     	        // Record the end time
     	        long endTime = System.currentTimeMillis();
@@ -80,11 +80,11 @@ public class MainConsole {
     	        // Calculate the elapsed time in milliseconds
     	        long elapsedTime = endTime - startTime;
     	        // Print the result and the execution time
-                Thread.sleep(250); // Sleep for 1 second
+                Thread.sleep(100); // Sleep for 1 second
                 prevResultsIndex = 0;
                 iteration++;
                 //efficiency test
-        	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
+//    	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 //	                memoryUsage();
             }
         } catch (InterruptedException e) {
@@ -212,7 +212,7 @@ public class MainConsole {
             	result.put("unique_id", null); //nullify the result, in case previously it was set to true
         	latestResults.add(result);
         	prevResultsIndex++;
-	        System.out.println(result);
+//	        System.out.println(result);
 		}
 		return latestResults;
 	}

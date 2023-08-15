@@ -85,31 +85,30 @@ public class RuleRunner extends Thread{
 		}
 	}
 	
-	public static void main(String[] args) {
-	        mainDbManager = MainMenu.mainDbManager;
-			ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
-			ArrayList<RuleRunner> threads = new ArrayList<>();
-			for (Map<String, Object> rule : rules)
-				threads.add(new RuleRunner(rule));
-			Map<String, Object> testEvent = new HashMap<>();
-			testEvent.put("database", "beacon_localisation");
-			testEvent.put("table", "record");
-			testEvent.put("MAC", "C5:39:2D:D9:C1:B8");
-			testEvent.put("sortby", "dateTime");
-			testEvent.put("event_type", "database_read_event");
-			threads.get(0).event = testEvent;
-			threads.get(0).event = testEvent;
-			threads.get(0).run();
-
-			testEvent.put("path", "C:/Users/ASUS/git/AAL-Middleware/lastAccessedBLE.txt");
-			testEvent.put("previous_result", 1691063796908l);
-			testEvent.put("unique_id", "kewnfkwjen");
-			testEvent.put("event_type", "system_file_read_event");
-			testEvent.put("content", "");
-
-			threads.get(0).event = testEvent;
-			threads.get(0).run();
-	   }
+//	public static void main(String[] args) {
+//	        mainDbManager = MainMenu.mainDbManager;
+//			ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
+//			ArrayList<RuleRunner> threads = new ArrayList<>();
+//			for (Map<String, Object> rule : rules)
+//				threads.add(new RuleRunner(rule));
+//			Map<String, Object> testEvent = new HashMap<>();
+//			testEvent.put("database", "beacon_localisation");
+//			testEvent.put("table", "record");
+//			testEvent.put("MAC", "C5:39:2D:D9:C1:B8");
+//			testEvent.put("sortby", "dateTime");
+//			testEvent.put("event_type", "database_read_event");
+//			threads.get(0).event = testEvent;
+//			threads.get(0).run();
+//
+//			testEvent.put("path", "C:/Users/ASUS/git/AAL-Middleware/lastAccessedBLE.txt");
+//			testEvent.put("previous_result", 1691063796908l);
+//			testEvent.put("unique_id", "kewnfkwjen");
+//			testEvent.put("event_type", "system_file_read_event");
+//			testEvent.put("content", "");
+//
+//			threads.get(0).event = testEvent;
+//			threads.get(0).run();
+//	   }
 	
 	private void runThens() {
 		for(Map<String, Object> then : thens) {
@@ -119,14 +118,16 @@ public class RuleRunner extends Thread{
 						mainDbManager.connectToDb("middleware");
 						Map<String, Object> row = mainDbManager.queryDB("SELECT * FROM system_file_run_event WHERE unique_id = '" + (String) then.get("unique_id") + "'", "select").get(0);						
 						String command = (String) row.get("command");
+//						String command = "java --version";
 			            String currentWorkingDirectory = (String) row.get("current_working_directory");
-		        		ProcessBuilder processBuilder = new ProcessBuilder("cmd" ,"/c", command);
-		        		if(currentWorkingDirectory != null)
+		        		ProcessBuilder processBuilder = new ProcessBuilder("cmd", "/c", command);
+		        		if(currentWorkingDirectory != null && !currentWorkingDirectory.isEmpty())
 		        			processBuilder.directory(new File(currentWorkingDirectory));
 		        		System.out.println(command);
 			            Process process = processBuilder.start();
 
 			            // Get the output stream of the process
+			            processBuilder.redirectErrorStream(true);
 			            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
 			            // Read and print the output
