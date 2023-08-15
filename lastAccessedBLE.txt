@@ -1,2 +1,3 @@
-Omer,bedroo
+Gines,livingroom
+Omer,Livingroom
 Mario,Room 4

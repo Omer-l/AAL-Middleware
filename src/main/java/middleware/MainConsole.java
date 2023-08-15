@@ -69,8 +69,10 @@ public class MainConsole {
     	        if(!latestResults.equals(prevResults)) {
     	        	System.out.println("EVENT!\n");
     	        	Map<String, Object> event = getNewEvent(prevResults, latestResults);
-    	        	prevResults = latestResults;
-    	        	runRules(event);
+    	        	if(event != null) {
+	    	        	prevResults = latestResults;
+	    	        	runRules(event);
+    	        	}
     	        } else {
 //    	        	System.out.println("no event detected!");
     	        }
@@ -80,7 +82,7 @@ public class MainConsole {
     	        // Calculate the elapsed time in milliseconds
     	        long elapsedTime = endTime - startTime;
     	        // Print the result and the execution time
-                Thread.sleep(100); // Sleep for 1 second
+                Thread.sleep(50); // Sleep for 1 second
                 prevResultsIndex = 0;
                 iteration++;
                 //efficiency test
@@ -99,7 +101,10 @@ public class MainConsole {
 
         // Find elements in new results that are not in previous results
         set2.removeAll(set1);
-		return new ArrayList<>(set2).get(0);
+        if(set2.size() > 0)
+        	return new ArrayList<>(set2).get(0);
+        else
+        	return null;
 	}
 
 	private void assignRules() {
