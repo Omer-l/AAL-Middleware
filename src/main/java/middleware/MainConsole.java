@@ -9,12 +9,14 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.sql.Connection;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.time.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,7 +41,11 @@ public class MainConsole {
         MySqlConnection con = new MySqlConnection();
         con.setDetails(DbXMLParser.dbDetailsMySql);
         MainConsole mainConsole = new MainConsole(con);
-        mainConsole.listen();
+//        mainConsole.listen();
+		RuleRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
+		RuleRunner.mainDbManager.setUsername("root");
+		RuleRunner.mainDbManager.setPassword("root");
+        mainConsole.latestResultsSchedules();
     }
 
     public void stopListening() {
@@ -108,9 +114,6 @@ public class MainConsole {
 	}
 
 	private void assignRules() {
-		RuleRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
-		RuleRunner.mainDbManager.setUsername("root");
-		RuleRunner.mainDbManager.setPassword("root");
 		ArrayList<Map<String, Object>> rules = RuleRunner.mainDbManager.queryDB("SELECT * from rule", "select");
 		for (Map<String, Object> rule : rules)
 			ruleThreads.add(new RuleRunner(rule));
@@ -204,21 +207,65 @@ public class MainConsole {
 	private ArrayList<Map<String, Object>> latestResultsSchedules() {
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
 		ArrayList<Map<String, Object>> results = RuleRunner.mainDbManager.queryDB("SELECT * FROM schedule ORDER BY 1 DESC", "select");
+//		for(Map<String, Object> result : results) {
+//            LocalDateTime now = LocalDateTime.now();
+//            //do some calculations to solve startDateTime by using the  result.get("start_date_time") and result.get("repetition") attribute
+//            LocalDateTime startDateTime = (LocalDateTime) result.get("start_date_time");
+//			LocalDateTime endDateTime = (LocalDateTime) result.get("end_date_time");
+//        	result.put("event_type", "schedule");
+//        	//also check result.get("updated_at") in case code is rerun and event ends up running twice in the repetition period
+//            if ( iteration != 0 && (now.isEqual(startDateTime) || now.isAfter(startDateTime)) && now.isBefore(endDateTime))
+//            	result.put("achieved", true);
+//            else
+//            	result.put("unique_id", null); //nullify the result, in case previously it was set to true
+//        	latestResults.add(result);
+//        	prevResultsIndex++;
+////	        System.out.println(result);
+//		}
 		for(Map<String, Object> result : results) {
-            LocalDateTime now = LocalDateTime.now();
-            //do some calculations to solve startDateTime by using the  result.get("start_date_time") and result.get("repetition") attribute
-            LocalDateTime startDateTime = (LocalDateTime) result.get("start_date_time");
+			LocalDateTime now = LocalDateTime.now();
+			LocalDateTime startDateTime = (LocalDateTime) result.get("start_date_time");
 			LocalDateTime endDateTime = (LocalDateTime) result.get("end_date_time");
-        	result.put("event_type", "schedule");
-        	//also check result.get("updated_at") in case code is rerun and event ends up running twice in the repetition period
-            if ( iteration != 0 && (now.isEqual(startDateTime) || now.isAfter(startDateTime)) && now.isBefore(endDateTime))
-            	result.put("achieved", true);
-            else
-            	result.put("unique_id", null); //nullify the result, in case previously it was set to true
-        	latestResults.add(result);
-        	prevResultsIndex++;
-//	        System.out.println(result);
-		}
-		return latestResults;
+			if(now.isAfter(endDateTime)) continue; //schedule won't need to be considered
+			ScheduleInterval scheduleInterval = ScheduleInterval.valueOf(((String) result.get("repetition")).toUpperCase());
+			Schedule schedule = new Schedule(startDateTime.getDayOfWeek(), startDateTime.toLocalTime(), scheduleInterval);
+	        // Calculate the initial delay until the next schedule time
+	        Duration initialDelay = calculateInitialDelay(schedule);
+	        Timer timer = new Timer();
+	        // Schedule the task to run at the specified interval
+	        timer.schedule(new TimerTask() {
+	            @Override
+	            public void run() {
+	                LocalDateTime now = LocalDateTime.now();
+
+	                // Check if the schedule is met
+	                if (isScheduleMet(now, schedule)) {
+	                    System.out.println("Schedule met at: " + now);
+	                }
+	            }
+	        }, initialDelay.toMillis(), schedule.getInterval().duration.toMillis());
+	    }
+
+		return null;
 	}
+	
+    enum ScheduleInterval {
+    	SECOND(Duration.ofSeconds(1)),
+        MINUTE(Duration.ofMinutes(1)),
+        HOUR(Duration.ofHours(1)),
+        DAY(Duration.ofDays(1)),
+        WEEK(Duration.ofDays(7)),
+        MONTH(Duration.ofDays(30));
+
+        private final Duration duration;
+
+        ScheduleInterval(Duration duration) {
+            this.duration = duration;
+        }
+
+        public Duration toDuration() {
+            return duration;
+        }
+    }
 }
+

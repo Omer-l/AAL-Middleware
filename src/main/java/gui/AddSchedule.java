@@ -174,10 +174,12 @@ public class AddSchedule extends Window {
         // Create a MenuItem
         MenuBar column1Hbox6VBox2MenuBar = new MenuBar();
         // Create MenuItems for the dropdown menu
-        MenuItem option1 = new MenuItem("Daily");
-        MenuItem option2 = new MenuItem("Weekly");
-        MenuItem option3 = new MenuItem("Monthly");
-        menu1.getItems().addAll(option1, option2, option3);
+        MenuItem option1 = new MenuItem("Second");
+        MenuItem option2 = new MenuItem("Hour");
+        MenuItem option3 = new MenuItem("Day");
+        MenuItem option4 = new MenuItem("Week");
+        MenuItem option5 = new MenuItem("Month");
+        menu1.getItems().addAll(option1, option2, option3, option4, option5);
         column1Hbox6VBox2MenuBar.getMenus().add(menu1);
         column1Hbox6VBox1.getChildren().addAll(column1Hbox6VBox1Header);
         column1Hbox6VBox2.getChildren().addAll(column1Hbox6VBox2MenuBar);

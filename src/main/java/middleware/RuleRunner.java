@@ -23,10 +23,16 @@ public class RuleRunner extends Thread{
 	public Map<String, Object> event; // the new event to evaluate
 
     public RuleRunner(Map<String, Object> rule) {
+		mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
+		mainDbManager.setUsername("root");
+		mainDbManager.setPassword("root");
         getWhensAndThens(rule);
     }
     
     public RuleRunner(ArrayList<Map<String, Object>> whens, ArrayList<Map<String, Object>> thens) {
+		mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
+		mainDbManager.setUsername("root");
+		mainDbManager.setPassword("root");
     	this.whens = whens;
     	this.thens = thens;
     }
