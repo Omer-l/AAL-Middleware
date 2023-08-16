@@ -237,13 +237,15 @@ public class MainConsole {
 	            @Override
 	            public void run() {
 	                LocalDateTime now = LocalDateTime.now();
+	                LocalDateTime nextSchedule = schedule.getNextScheduleTime(now);
 
 	                // Check if the schedule is met
-	                if (isScheduleMet(now, schedule)) {
+//	                if(scheduleInterval.equals(ScheduleInterval.MINUTE))
 	                    System.out.println("Schedule met at: " + now);
-	                }
+		           
 	            }
 	        }, initialDelay.toMillis(), schedule.getInterval().duration.toMillis());
+	        iteration++;
 	    }
 
 		return null;
@@ -251,6 +253,9 @@ public class MainConsole {
 	
 	public static boolean isScheduleMet(LocalDateTime dateTime, Schedule schedule) {
         return schedule.isScheduleTime(dateTime);
+    }
+	public static boolean isScheduleMet(LocalDateTime dateTime, LocalDateTime schedule) {
+        return dateTime.isAfter(schedule) || dateTime.isEqual(schedule);
     }
 	
 	public static Duration calculateInitialDelay(Schedule schedule) {
