@@ -26,6 +26,7 @@ import gui.MainMenu;
 
 public class MainConsole {
     ArrayList<Map<String, Object>> prevResults = new ArrayList<Map<String, Object>>();
+    ArrayList<Map<String, Object>> completedSchedules = new ArrayList<Map<String,Object>>();
     private int prevResultsIndex = 0;
     private MySqlConnection connection;
     private boolean listening;		
@@ -41,12 +42,12 @@ public class MainConsole {
         MySqlConnection con = new MySqlConnection();
         con.setDetails(DbXMLParser.dbDetailsMySql);
         MainConsole mainConsole = new MainConsole(con);
-//        mainConsole.listen();
 		RuleRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
 		RuleRunner.mainDbManager.setUsername("root");
 		RuleRunner.mainDbManager.setPassword("root");
-        mainConsole.latestResultsSchedules();
-    }
+        mainConsole.initialiseSchedules();
+        mainConsole.listen();
+}
 
     public void stopListening() {
         this.listening = false;
@@ -66,12 +67,10 @@ public class MainConsole {
     	        connection.setDetails(DbXMLParser.dbDetailsPostgresql);
     	        latestResults.addAll(latestResultsDB(DbXMLParser.postgresqlDbAndTablesMap));
     	        latestResults.addAll(latestResultsFiles());
-    	        latestResults.addAll(latestResultsSchedules());
+    	        latestResults.addAll(completedSchedules);
 //        	    System.out.println(latestResults + "\n" + prevResults);
-    			//checks whether the latest result isn't actually previous Result
     	        if(iteration == 0) //only for first iteration
     	        	prevResults = latestResults;
-    	        
     	        if(!latestResults.equals(prevResults)) {
     	        	System.out.println("EVENT!\n");
     	        	Map<String, Object> event = getNewEvent(prevResults, latestResults);
@@ -94,6 +93,7 @@ public class MainConsole {
                 //efficiency test
 //    	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 //	                memoryUsage();
+                completedSchedules.clear();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -192,10 +192,10 @@ public class MainConsole {
 				    	result.put("previous_result", (long) prevResults.get(prevResultsIndex).get("previous_result"));
 
     				result.put("event_type", "system_file_read_event");
-    				latestResults.add(result);
-				    prevResultsIndex++;
 				}
-				bis.close();
+				latestResults.add(result);
+			    prevResultsIndex++;
+			    bis.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -204,7 +204,7 @@ public class MainConsole {
 		return latestResults;
 	}
 	
-	private ArrayList<Map<String, Object>> latestResultsSchedules() {
+	private ArrayList<Map<String, Object>> initialiseSchedules() {
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
 		ArrayList<Map<String, Object>> results = RuleRunner.mainDbManager.queryDB("SELECT * FROM schedule ORDER BY 1 DESC", "select");
 //		for(Map<String, Object> result : results) {
@@ -241,11 +241,13 @@ public class MainConsole {
 
 	                // Check if the schedule is met
 //	                if(scheduleInterval.equals(ScheduleInterval.MINUTE))
-	                    System.out.println("Schedule met at: " + now);
-		           
+	                Map<String, Object> scheduleEvent = new HashMap<String, Object>();
+	                scheduleEvent.put("unique_id", schedule.uniqueId);
+	                scheduleEvent.put("start_date_time", schedule.dateTime);
+//	                    System.out.println("Schedule met at: " + now);
+		           completedSchedules.add(result);
 	            }
 	        }, initialDelay.toMillis(), schedule.getInterval().duration.toMillis());
-	        iteration++;
 	    }
 
 		return null;
@@ -269,6 +271,8 @@ public class MainConsole {
         private final DayOfWeek dayOfWeek;
         private final LocalTime time;
         private final ScheduleInterval interval;
+        private String uniqueId;
+        private LocalDateTime dateTime;
 
         public Schedule(DayOfWeek dayOfWeek, LocalTime time, ScheduleInterval interval) {
             this.dayOfWeek = dayOfWeek;
