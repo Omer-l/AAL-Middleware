@@ -249,6 +249,38 @@ public class MainConsole {
 		return null;
 	}
 	
+	static class Schedule {
+        private final DayOfWeek dayOfWeek;
+        private final LocalTime time;
+        private final ScheduleInterval interval;
+
+        public Schedule(DayOfWeek dayOfWeek, LocalTime time, ScheduleInterval interval) {
+            this.dayOfWeek = dayOfWeek;
+            this.time = time;
+            this.interval = interval;
+        }
+
+        public LocalDateTime getNextScheduleTime(LocalDateTime baseTime) {
+            LocalDateTime nextSchedule = baseTime
+                    .with(TemporalAdjusters.nextOrSame(dayOfWeek))
+                    .with(time);
+
+            while (nextSchedule.isBefore(baseTime)) {
+                nextSchedule = nextSchedule.plus(interval.toDuration());
+            }
+
+            return nextSchedule;
+        }
+
+        public boolean isScheduleTime(LocalDateTime dateTime) {
+            return dayOfWeek == dateTime.getDayOfWeek() && time.equals(dateTime.toLocalTime());
+        }
+
+        public ScheduleInterval getInterval() {
+            return interval;
+        }
+    }
+	
     enum ScheduleInterval {
     	SECOND(Duration.ofSeconds(1)),
         MINUTE(Duration.ofMinutes(1)),
