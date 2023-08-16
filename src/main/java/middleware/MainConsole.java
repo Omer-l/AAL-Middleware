@@ -72,10 +72,10 @@ public class MainConsole {
     	        if(iteration == 0) //only for first iteration
     	        	prevResults = latestResults;
     	        if(!latestResults.equals(prevResults)) {
-    	        	System.out.println("EVENT!\n");
     	        	Map<String, Object> event = getNewEvent(prevResults, latestResults);
     	        	if(event != null) {
-	    	        	prevResults = latestResults;
+        	        	System.out.println("EVENT!\n");
+        	        	prevResults = latestResults;
 	    	        	runRules(event);
     	        	}
     	        } else {
@@ -93,7 +93,6 @@ public class MainConsole {
                 //efficiency test
 //    	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 //	                memoryUsage();
-                completedSchedules.clear();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -105,7 +104,7 @@ public class MainConsole {
 		Set<Map<String, Object>> set1 = new HashSet<>(prevResults);
         Set<Map<String, Object>> set2 = new HashSet<>(latestResults);
 
-        // Find elements in new results that are not in previous results
+        // Find elements in new results that are not in previous result
         set2.removeAll(set1);
         if(set2.size() > 0)
         	return new ArrayList<>(set2).get(0);
@@ -123,6 +122,8 @@ public class MainConsole {
 		for (RuleRunner rule : ruleThreads) {
 			//clone first to avoid IllegalThreadStateException
 			RuleRunner ruleThread = new RuleRunner(rule.whens, rule.thens); //carry of the whens and thens to the clone
+			completedSchedules.remove(event);
+			prevResults.remove(event);
 			ruleThread.event = event;
 			ruleThread.start();
 		}
@@ -229,6 +230,7 @@ public class MainConsole {
 			if(now.isAfter(endDateTime)) continue; //schedule won't need to be considered
 			ScheduleInterval scheduleInterval = ScheduleInterval.valueOf(((String) result.get("repetition")).toUpperCase());
 			Schedule schedule = new Schedule(startDateTime.getDayOfWeek(), startDateTime.toLocalTime(), scheduleInterval);
+			schedule.uniqueId = (String) result.get("unique_id");
 	        // Calculate the initial delay until the next schedule time
 	        Duration initialDelay = calculateInitialDelay(schedule);
 	        Timer timer = new Timer();
@@ -242,10 +244,9 @@ public class MainConsole {
 	                // Check if the schedule is met
 //	                if(scheduleInterval.equals(ScheduleInterval.MINUTE))
 	                Map<String, Object> scheduleEvent = new HashMap<String, Object>();
-	                scheduleEvent.put("unique_id", schedule.uniqueId);
-	                scheduleEvent.put("start_date_time", schedule.dateTime);
+	                scheduleEvent.put("start_date_time", now);
 //	                    System.out.println("Schedule met at: " + now);
-		           completedSchedules.add(result);
+		           completedSchedules.add(scheduleEvent);
 	            }
 	        }, initialDelay.toMillis(), schedule.getInterval().duration.toMillis());
 	    }
