@@ -8,8 +8,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.Node;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,4 +102,14 @@ public class DbXMLParser {
 		return dbDetails;
 	}
 	
+	public static void writeConfigs(String absFilePath, String payload) {
+		try {
+	        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("lastAccessedBLE.txt"));
+	        byte[] data = payload.getBytes(); // Replace with your data
+	        bos.write(data);
+	        bos.close();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+	}
 }

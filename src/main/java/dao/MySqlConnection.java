@@ -31,6 +31,8 @@ public class MySqlConnection {
 	public MySqlConnection() {
 		
 	}
+	
+	
 
 	public void connect() throws SQLException {
 		connection = DriverManager.getConnection(url, username, password);
