@@ -249,6 +249,17 @@ public class MainConsole {
 		return null;
 	}
 	
+	public static boolean isScheduleMet(LocalDateTime dateTime, Schedule schedule) {
+        return schedule.isScheduleTime(dateTime);
+    }
+	
+	public static Duration calculateInitialDelay(Schedule schedule) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime nextScheduleTime = schedule.getNextScheduleTime(now);
+
+        return Duration.between(now, nextScheduleTime);
+    }
+	
 	static class Schedule {
         private final DayOfWeek dayOfWeek;
         private final LocalTime time;
