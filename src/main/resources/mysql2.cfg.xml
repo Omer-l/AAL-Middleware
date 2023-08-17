@@ -6,9 +6,9 @@
 	<password>root</password>
 	<database name="beacon_localisation">
 		<table>record</table>
-	<table>beacon</table>
+		<table>beacon</table>
 	</database>
 	<database name="middleware">
 		<table>rule</table>
 	</database>
-	</database-configuration>
+</database-configuration>
