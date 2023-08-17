@@ -102,14 +102,43 @@ public class DbXMLParser {
 		return dbDetails;
 	}
 	
-	public static void writeConfigs(String absFilePath, String payload) {
+	public static void write(String absFilePath, String payload) {
 		try {
-	        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("lastAccessedBLE.txt"));
+	        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(absFilePath));
 	        byte[] data = payload.getBytes(); // Replace with your data
 	        bos.write(data);
 	        bos.close();
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
+	}
+
+	public static void save(String fileName, String url, String username, String password, String dbtb) {
+		StringBuilder payload = new StringBuilder();
+		payload.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<database-configuration>\n\t<!-- Database connection properties -->\n\t");
+		payload.append("<url>");
+		payload.append(url);
+		payload.append("</url>\n\t");
+		payload.append("<username>");
+		payload.append(username);
+		payload.append("</username>\n\t");
+		payload.append("<password>");
+		payload.append(password);
+		payload.append("</password>\n\t");
+        String[] rows = dbtb.split("&");
+        for (int i = 0; i < rows.length; i++) {
+        	String[] cols = rows[i].split(",");
+    		payload.append("<database name=\"");
+    		payload.append(cols[0]);
+    		payload.append("\">\n\t\t");
+            for(int j = 1; j < cols.length; j++) {
+        		payload.append("<table>");
+        		payload.append(cols[j]);
+        		payload.append("</table>\n\t");
+        	}
+    		payload.append("</database>\n\t");
+        }
+		payload.append("</database-configuration>");
+		write("C:\\Users\\EIS\\AAL-Middleware\\src\\main\\resources\\" + fileName, payload.toString());
 	}
 }

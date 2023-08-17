@@ -1,6 +1,8 @@
 package gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import dao.DbXMLParser;
 import dao.MySqlConnection;
 import javafx.application.Application;
@@ -46,12 +48,20 @@ public class MainMenu extends Application {
 	public static Stage primaryStage;
     public static void main(String[] args) {
 //    	Settings s = new Settings();
-		String dbTb = "beacon_localisation,record\nmiddleware,schedule";
+		String sqldbTb = "beacon_localisation,record,user,room&middleware,event";
+		String sqlurl = "jdbc:mysql://localhost:3306/beacon_localisation";
+		String sqlUser = "root";
+		String sqlpw = "root";
+		String psqlurl = "";
+		String psqluser = "postgres";
+		String psqlpw = "123456";
 //		System.out.print(s.parseDbTb(dbTb));
     	
     		open();
     		
     		DatabaseSettings s = new DatabaseSettings();
+//    		s.column1HBox4VBox2TextField.setText(sqldbTb);
+//    		HashMap<String, ArrayList<String>> passDeets = s.parseDbTb(s.column1HBox4VBox2TextField.getText());
     		s.open();
     		
 //    		Rules r = new Rules();
