@@ -120,12 +120,23 @@ public class MainConsole {
 
 	private void runRules(Map<String, Object> event) {
 		for (RuleRunner rule : ruleThreads) {
-			//clone first to avoid IllegalThreadStateException
-			RuleRunner ruleThread = new RuleRunner(rule.whens, rule.thens); //carry of the whens and thens to the clone
-			completedSchedules.remove(event);
-			prevResults.remove(event);
-			ruleThread.event = event;
-			ruleThread.start();
+				if( ((String)event.get("event_type")).equals("database_read_event") || rule.containsWhenId((String) event.get("unique_id"))) {
+				Thread.State state = rule.getState();
+				System.out.println(rule.whens);
+				if(state == Thread.State.RUNNABLE) {
+					System.out.println("Thread is currently running");
+				} else {
+					System.out.println("Thread is not running");
+				}
+				//clone first to avoid IllegalThreadStateException
+				RuleRunner ruleThread = new RuleRunner(rule.whens, rule.thens); //carry of the whens and thens to the clone
+				if(completedSchedules.contains(event)) {
+					completedSchedules.remove(event);
+					prevResults.remove(event);
+				}
+				ruleThread.event = event;
+				ruleThread.start();
+			}
 		}
 	}
 

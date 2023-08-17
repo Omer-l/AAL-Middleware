@@ -163,4 +163,12 @@ public class RuleRunner extends Thread{
 		for(Map<String, Object> when : whens)
 			when.put("reached", false);
 	}
+	
+	public boolean containsWhenId(String id) {
+		for(Map<String, Object> when : whens)
+			if(((String) when.get("unique_id")).equals(id))
+				return true;
+		
+		return false;
+	}
 }
