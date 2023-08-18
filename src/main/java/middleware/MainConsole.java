@@ -259,6 +259,7 @@ public class MainConsole {
 	                Map<String, Object> scheduleEvent = new HashMap<String, Object>();
 	                scheduleEvent.put("start_date_time", now);
 	                scheduleEvent.put("event_type", "schedule");
+	                scheduleEvent.put("unique_id", schedule.uniqueId);
 //	                    System.out.println("Schedule met at: " + now);
 		           completedSchedules.add(scheduleEvent);
 	            }
