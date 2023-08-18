@@ -238,9 +238,11 @@ public class MainConsole {
 			LocalDateTime now = LocalDateTime.now();
 			LocalDateTime startDateTime = (LocalDateTime) result.get("start_date_time");
 			LocalDateTime endDateTime = (LocalDateTime) result.get("end_date_time");
-			if(now.isAfter(endDateTime)) continue; //schedule won't need to be considered
+			if(now.isAfter(endDateTime)) //TODO consider result.get("updated_at"); in case user restarts middleware
+				continue; //schedule won't need to be considered
 			ScheduleInterval scheduleInterval = ScheduleInterval.valueOf(((String) result.get("repetition")).toUpperCase());
-			Schedule schedule = new Schedule(startDateTime.getDayOfWeek(), startDateTime.toLocalTime(), scheduleInterval);
+			Schedule schedule = now.isAfter(startDateTime)  && (((String) result.get("repetition")).equals("Minute") || ((String) result.get("repetition")).equals("Second")) ? new Schedule(LocalDate.now().getDayOfWeek(), LocalDateTime.now().toLocalTime(), scheduleInterval) : new Schedule(startDateTime.getDayOfWeek(), startDateTime.toLocalTime(), scheduleInterval);
+
 			schedule.uniqueId = (String) result.get("unique_id");
 	        // Calculate the initial delay until the next schedule time
 	        Duration initialDelay = calculateInitialDelay(schedule);
@@ -251,11 +253,12 @@ public class MainConsole {
 	            public void run() {
 	                LocalDateTime now = LocalDateTime.now();
 	                LocalDateTime nextSchedule = schedule.getNextScheduleTime(now);
-
+	                System.out.println("HIT: " + schedule.interval);
 	                // Check if the schedule is met
 //	                if(scheduleInterval.equals(ScheduleInterval.MINUTE))
 	                Map<String, Object> scheduleEvent = new HashMap<String, Object>();
 	                scheduleEvent.put("start_date_time", now);
+	                scheduleEvent.put("event_type", "schedule");
 //	                    System.out.println("Schedule met at: " + now);
 		           completedSchedules.add(scheduleEvent);
 	            }
