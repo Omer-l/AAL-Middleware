@@ -8,6 +8,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -45,7 +46,6 @@ public class MainConsole {
 		RuleRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
 		RuleRunner.mainDbManager.setUsername("root");
 		RuleRunner.mainDbManager.setPassword("root");
-        mainConsole.initialiseSchedules();
         mainConsole.listen();
 }
 
@@ -54,8 +54,9 @@ public class MainConsole {
     }
 
 	public void listen() {
-		assignRules();
 	    try {
+	        initialiseSchedules();
+			assignRules();
         	//initialise prevResults
             while (listening) {
                 // Record the start time
@@ -94,9 +95,16 @@ public class MainConsole {
 //    	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 //	                memoryUsage();
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        } catch (InterruptedException | SQLException e) {
+			try {
+				e.printStackTrace();
+				Thread.sleep(5000);
+				listen();   
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}     
+		}
 	}
 
 	private Map<String, Object> getNewEvent(ArrayList<Map<String, Object>> prevResults, ArrayList<Map<String, Object>> latestResults) {
@@ -112,7 +120,7 @@ public class MainConsole {
         	return null;
 	}
 
-	private void assignRules() {
+	private void assignRules() throws SQLException {
 		ArrayList<Map<String, Object>> rules = RuleRunner.mainDbManager.queryDB("SELECT * from rule", "select");
 		for (Map<String, Object> rule : rules)
 			ruleThreads.add(new RuleRunner(rule));
@@ -160,30 +168,31 @@ public class MainConsole {
         System.out.println("    Max: " + memoryUsage.getMax() / (1024 * 1024) + " MB");		
 	}
 
-	private Collection<Map<String, Object>> latestResultsDB(Map<String, ArrayList<String>> dbAndTablesMap) {
+	private Collection<Map<String, Object>> latestResultsDB(Map<String, ArrayList<String>> dbAndTablesMap)  throws SQLException{
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
-		for(String databaseName : dbAndTablesMap.keySet()) {
-    		connection.connectToDb(databaseName);
-    		for(String tableName : dbAndTablesMap.get(databaseName)) {
-    			StringBuilder query = new StringBuilder("SELECT * FROM ");
-    			query.append(tableName);
-    			query.append(" ORDER BY 1 DESC LIMIT 1");
-    			ArrayList<Map<String, Object>> result = connection.queryDB(query.toString(), "select");
-    			if(result.size() > 0) {
-    				Map<String, Object> newRow = result.get(0);
-    				newRow.put("event_type", "database_read_event");
-    				newRow.put("database", databaseName);
-    				newRow.put("table", tableName);
-    				latestResults.add(newRow);
-    				prevResultsIndex++;
-    			} else
-    				latestResults.add(null); //placeholder
-    		}
-    	}
+			for(String databaseName : dbAndTablesMap.keySet()) {
+	    		connection.connectToDb(databaseName);
+	    		for(String tableName : dbAndTablesMap.get(databaseName)) {
+	    			StringBuilder query = new StringBuilder("SELECT * FROM ");
+	    			query.append(tableName);
+	    			query.append(" ORDER BY 1 DESC LIMIT 1");
+	    			ArrayList<Map<String, Object>> result = connection.queryDB(query.toString(), "select");
+	    			if(result.size() > 0) {
+	    				Map<String, Object> newRow = result.get(0);
+	    				newRow.put("event_type", "database_read_event");
+	    				newRow.put("database", databaseName);
+	    				newRow.put("table", tableName);
+	    				latestResults.add(newRow);
+	    				prevResultsIndex++;
+	    			} else {
+	    				latestResults.add(null); //placeholder
+	    			}
+	    		}
+	    	}
 		return latestResults;
 	}
 
-	private ArrayList<Map<String, Object>> latestResultsFiles() {
+	private ArrayList<Map<String, Object>> latestResultsFiles() throws SQLException {
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
 		ArrayList<Map<String, Object>> results = RuleRunner.mainDbManager.queryDB("SELECT * FROM system_file_read_event ORDER BY 1 DESC", "select");
 		for(Map<String, Object> result : results) {
@@ -216,7 +225,7 @@ public class MainConsole {
 		return latestResults;
 	}
 	
-	private ArrayList<Map<String, Object>> initialiseSchedules() {
+	private ArrayList<Map<String, Object>> initialiseSchedules() throws SQLException {
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
 		ArrayList<Map<String, Object>> results = RuleRunner.mainDbManager.queryDB("SELECT * FROM schedule ORDER BY 1 DESC", "select");
 //		for(Map<String, Object> result : results) {
