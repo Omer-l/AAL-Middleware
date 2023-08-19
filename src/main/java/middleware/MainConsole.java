@@ -98,6 +98,7 @@ public class MainConsole {
         } catch (InterruptedException | SQLException e) {
 			try {
 				e.printStackTrace();
+				System.out.println("Error connecting to server");
 				Thread.sleep(5000);
 				listen();   
 			} catch (InterruptedException e1) {

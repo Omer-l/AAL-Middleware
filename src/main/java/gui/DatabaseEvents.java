@@ -42,28 +42,28 @@ public class DatabaseEvents extends Window {
         MainMenu.menuBarHBox.getChildren().addAll(button1);
         //LEFT SIDE MAIN
         VBox mainVBox1 = new VBox(2);
+        //RIGHT SIDE MAIN
+        VBox mainVBox2 = new VBox(2);
         mainVBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         //read events
         VBox column1VBox = new VBox(2);
+        VBox column2VBox = new VBox(2);
+        mainVBox1.getChildren().addAll(column1VBox);
+        mainVBox2.getChildren().addAll(column2VBox);
         Text column1Header = new Text("Read Events");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
         column1VBox.getChildren().addAll(column1Header);
         styles.getEvents("SELECT * FROM database_read_event INNER JOIN event ON database_read_event.unique_id = event.unique_id;", column1VBox, this);
         int readEventsLastIndex = column1VBox.getChildren().size() - 1;
         column1VBox.getChildren().get(readEventsLastIndex).setOnMouseClicked(event -> {new AddDatabaseEvent(this).open();});
-        mainVBox1.getChildren().addAll(column1VBox);
-        //RIGHT SIDE MAIN
-        VBox mainVBox2 = new VBox(2);
         mainVBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         //write events
-        VBox column2VBox = new VBox(2);
         Text column2Header = new Text("Write Events");
         column2Header.setStyle(MainMenu.HEADER_1_STYLE);
         column2VBox.getChildren().add(column2Header);
         styles.getEvents("SELECT * FROM database_write_event INNER JOIN event ON database_write_event.unique_id = event.unique_id;", column2VBox, this);
         int writeEventsLastIndex = column2VBox.getChildren().size() - 1;
         column2VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { /** add event */ System.out.println("Write event clicked"); });
-        mainVBox2.getChildren().addAll(column2VBox);
 //START
     	MainMenu.addHoverInteraction(new VBox[] {(VBox) column1VBox.getChildren().get(readEventsLastIndex), (VBox) column2VBox.getChildren().get(writeEventsLastIndex)}, "yellow", "darkgray");
         MainMenu.mainHBox.getChildren().addAll(mainVBox1, mainVBox2);
