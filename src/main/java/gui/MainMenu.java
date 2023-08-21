@@ -1,10 +1,33 @@
 package gui;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+
+import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXProgressBar;
+import com.jfoenix.controls.JFXRippler;
+import com.jfoenix.controls.JFXSpinner;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleButton;
+import com.jfoenix.controls.JFXToggleNode;
+import com.jfoenix.validation.RequiredFieldValidator;
+
 import dao.DbXMLParser;
 import dao.MySqlConnection;
+import de.jensd.fx.fontawesome.AwesomeIcon;
+import de.jensd.fx.fontawesome.Icon;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,45 +69,21 @@ public class MainMenu extends Application {
 	public static HBox mainVBox = new HBox(10);
 	//MAIN
 	public static Stage primaryStage;
-    public static void main(String[] args) {
-//    	Settings s = new Settings();
-		String sqldbTb = "beacon_localisation,record,user,room&middleware,event";
-		String sqlurl = "jdbc:mysql://localhost:3306/beacon_localisation";
-		String sqlUser = "root";
-		String sqlpw = "root";
-		String psqlurl = "";
-		String psqluser = "postgres";
-		String psqlpw = "123456";
-//		System.out.print(s.parseDbTb(dbTb));
+    
+	
+	
+	public static void main(String[] args) {
     	
     		open();
     		
-    		DatabaseSettings s = new DatabaseSettings();
-//    		s.column1HBox4VBox2TextField.setText(sqldbTb);
-//    		HashMap<String, ArrayList<String>> passDeets = s.parseDbTb(s.column1HBox4VBox2TextField.getText());
-    		s.open();
-    		
-//    		Rules r = new Rules();
-//    		r.open();
-//    		AddFileEvent adr = new AddFileEvent(new FileEvents(null), "run");
-//        	adr.open();
-//    		AddSchedule as = new AddSchedule(new Schedules());
-//    		as.open();
+//    		DatabaseSettings s = new DatabaseSettings();
+//    		s.open();
     		launch(args);
-        	
-//    	open();
-//		DatabaseEvents adr = new DatabaseEvents();
-//    	adr.open();
-//		AddDatabaseEvent ade = new AddDatabaseEvent(new DatabaseEvents());
-//		ade.loadData("bwhjenfio34nf");
-//		ade.open();
-
-		//AddFileEvent adf = new AddFileEvent(new FileEvents(), "read");
-    	//Rules adf = new Rules();
-		//adf.open();
     	 
     
     }
+    
+    
 
     @Override
     public void start(Stage primaryStage) {
@@ -169,7 +168,20 @@ public class MainMenu extends Application {
     	Text settingsVBox1Details = new Text("RDBM URL, Username, Password");
     	settingsVBox1.getChildren().addAll(settingsVBox1Header, settingsVBox1Details);
     	settingsVBox.getChildren().addAll(settingsHeader, settingsVBox1);
-    	mainVBox2.getChildren().addAll(settingsVBox);
+    	JFXTextField field = new JFXTextField();
+    	field.setLabelFloat(true);
+    	field.setPromptText("Floating prompt");
+    	 
+    	JFXButton jfoenixButton = new JFXButton("JFoenix Button");
+    	JFXButton button = new JFXButton("Raised Button".toUpperCase());
+    	button.setStyle("\r\n"
+    			+ "    -fx-padding: 0.7em 0.57em;\r\n"
+    			+ "    -fx-font-size: 14px;\r\n"
+    			+ "    -jfx-button-type: RAISED;\r\n"
+    			+ "    -fx-background-color: rgb(77,102,204);\r\n"
+    			+ "    -fx-pref-width: 200;\r\n"
+    			+ "    -fx-text-fill: WHITE;");
+    	mainVBox2.getChildren().addAll(settingsVBox, button);
 
     	addHoverInteraction(new VBox[] {configVBox1, configVBox2, configVBox3, configVBox4, automationVBox1, settingsVBox1}, "white", "darkgray");
     	mainHBox.getChildren().addAll(mainVBox1, mainVBox2);

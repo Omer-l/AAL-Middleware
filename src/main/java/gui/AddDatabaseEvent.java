@@ -149,6 +149,8 @@ public class AddDatabaseEvent extends Window {
         Text column1Hbox4VBox1Header = new Text("RDBM ");
         VBox column1Hbox4VBox2 = new VBox();
         column1Hbox4VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+        
+        
         // Create a MenuItem
         MenuBar column1HBox4VBox2MenuBar = new MenuBar();
         Menu menu1 =  new Menu();

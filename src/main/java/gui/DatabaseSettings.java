@@ -146,7 +146,8 @@ public class DatabaseSettings extends Window {
         VBox column1HBox4VBox1 = new VBox();
         column1HBox4VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
         column1HBox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox4VBox1Header = new Text("Enter (Database, Table) separated by commas");
+        Text column1HBox4VBox1Header = new Text("Enter Database name1,Table name1,Table name2&Database name2,"
+        		+ "Table name1,Table name2");
         VBox column1HBox4VBox2 = new VBox();
         column1HBox4VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         TextField column1HBox4VBox2TextField = new TextField();
@@ -201,7 +202,8 @@ public class DatabaseSettings extends Window {
         VBox column1HBox4VBox1P = new VBox();
         column1HBox4VBox1P.setStyle(MainMenu.MENU_BUTTON_STYLE);
         column1HBox4VBox1P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox4VBox1HeaderP = new Text("Enter (Database, Table), separated by commas");
+        Text column1HBox4VBox1HeaderP = new Text("Enter Database name1,Table name1,Table name2&Database name2,"
+        		+ "Table name1,Table name2");
         VBox column1HBox4VBox2P = new VBox();
         column1HBox4VBox2P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         TextField column1HBox4VBox2TextFieldP = new TextField();
