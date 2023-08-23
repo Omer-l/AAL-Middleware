@@ -1,4 +1,4 @@
-package gui;
+package middleware;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -17,6 +17,12 @@ import java.util.HashMap;
 
 import dao.DbXMLParser;
 import dao.MySqlConnection;
+import gui.DatabaseEvents;
+import gui.DatabaseSettings;
+import gui.FileEvents;
+import gui.Rules;
+import gui.Schedules;
+import gui.Window;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -162,8 +168,8 @@ public class MainMenu extends Application {
     	Text settingsVBox1Details = new Text("RDBM URL, Username, Password");
     	settingsVBox1.getChildren().addAll(settingsVBox1Header, settingsVBox1Details);
     	settingsVBox.getChildren().addAll(settingsHeader, settingsVBox1);
-		String cssFile = getClass().getResource("styles.css").toExternalForm();
-    	root.getStylesheets().add(cssFile);
+//		String cssFile = getClass().getResource("styles.css").toExternalForm();
+//    	root.getStylesheets().add(cssFile);
     	
     	
     	mainVBox2.getChildren().addAll(settingsVBox);
