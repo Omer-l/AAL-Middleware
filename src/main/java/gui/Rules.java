@@ -59,7 +59,7 @@ public class Rules extends Window {
 		ArrayList<Map<String, Object>> events = MainMenu.mainDbManager.queryDB(query, "select");
 		for(Map<String, Object> readEvent : events) {
 			VBox column1VBox = new VBox();
-	        column1VBox.setStyle(MainMenu.MENU_BUTTON_STYLE);
+	        column1VBox.setStyle(MainMenu.CARD_STYLE);
 	        Text column1VBoxHeader = new Text((String) readEvent.get("name"));
 	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
 	        Text column1VBoxUniqueId = new Text((String) readEvent.get("unique_id"));

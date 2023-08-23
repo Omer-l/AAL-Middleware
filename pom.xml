@@ -6,6 +6,10 @@
 	<name>middleware</name>
   
 	<dependencies>
+<<<<<<< HEAD
+
+=======
+>>>>>>> b0c6e49ea050bb7935311b7b405932778fba9f0a
 	</dependencies>
 	<build>
 		<plugins>

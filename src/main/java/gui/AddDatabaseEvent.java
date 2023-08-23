@@ -103,7 +103,7 @@ public class AddDatabaseEvent extends Window {
 
         HBox column1HBox1 = new HBox();
         VBox column1HBox1VBox1 = new VBox();
-        column1HBox1VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox1VBox1.setStyle(MainMenu.CARD_STYLE);
         column1HBox1VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox1VBox1Header = new Text("UniqueID"); //TODO: delete this unique id field and make it so that the db auto increments this
         VBox column1HBox1VBox2 = new VBox();
@@ -115,7 +115,7 @@ public class AddDatabaseEvent extends Window {
 
         HBox column1HBox2 = new HBox();
         VBox column1HBox2VBox1 = new VBox();
-        column1HBox2VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox2VBox1.setStyle(MainMenu.CARD_STYLE);
         column1HBox2VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox2VBox1Header = new Text("Name");
         VBox column1HBox2VBox2 = new VBox();
@@ -127,7 +127,7 @@ public class AddDatabaseEvent extends Window {
 
         HBox column1HBox3 = new HBox();
         VBox column1HBox3VBox1 = new VBox();
-        column1HBox3VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox3VBox1.setStyle(MainMenu.CARD_STYLE);
         column1HBox3VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox3VBox1Header = new Text("Description");
         VBox column1HBox3VBox2 = new VBox();
@@ -144,7 +144,7 @@ public class AddDatabaseEvent extends Window {
         HBox column1Hbox4 = new HBox();
         
         VBox column1Hbox4VBox1 = new VBox();
-        column1Hbox4VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1Hbox4VBox1.setStyle(MainMenu.CARD_STYLE);
         column1Hbox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1Hbox4VBox1Header = new Text("RDBM ");
         VBox column1Hbox4VBox2 = new VBox();
@@ -165,7 +165,7 @@ public class AddDatabaseEvent extends Window {
 
         HBox column1HBox5 = new HBox();
         VBox column1HBox5VBox1 = new VBox();
-        column1HBox5VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox5VBox1.setStyle(MainMenu.CARD_STYLE);
         column1HBox5VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox5VBox1Header = new Text("Database");
         VBox column1HBox5VBox2 = new VBox();
@@ -183,7 +183,7 @@ public class AddDatabaseEvent extends Window {
 
         HBox column1HBox6 = new HBox();
         VBox column1HBox6VBox1 = new VBox();
-        column1HBox6VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox6VBox1.setStyle(MainMenu.CARD_STYLE);
         column1HBox6VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox6VBox1Header = new Text("Table");
         VBox column1HBox6VBox2 = new VBox();
@@ -201,7 +201,7 @@ public class AddDatabaseEvent extends Window {
 
         HBox column1HBox7 = new HBox();
         VBox column1HBox7VBox1 = new VBox();
-        column1HBox7VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox7VBox1.setStyle(MainMenu.CARD_STYLE);
         column1HBox7VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox7VBox1Header = new Text("Column");
         VBox column1HBox7VBox2 = new VBox();
@@ -219,7 +219,7 @@ public class AddDatabaseEvent extends Window {
 
         HBox column1HBox8 = new HBox();
         VBox column1HBox8VBox1 = new VBox();
-        column1HBox8VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox8VBox1.setStyle(MainMenu.CARD_STYLE);
         column1HBox8VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox8VBox1Header = new Text("Sort By");
         VBox column1HBox8VBox2 = new VBox();

@@ -1,5 +1,4 @@
-package gui;
-
+package middleware;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -18,6 +17,12 @@ import java.util.HashMap;
 
 import dao.DbXMLParser;
 import dao.MySqlConnection;
+import gui.DatabaseEvents;
+import gui.DatabaseSettings;
+import gui.FileEvents;
+import gui.Rules;
+import gui.Schedules;
+import gui.Window;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +33,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -41,7 +47,10 @@ public class MainMenu extends Application {
 	private final int WINDOW_HEIGHT = 800;
 	public final static String HEADER_1_STYLE = "-fx-font-size: 20px;";
 	public final static String HEADER_2_STYLE = "-fx-font-weight:   bold; -fx-font-size: 16px;";
-	public final static String CARD_STYLE = "-fx-background-color:   white; -fx-border-color: black;";
+	public final static String CARD_STYLE = "-fx-background-color:   blue; -fx-border-color: black;";
+	
+//	public final static String CARD_STYLE = "";
+
 	public final static String MENU_ADD_NEW_EVENT_BUTTON_STYLE = "-fx-background-color:   yellow; -fx-border-color: black;";
 	public final static String MAIN_CONTENT_STYLE = "-fx-background-color:  #d3d3d3;";
 	public final static String GUI_BACKGROUND_STYLE = "-fx-background-color:   #FAF0DC;";
@@ -63,8 +72,10 @@ public class MainMenu extends Application {
 	
 	
 	public static void main(String[] args) {
-    	MainMenu mm = new MainMenu();
+    	
+    		MainMenu mm = new MainMenu();
     		mm.open();
+    		
 //    		DatabaseSettings s = new DatabaseSettings();
 //    		s.open();
     		launch(args);
@@ -156,7 +167,11 @@ public class MainMenu extends Application {
     	settingsVBox1Header.setStyle(HEADER_2_STYLE);
     	Text settingsVBox1Details = new Text("RDBM URL, Username, Password");
     	settingsVBox1.getChildren().addAll(settingsVBox1Header, settingsVBox1Details);
-    	settingsVBox.getChildren().addAll(settingsHeader, settingsVBox1);    	
+    	settingsVBox.getChildren().addAll(settingsHeader, settingsVBox1);
+//		String cssFile = getClass().getResource("styles.css").toExternalForm();
+//    	root.getStylesheets().add(cssFile);
+    	
+    	
     	mainVBox2.getChildren().addAll(settingsVBox);
 
     	addHoverInteraction(new VBox[] {configVBox1, configVBox2, configVBox3, configVBox4, automationVBox1, settingsVBox1}, "white", "darkgray");

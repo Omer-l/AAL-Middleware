@@ -108,7 +108,7 @@ public class DatabaseSettings extends Window {
     
         HBox column1HBox1 = new HBox();
         VBox column1HBox1VBox1 = new VBox();
-        column1HBox1VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox1VBox1.setStyle(MainMenu.CARD_STYLE);
         column1HBox1VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox1VBox1Header = new Text("Enter URL (with database)"); //TODO: delete this unique id field and make it so that the db auto increments this
         VBox column1HBox1VBox2 = new VBox();
@@ -120,7 +120,7 @@ public class DatabaseSettings extends Window {
 
         HBox column1HBox2 = new HBox();
         VBox column1HBox2VBox1 = new VBox();
-        column1HBox2VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox2VBox1.setStyle(MainMenu.CARD_STYLE);
         column1HBox2VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox2VBox1Header = new Text("Enter Username");
         VBox column1HBox2VBox2 = new VBox();
@@ -132,7 +132,7 @@ public class DatabaseSettings extends Window {
 
         HBox column1HBox3 = new HBox();
         VBox column1HBox3VBox1 = new VBox();
-        column1HBox3VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox3VBox1.setStyle(MainMenu.CARD_STYLE);
         column1HBox3VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox3VBox1Header = new Text("Enter Password");
         VBox column1HBox3VBox2 = new VBox();
@@ -144,7 +144,7 @@ public class DatabaseSettings extends Window {
                 
         HBox column1HBox4 = new HBox();
         VBox column1HBox4VBox1 = new VBox();
-        column1HBox4VBox1.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox4VBox1.setStyle(MainMenu.CARD_STYLE);
         column1HBox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox4VBox1Header = new Text("Enter Database name1,Table name1,Table name2&Database name2,"
         		+ "Table name1,Table name2");
@@ -164,7 +164,7 @@ public class DatabaseSettings extends Window {
     
         HBox column1HBox1P = new HBox();
         VBox column1HBox1VBox1P = new VBox();
-        column1HBox1VBox1P.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox1VBox1P.setStyle(MainMenu.CARD_STYLE);
         column1HBox1VBox1P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox1VBox1HeaderP = new Text("Enter URL (with database)"); //TODO: delete this unique id field and make it so that the db auto increments this
         VBox column1HBox1VBox2P = new VBox();
@@ -176,7 +176,7 @@ public class DatabaseSettings extends Window {
 
         HBox column1HBox2P = new HBox();
         VBox column1HBox2VBox1P = new VBox();
-        column1HBox2VBox1P.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox2VBox1P.setStyle(MainMenu.CARD_STYLE);
         column1HBox2VBox1P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox2VBox1HeaderP = new Text("Enter Username");
         VBox column1HBox2VBox2P = new VBox();
@@ -188,7 +188,7 @@ public class DatabaseSettings extends Window {
 
         HBox column1HBox3P = new HBox();
         VBox column1HBox3VBox1P = new VBox();
-        column1HBox3VBox1P.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox3VBox1P.setStyle(MainMenu.CARD_STYLE);
         column1HBox3VBox1P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox3VBox1HeaderP = new Text("Enter Password");
         VBox column1HBox3VBox2P = new VBox();
@@ -200,7 +200,7 @@ public class DatabaseSettings extends Window {
         
         HBox column1HBox4P = new HBox();
         VBox column1HBox4VBox1P = new VBox();
-        column1HBox4VBox1P.setStyle(MainMenu.MENU_BUTTON_STYLE);
+        column1HBox4VBox1P.setStyle(MainMenu.CARD_STYLE);
         column1HBox4VBox1P.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox4VBox1HeaderP = new Text("Enter Database name1,Table name1,Table name2&Database name2,"
         		+ "Table name1,Table name2");
