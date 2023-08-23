@@ -1,4 +1,5 @@
 package gui;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -27,7 +28,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -41,10 +41,7 @@ public class MainMenu extends Application {
 	private final int WINDOW_HEIGHT = 800;
 	public final static String HEADER_1_STYLE = "-fx-font-size: 20px;";
 	public final static String HEADER_2_STYLE = "-fx-font-weight:   bold; -fx-font-size: 16px;";
-	public final static String CARD_STYLE = "-fx-background-color:   blue; -fx-border-color: black;";
-	
-//	public final static String CARD_STYLE = "";
-
+	public final static String MENU_BUTTON_STYLE = "-fx-background-color:   white; -fx-border-color: black;";
 	public final static String MENU_ADD_NEW_EVENT_BUTTON_STYLE = "-fx-background-color:   yellow; -fx-border-color: black;";
 	public final static String MAIN_CONTENT_STYLE = "-fx-background-color:  #d3d3d3;";
 	public final static String GUI_BACKGROUND_STYLE = "-fx-background-color:   #FAF0DC;";
@@ -67,8 +64,7 @@ public class MainMenu extends Application {
 	
 	public static void main(String[] args) {
     	
-    		MainMenu mm = new MainMenu();
-    		mm.open();
+    		open();
     		
 //    		DatabaseSettings s = new DatabaseSettings();
 //    		s.open();
@@ -96,7 +92,7 @@ public class MainMenu extends Application {
     	mainHBox.setStyle(MAIN_CONTENT_STYLE);
     }
     
-    public void open() {
+    public static void open() {
     	clearMainBox();
     	changeTitle("Main Menu");
     	//LEFT SIDE MAIN
@@ -107,28 +103,28 @@ public class MainMenu extends Application {
     	Text configHeader = new Text("Configuration");
     	configHeader.setStyle(HEADER_1_STYLE);
     	VBox configVBox1 = new VBox();
-    	configVBox1.setStyle(CARD_STYLE);
+    	configVBox1.setStyle(MENU_BUTTON_STYLE);
     	Text configVBox1Header = new Text("Database");
     	configVBox1Header.setStyle(HEADER_2_STYLE);
     	Text configVBox1Details = new Text("Read/Write database");
     	configVBox1.getChildren().addAll(configVBox1Header, configVBox1Details);
     	configVBox1.setOnMouseClicked(event -> { goToDatabaseListWindow(null);});
     	VBox configVBox2 = new VBox();
-    	configVBox2.setStyle(CARD_STYLE);
+    	configVBox2.setStyle(MENU_BUTTON_STYLE);
     	Text configVBox2Header = new Text("System");
     	configVBox2Header.setStyle(HEADER_2_STYLE);
     	Text configVBox2Details = new Text("Run/Read/Write files");
     	configVBox2.getChildren().addAll(configVBox2Header, configVBox2Details);
     	configVBox2.setOnMouseClicked(event -> { new FileEvents(null).open();});
     	VBox configVBox3 = new VBox();
-    	configVBox3.setStyle(CARD_STYLE);
+    	configVBox3.setStyle(MENU_BUTTON_STYLE);
     	Text configVBox3Header = new Text("Schedules");
     	configVBox3Header.setStyle(HEADER_2_STYLE);
     	Text configVBox3Details = new Text("Schedules to keep track of");
     	configVBox3.getChildren().addAll(configVBox3Header, configVBox3Details);
     	configVBox3.setOnMouseClicked(event -> { new Schedules(null).open();});
     	VBox configVBox4 = new VBox();
-    	configVBox4.setStyle(CARD_STYLE);
+    	configVBox4.setStyle(MENU_BUTTON_STYLE);
     	Text configVBox4Header = new Text("Hardware & Services");
     	configVBox4Header.setStyle(HEADER_2_STYLE);
     	Text configVBox4Details = new Text("Define, connect and use API of hardware and online services");
@@ -139,7 +135,7 @@ public class MainMenu extends Application {
     	Text automationHeader = new Text("Automation");
     	automationHeader.setStyle(HEADER_1_STYLE);
     	VBox automationVBox1 = new VBox();
-    	automationVBox1.setStyle(CARD_STYLE);
+    	automationVBox1.setStyle(MENU_BUTTON_STYLE);
     	Text automationVBox1Header = new Text("Rules");
     	automationVBox1Header.setStyle(HEADER_2_STYLE);
     	Text automationVBox1Details = new Text("Rules in system");
@@ -156,16 +152,12 @@ public class MainMenu extends Application {
     	settingsHeader.setStyle(HEADER_1_STYLE);
     	settingsVBox.setOnMouseClicked(event -> { new DatabaseSettings(null).open();});
     	VBox settingsVBox1 = new VBox(2);
-    	settingsVBox1.setStyle(CARD_STYLE);
+    	settingsVBox1.setStyle(MENU_BUTTON_STYLE);
     	Text settingsVBox1Header = new Text("Database");
     	settingsVBox1Header.setStyle(HEADER_2_STYLE);
     	Text settingsVBox1Details = new Text("RDBM URL, Username, Password");
     	settingsVBox1.getChildren().addAll(settingsVBox1Header, settingsVBox1Details);
-    	settingsVBox.getChildren().addAll(settingsHeader, settingsVBox1);
-		String cssFile = getClass().getResource("styles.css").toExternalForm();
-    	root.getStylesheets().add(cssFile);
-    	
-    	
+    	settingsVBox.getChildren().addAll(settingsHeader, settingsVBox1);    	
     	mainVBox2.getChildren().addAll(settingsVBox);
 
     	addHoverInteraction(new VBox[] {configVBox1, configVBox2, configVBox3, configVBox4, automationVBox1, settingsVBox1}, "white", "darkgray");
@@ -197,8 +189,7 @@ public class MainMenu extends Application {
     
     public static void goToMainMenu() {
     	menuBarHBox.getChildren().clear();
-    	MainMenu mm = new MainMenu();
-    	mm.open();
+    	MainMenu.open();
 	}
 
 	public static void addHoverInteraction(VBox[] buttons, String fromColor, String toColor) {

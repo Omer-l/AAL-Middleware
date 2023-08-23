@@ -63,11 +63,15 @@ public class AddFileEvent extends Window {
 		super(prevWindow);
 		this.operation = operation;
 	}
+	
+	public AddFileEvent(Window prevWindow) {
+		super(prevWindow);
+	}
     
 	public AddFileEvent() {
 		
 	}
-	
+
 	public static void removeEventFromFileEvent(String uniqueID, String operation) {
 		try {
 			if(operation == "run") {
