@@ -73,10 +73,10 @@ public class MyStyles {
 	        			afe.loadData((String) readEvent.get("unique_id"), "read");
 	        		}
 	        		afe.open();
-	        	}else if(window instanceof Rules) {
+	        	} else if(window instanceof Rules) {
 	        			Rules rules = new Rules();
 //	        			rules.editData((String) readEvent.get("unique_id"))
-	        	}else if(window instanceof Schedules) {
+	        	} else if(window instanceof Schedules) {
 	        		AddSchedule addSchedule = new AddSchedule(window);
 	        		addSchedule.loadData((String) readEvent.get("unique_id"));
 	        		addSchedule.open();

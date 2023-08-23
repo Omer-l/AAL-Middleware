@@ -1,6 +1,7 @@
 package gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javafx.event.ActionEvent;
@@ -19,8 +20,8 @@ import javafx.scene.text.Text;
 public class AddRule extends Window {
 	ArrayList<ArrayList<String>> whenData = new ArrayList<>();
 	ArrayList<ArrayList<String>> thenData = new ArrayList<>();
-	ArrayList<ArrayList<String>> editRules = new ArrayList<>();
-	
+	Map<String, Object> editRule = new HashMap<String, Object>();
+
 	
 	public AddRule(Window prevWindow) {
 		super(prevWindow);
@@ -31,10 +32,7 @@ public class AddRule extends Window {
 	}
 	
 	public void loadData(String uniqueId, TextField uniqueIdField, TextField nameField,
-			 TextField descriptionField, VBox column1VBox3) {
-		
-		
-		
+			 TextField descriptionField) {
 	}
 
 
