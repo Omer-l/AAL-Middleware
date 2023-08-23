@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.animation.TranslateTransition;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -54,24 +53,24 @@ public class MainMenu extends Application {
 	public static VBox menuBarVBox = new VBox();
 	public static HBox menuBarHBox = new HBox();
 	public static HBox titleHBox = new HBox();
-	public static BorderPane mainBorderPane = new BorderPane();
-	public static VBox sidebar = new VBox();
-    public static boolean sidebarVisible = false;
-    private static final double SIDEBAR_WIDTH = 200;
-    //MAIN
+	//MAIN
 	public static HBox mainHBox = new HBox(10);
 	//MAIN
 	public static HBox mainVBox = new HBox(10);
 	//MAIN
 	public static Stage primaryStage;
- 
+    
 	
 	
 	public static void main(String[] args) {
+    	
     		open();
+    		
 //    		DatabaseSettings s = new DatabaseSettings();
 //    		s.open();
     		launch(args);
+    	 
+    
     }
     
     
@@ -79,19 +78,11 @@ public class MainMenu extends Application {
     @Override
     public void start(Stage primaryStage) {
     	this.primaryStage = primaryStage;
-        primaryStage.setScene(new Scene(mainBorderPane, WINDOW_WIDTH, WINDOW_HEIGHT));
+        primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.setTitle("Middleware");
         primaryStage.show();
     	menuBarVBox.getChildren().addAll(menuBarHBox, titleHBox);
-//    	root.getChildren().addAll(menuBarVBox, mainHBox);
-    	mainBorderPane.setCenter(mainHBox);
-    	mainBorderPane.setTop(menuBarVBox);
-    	mainBorderPane.setLeft(sidebar);
-        Button toggleButton = new Button("Toggle Sidebar");
-        sidebar.setStyle("-fx-background-color: #333333;");
-        sidebar.setMinWidth(SIDEBAR_WIDTH);
-        toggleButton.setOnAction(event -> toggleSidebar());
-    	menuBarVBox.getChildren().add(toggleButton);
+    	root.getChildren().addAll(menuBarVBox, mainHBox);
     	root.setStyle(GUI_BACKGROUND_STYLE);
     	titleHBox.setAlignment(Pos.CENTER);
     	menuBarVBox.prefHeightProperty().bind(root.heightProperty().divide(10));
@@ -101,23 +92,7 @@ public class MainMenu extends Application {
     	mainHBox.setStyle(MAIN_CONTENT_STYLE);
     }
     
-    public static void toggleSidebar() {
-        TranslateTransition transition = new TranslateTransition(Duration.millis(300), sidebar);
-
-        if (sidebarVisible) {
-        	transition.setOnFinished(event -> {sidebar.setMinWidth(0);});
-            transition.setToX(-SIDEBAR_WIDTH);
-            sidebarVisible = false;
-        } else {
-            transition.setToX(0);
-        	transition.setOnFinished(event -> {sidebar.setMinWidth(SIDEBAR_WIDTH);});
-            sidebarVisible = true;
-        }
-
-        transition.play();
-	}
-
-	public static void open() {
+    public static void open() {
     	clearMainBox();
     	changeTitle("Main Menu");
     	//LEFT SIDE MAIN
