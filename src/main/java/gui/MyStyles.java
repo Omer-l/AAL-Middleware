@@ -66,7 +66,7 @@ public class MyStyles {
 	        		ade.open();
 	        	} else if(window instanceof FileEvents) {
 	        		String header = ((Text) eventsVBox.getChildren().get(0)).getText();
-	        		AddFileEvent afe = new AddFileEvent();
+	        		AddFileEvent afe = new AddFileEvent(window);
 	        		if(header.equals("Run Events")) {
 	        			afe.loadData((String) readEvent.get("unique_id"), "run");
 	        		} else if (header.equals("Read Events")) {
@@ -77,7 +77,7 @@ public class MyStyles {
 	        			Rules rules = new Rules();
 //	        			rules.editData((String) readEvent.get("unique_id"))
 	        	}else if(window instanceof Schedules) {
-	        		AddSchedule addSchedule = new AddSchedule();
+	        		AddSchedule addSchedule = new AddSchedule(window);
 	        		addSchedule.loadData((String) readEvent.get("unique_id"));
 	        		addSchedule.open();
 	        	}
