@@ -33,6 +33,7 @@ public class AddRule extends Window {
 	
 	public void loadData(String uniqueId, TextField uniqueIdField, TextField nameField,
 			 TextField descriptionField) {
+		unique
 	}
 
 

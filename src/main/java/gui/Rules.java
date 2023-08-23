@@ -54,30 +54,6 @@ public class Rules extends Window {
         mainVBox1.getChildren().addAll(configVBox);
     	MainMenu.mainHBox.getChildren().addAll(mainVBox1);
     }
-	
-	public void getEvents(String query, VBox eventsVBox) {
-		ArrayList<Map<String, Object>> events = MainMenu.mainDbManager.queryDB(query, "select");
-		for(Map<String, Object> readEvent : events) {
-			VBox column1VBox = new VBox();
-	        column1VBox.setStyle(MainMenu.CARD_STYLE);
-	        Text column1VBoxHeader = new Text((String) readEvent.get("name"));
-	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
-	        Text column1VBoxUniqueId = new Text((String) readEvent.get("unique_id"));
-	        Text column1VBoxDescription = new Text((String) readEvent.get("description"));
-	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
-	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
-	        column1VBoxUniqueId.setVisible(false);
-	    	MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
-	        eventsVBox.getChildren().addAll(column1VBox);
-		}
-		
-        VBox column1VBox2 = new VBox();
-        column1VBox2.setStyle(MainMenu.MENU_ADD_NEW_EVENT_BUTTON_STYLE);
-        Text column1VBox2Header = new Text("Add New Rule");
-        column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        
-        column1VBox2.getChildren().addAll(column1VBox2Header);
-        eventsVBox.getChildren().add(column1VBox2);
-	}
 
 	public void editData(String uniqueId) {
 	 MainMenu.mainDbManager.queryDB("SELECT * FROM rule JOIN event ON rule.unique_id = event.unique_id WHERE event.unique_id =  \"" + uniqueId + "\"", "select").get(0);
