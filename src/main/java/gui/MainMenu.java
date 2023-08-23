@@ -1,8 +1,10 @@
 package gui;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.animation.TranslateTransition;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -15,19 +17,8 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXProgressBar;
-import com.jfoenix.controls.JFXRippler;
-import com.jfoenix.controls.JFXSpinner;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXToggleButton;
-import com.jfoenix.controls.JFXToggleNode;
-import com.jfoenix.validation.RequiredFieldValidator;
-
 import dao.DbXMLParser;
 import dao.MySqlConnection;
-import de.jensd.fx.fontawesome.AwesomeIcon;
-import de.jensd.fx.fontawesome.Icon;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -63,24 +54,24 @@ public class MainMenu extends Application {
 	public static VBox menuBarVBox = new VBox();
 	public static HBox menuBarHBox = new HBox();
 	public static HBox titleHBox = new HBox();
-	//MAIN
+	public static BorderPane mainBorderPane = new BorderPane();
+	public static VBox sidebar = new VBox();
+    public static boolean sidebarVisible = false;
+    private static final double SIDEBAR_WIDTH = 200;
+    //MAIN
 	public static HBox mainHBox = new HBox(10);
 	//MAIN
 	public static HBox mainVBox = new HBox(10);
 	//MAIN
 	public static Stage primaryStage;
-    
+ 
 	
 	
 	public static void main(String[] args) {
-    	
     		open();
-    		
 //    		DatabaseSettings s = new DatabaseSettings();
 //    		s.open();
     		launch(args);
-    	 
-    
     }
     
     
@@ -88,11 +79,19 @@ public class MainMenu extends Application {
     @Override
     public void start(Stage primaryStage) {
     	this.primaryStage = primaryStage;
-        primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
+        primaryStage.setScene(new Scene(mainBorderPane, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.setTitle("Middleware");
         primaryStage.show();
     	menuBarVBox.getChildren().addAll(menuBarHBox, titleHBox);
-    	root.getChildren().addAll(menuBarVBox, mainHBox);
+//    	root.getChildren().addAll(menuBarVBox, mainHBox);
+    	mainBorderPane.setCenter(mainHBox);
+    	mainBorderPane.setTop(menuBarVBox);
+    	mainBorderPane.setLeft(sidebar);
+        Button toggleButton = new Button("Toggle Sidebar");
+        sidebar.setStyle("-fx-background-color: #333333;");
+        sidebar.setMinWidth(SIDEBAR_WIDTH);
+        toggleButton.setOnAction(event -> toggleSidebar());
+    	menuBarVBox.getChildren().add(toggleButton);
     	root.setStyle(GUI_BACKGROUND_STYLE);
     	titleHBox.setAlignment(Pos.CENTER);
     	menuBarVBox.prefHeightProperty().bind(root.heightProperty().divide(10));
@@ -102,7 +101,23 @@ public class MainMenu extends Application {
     	mainHBox.setStyle(MAIN_CONTENT_STYLE);
     }
     
-    public static void open() {
+    public static void toggleSidebar() {
+        TranslateTransition transition = new TranslateTransition(Duration.millis(300), sidebar);
+
+        if (sidebarVisible) {
+        	transition.setOnFinished(event -> {sidebar.setMinWidth(0);});
+            transition.setToX(-SIDEBAR_WIDTH);
+            sidebarVisible = false;
+        } else {
+            transition.setToX(0);
+        	transition.setOnFinished(event -> {sidebar.setMinWidth(SIDEBAR_WIDTH);});
+            sidebarVisible = true;
+        }
+
+        transition.play();
+	}
+
+	public static void open() {
     	clearMainBox();
     	changeTitle("Main Menu");
     	//LEFT SIDE MAIN
@@ -168,20 +183,7 @@ public class MainMenu extends Application {
     	Text settingsVBox1Details = new Text("RDBM URL, Username, Password");
     	settingsVBox1.getChildren().addAll(settingsVBox1Header, settingsVBox1Details);
     	settingsVBox.getChildren().addAll(settingsHeader, settingsVBox1);
-    	JFXTextField field = new JFXTextField();
-    	field.setLabelFloat(true);
-    	field.setPromptText("Floating prompt");
-    	 
-    	JFXButton jfoenixButton = new JFXButton("JFoenix Button");
-    	JFXButton button = new JFXButton("Raised Button".toUpperCase());
-    	button.setStyle("\r\n"
-    			+ "    -fx-padding: 0.7em 0.57em;\r\n"
-    			+ "    -fx-font-size: 14px;\r\n"
-    			+ "    -jfx-button-type: RAISED;\r\n"
-    			+ "    -fx-background-color: rgb(77,102,204);\r\n"
-    			+ "    -fx-pref-width: 200;\r\n"
-    			+ "    -fx-text-fill: WHITE;");
-    	mainVBox2.getChildren().addAll(settingsVBox, button);
+    	mainVBox2.getChildren().addAll(settingsVBox);
 
     	addHoverInteraction(new VBox[] {configVBox1, configVBox2, configVBox3, configVBox4, automationVBox1, settingsVBox1}, "white", "darkgray");
     	mainHBox.getChildren().addAll(mainVBox1, mainVBox2);
