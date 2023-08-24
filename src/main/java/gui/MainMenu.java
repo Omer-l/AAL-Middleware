@@ -48,8 +48,8 @@ public class MainMenu extends Application {
 	private final int WINDOW_HEIGHT = 800;
 	private final int VBOX_HEIGHT = 50;
 	private final int VBOX_WIDTH = 600;
-	private final int HBOX_HEIGHT = 50;
-	private final int HBOX_WIDTH = 500;
+	private final int HBOX_HEIGHT = 80;
+	private final int HBOX_WIDTH = 1000;
 
 	public final static String HEADER = "-fx-font-size: 24px;"
 			+ "    -fx-font-weight: bold;"
@@ -64,9 +64,9 @@ public class MainMenu extends Application {
 	public final static String CARD_STYLE = "-fx-background-color:  white ; ";
 	
 	public final static String HBOX_LIST_STYLE = "-fx-background-color: #FFEBEE ;"
-			+ "-fx-background-radius: 20; ";
+			+ "-fx-background-radius: 10; ";
 	
-	public final static double ICON_WIDTH = 70;
+	public final static double ICON_WIDTH = 75;
 	public final static double ICON_HEIGHT = 70;
 	
 	public static String DATABASE_SVG = "M448 80v48c0 44.2-100.3 80-224 80S0 172.2 0 128V80C0 35.8 100.3 0 224 0S448 35.8 448 80zM393.2 214.7c20.8-7.4 39.9-16.9 54.8-28.6V288c0 44.2-100.3 80-224 80S0 332.2 0 288V186.1c14.9 11.8 34 21.2 54.8 28.6C99.7 230.7 159.5 240 224 240s124.3-9.3 169.2-25.3zM0 346.1c14.9 11.8 34 21.2 54.8 28.6C99.7 390.7 159.5 400 224 400s124.3-9.3 169.2-25.3c20.8-7.4 39.9-16.9 54.8-28.6V432c0 44.2-100.3 80-224 80S0 476.2 0 432V346.1z";
@@ -102,11 +102,7 @@ public class MainMenu extends Application {
     	
     		MainMenu mm = new MainMenu();
     		mm.open();
-    		
-//    		DatabaseSettings s = new DatabaseSettings();
-//    		s.open();
-//    		Rules rule = new Rules(null);
-//    		rule.open();
+    	
     		launch(args);
     	 
     
@@ -160,13 +156,13 @@ public class MainMenu extends Application {
         svgShape.setStyle("-fx-background-color: black;");
     	
     	VBox configVBox1 = new VBox();
-    	configVBox1.setStyle(CARD_STYLE);
+    	//configVBox1.setStyle(CARD_STYLE);
     	Text configVBox1Header = new Text("Database");
     	configVBox1Header.setStyle(HEADER_2_STYLE);
     	Text configVBox1Details = new Text("Read and Write database");
     	configVBox1.getChildren().addAll(configVBox1Header, configVBox1Details);
     	configHBox1.getChildren().addAll(new StackPane(svgShape), configVBox1);
-    	configVBox1.setOnMouseClicked(event -> { goToDatabaseListWindow(null);});
+    	configHBox1.setOnMouseClicked(event -> { goToDatabaseListWindow(null);});
     	
     	//second 
     	
@@ -187,13 +183,13 @@ public class MainMenu extends Application {
         svgShape2.setStyle("-fx-background-color: black;");
     	
     	VBox configVBox2 = new VBox();
-    	configVBox2.setStyle(CARD_STYLE);
+//    	configVBox2.setStyle(CARD_STYLE);
     	Text configVBox2Header = new Text("System");
     	configVBox2Header.setStyle(HEADER_2_STYLE);
     	Text configVBox2Details = new Text("Run,Read and Write files");
     	configVBox2.getChildren().addAll(configVBox2Header, configVBox2Details);
     	configHBox2.getChildren().addAll(new StackPane(svgShape2), configVBox2);
-    	configVBox2.setOnMouseClicked(event -> { goToDatabaseListWindow(null);});
+    	configHBox2.setOnMouseClicked(event -> { goToDatabaseListWindow(null);});
     	
     	
     	 HBox configHBox3 = new HBox();
@@ -212,13 +208,13 @@ public class MainMenu extends Application {
          svgShape3.setStyle("-fx-background-color: black;");
     
     	VBox configVBox3 = new VBox();
-    	configVBox3.setStyle(CARD_STYLE);
+//    	configVBox3.setStyle(CARD_STYLE);
     	Text configVBox3Header = new Text("Schedules");
     	configVBox3Header.setStyle(HEADER_2_STYLE);
     	Text configVBox3Details = new Text("Schedules to keep track of");
     	configVBox3.getChildren().addAll(configVBox3Header, configVBox3Details);
     	configHBox3.getChildren().addAll(new StackPane(svgShape3), configVBox3);
-    	configVBox3.setOnMouseClicked(event -> { new Schedules(null).open();});
+    	configHBox3.setOnMouseClicked(event -> { new Schedules(null).open();});
     	
     	HBox configHBox4 = new HBox();
 
@@ -238,20 +234,38 @@ public class MainMenu extends Application {
     	
     	
     	VBox configVBox4 = new VBox();
-    	configVBox4.setStyle(CARD_STYLE);
+//    	configVBox4.setStyle(CARD_STYLE);
     	Text configVBox4Header = new Text("Hardware & Services");
     	configVBox4Header.setStyle(HEADER_2_STYLE);
     	Text configVBox4Details = new Text("Define, connect and use API of hardware and online services");
     	configVBox4.getChildren().addAll(configVBox4Header, configVBox4Details);
     	configHBox4.getChildren().addAll(new StackPane(svgShape4), configVBox4);
     	
-    	configVBox.getChildren().addAll(configHeader, configHBox1, configHBox2, configHBox4, configHBox4);
+    	configVBox.getChildren().addAll(configHeader, configHBox1, configHBox2, configHBox3, configHBox4);
+    	
+    	
     	
     	//Automation
     	VBox automationVBox = new VBox(2);
     	Text automationHeader = new Text("Automation");
     	automationHeader.setStyle(HEADER_1_STYLE);
  
+    	HBox configHBox5 = new HBox();
+
+     	configHBox5.setPrefHeight(HBOX_HEIGHT);
+     	configHBox5.setPrefWidth(HBOX_WIDTH);
+     	configHBox5.setStyle(HBOX_LIST_STYLE);
+     	
+     	SVGPath svg5 = new SVGPath();
+     	svg5.setContent(RULE_SVG);
+     	final Region svgShape5 = new Region();
+     	svgShape5.setShape(svg5);
+     	svgShape5.setMinSize(ICON_WIDTH, ICON_HEIGHT);
+         svgShape5.setPrefSize(ICON_WIDTH, ICON_HEIGHT);
+         svgShape5.setMaxSize(ICON_WIDTH, ICON_HEIGHT);
+         svgShape5.setStyle("-fx-background-color: black;");
+    	
+    	
     	
     	VBox automationVBox1 = new VBox();
     	automationVBox1.setStyle(CARD_STYLE);
@@ -259,35 +273,56 @@ public class MainMenu extends Application {
     	automationVBox1Header.setStyle(HEADER_2_STYLE);
     	Text automationVBox1Details = new Text("Rules in system");
     	automationVBox1.getChildren().addAll(automationVBox1Header, automationVBox1Details);
+    	configHBox5.getChildren().addAll(new StackPane(svgShape5),automationVBox1);
     	automationVBox1.setOnMouseClicked(event -> { goToRulesListWindow(null); });
-    	automationVBox.getChildren().addAll(automationHeader, automationVBox1);
+    	automationVBox.getChildren().addAll(automationHeader, configHBox5);
+    	
     	mainVBox1.getChildren().addAll(configVBox, automationVBox);
     	// Set alignment to center within the VBox
     	mainVBox1.setAlignment(Pos.TOP_CENTER);
     	
     	//RIGHT SIDE MAIN
-    	VBox mainVBox2 = new VBox(2);
-    	mainVBox2.prefWidthProperty().bind(root.widthProperty().divide(2));
+//    	VBox mainVBox2 = new VBox(2);
+//    	mainVBox2.prefWidthProperty().bind(root.widthProperty().divide(2));
+    	
+    	
+    	HBox configHBox6 = new HBox();
+
+     	configHBox6.setPrefHeight(HBOX_HEIGHT);
+     	configHBox6.setPrefWidth(HBOX_WIDTH);
+     	configHBox6.setStyle(HBOX_LIST_STYLE);
+     	
+     	SVGPath svg6 = new SVGPath();
+     	svg6.setContent(DB_SETTINGS_SVG);
+     	final Region svgShape6 = new Region();
+     	svgShape6.setShape(svg6);
+     	svgShape6.setMinSize(ICON_WIDTH, ICON_HEIGHT);
+         svgShape6.setPrefSize(ICON_WIDTH, ICON_HEIGHT);
+         svgShape6.setMaxSize(ICON_WIDTH, ICON_HEIGHT);
+         svgShape6.setStyle("-fx-background-color: black;");
+    	
+    	
     	
     	//Settings
-//    	VBox settingsVBox = new VBox(2);
-//    	Text settingsHeader = new Text("Settings");
-//    	settingsHeader.setStyle(HEADER_1_STYLE);
-//    	settingsVBox.setOnMouseClicked(event -> { new DatabaseSettings(null).open();});
-//    	VBox settingsVBox1 = new VBox(2);
-//    	settingsVBox1.setStyle(CARD_STYLE);
-//    	Text settingsVBox1Header = new Text("Database");
-//    	settingsVBox1Header.setStyle(HEADER_2_STYLE);
-//    	Text settingsVBox1Details = new Text("RDBM URL, Username, Password");
-//    	settingsVBox1.getChildren().addAll(settingsVBox1Header, settingsVBox1Details);
-//    	settingsVBox.getChildren().addAll(settingsHeader, settingsVBox1);
-//		String cssFile = getClass().getResource("styles.css").toExternalForm();
-//    	root.getStylesheets().add(cssFile);
-    	
+    	VBox settingsVBox = new VBox(2);
+    	Text settingsHeader = new Text("Settings");
+    	settingsHeader.setStyle(HEADER_1_STYLE);
+    	settingsVBox.setOnMouseClicked(event -> { new DatabaseSettings(null).open();});
+    	VBox settingsVBox1 = new VBox(2);
+    	//settingsVBox1.setStyle(CARD_STYLE);
+    	Text settingsVBox1Header = new Text("Database");
+    	settingsVBox1Header.setStyle(HEADER_2_STYLE);
+    	Text settingsVBox1Details = new Text("RDBM URL, Username, Password");
+    	settingsVBox1.getChildren().addAll(settingsVBox1Header, settingsVBox1Details);
+    	settingsVBox.getChildren().addAll(settingsHeader, configHBox6);
+    	configHBox6.getChildren().addAll(new StackPane(svgShape6),settingsVBox1);
+
+    	mainVBox1.getChildren().add(settingsVBox);
+
     	
     	//mainVBox2.getChildren().addAll(settingsVBox);
-    	addHoverInteraction(new Pane[] {configHBox2, configHBox2, configVBox3, configVBox4, automationVBox1}, "white", "darkgray");
-    	mainHBox.getChildren().addAll(mainVBox1, mainVBox2);
+    	addHoverInteraction(new Pane[] {configHBox1, configHBox2, configHBox3, configHBox4, automationVBox1,settingsVBox}, "white", "darkgray");
+    	mainHBox.getChildren().addAll(mainVBox1);
     }
     
     public static void clearMainBox() {
@@ -321,11 +356,11 @@ public class MainMenu extends Application {
 
 	public static void addHoverInteraction(Pane[] buttons, String fromColor, String toColor) {
     	for(Pane button : buttons) {
-	    	button.setStyle("-fx-background-color: " + fromColor +";");
+//	    	button.setStyle("-fx-background-color: " + fromColor +";");
 	
 	        // Set the initial appearance of the pane
-	    	button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: " + toColor + ";"));
-	    	button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + fromColor + ";"));
+//	    	button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: " + toColor + ";"));
+//	    	button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + fromColor + ";"));
     	}
     }
 	
