@@ -182,11 +182,14 @@ public class AddRule extends Window {
 	
 	public void getEvents(VBox eventsVBox, ArrayList<ArrayList<String>> events) {
 		for(ArrayList<String> event : events) {
+			HBox column1HBox = new HBox();
 			VBox column1VBox = new VBox();
+			column1HBox.minWidthProperty().bind(eventsVBox.widthProperty().subtract(140));
+			column1VBox.minWidthProperty().bind(eventsVBox.widthProperty().subtract(140));
 	        column1VBox.setStyle(MainMenu.CARD_STYLE);
+	        Text column1VBoxUniqueId = new Text((String) event.get(0));
 	        Text column1VBoxHeader = new Text((String) event.get(1));
 	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
-	        Text column1VBoxUniqueId = new Text((String) event.get(0));
 	        Text column1VBoxDescription = new Text((String) event.get(2));
 	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
@@ -201,7 +204,9 @@ public class AddRule extends Window {
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        //eventsVBox.getChildren().add(column1VBox);
 	        MyStyles.addHover(column1VBox);
-	        eventsVBox.getChildren().addAll(column1VBox);
+			Button removeButton = new Button("-");
+			column1HBox.getChildren().addAll(column1VBox, removeButton);
+	        eventsVBox.getChildren().addAll(column1HBox);
 		}
 		
 
