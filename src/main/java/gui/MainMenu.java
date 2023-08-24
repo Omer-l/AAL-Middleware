@@ -95,6 +95,8 @@ public class MainMenu extends Application {
     		
 //    		DatabaseSettings s = new DatabaseSettings();
 //    		s.open();
+    		Rules rule = new Rules(null);
+    		rule.open();
     		launch(args);
     	 
     
