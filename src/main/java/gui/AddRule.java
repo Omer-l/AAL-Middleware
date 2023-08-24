@@ -181,6 +181,7 @@ public class AddRule extends Window {
 	}
 	
 	public void getEvents(VBox eventsVBox, ArrayList<ArrayList<String>> events) {
+		
 		for(ArrayList<String> event : events) {
 			HBox column1HBox = new HBox();
 			VBox column1VBox = new VBox();
@@ -195,16 +196,18 @@ public class AddRule extends Window {
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
 	        column1VBoxUniqueId.setVisible(false);
 	  
-	        column1VBox.setOnMouseClicked(e -> {
-	        	//remove from list or edit?
-	        	
-	    	
-	        	
-	        }); //HERE
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        //eventsVBox.getChildren().add(column1VBox);
 	        MyStyles.addHover(column1VBox);
 			Button removeButton = new Button("-");
+			removeButton.setOnMouseClicked(e -> {
+				eventsVBox.getChildren().remove(column1HBox);
+				if( ((Text)eventsVBox.getChildren().get(0)).getText().equals("When") )
+					whenData.remove(event);
+				else
+					thenData.remove(event);
+				
+	        }); //HERE
 			column1HBox.getChildren().addAll(column1VBox, removeButton);
 	        eventsVBox.getChildren().addAll(column1HBox);
 		}
