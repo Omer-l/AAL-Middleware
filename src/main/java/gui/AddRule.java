@@ -22,7 +22,9 @@ public class AddRule extends Window {
 	ArrayList<ArrayList<String>> whenData = new ArrayList<>();
 	ArrayList<ArrayList<String>> thenData = new ArrayList<>();
 	Map<String, Object> editRule = new HashMap<String, Object>();
-
+	String uniqueId = "";
+	String name = "";
+	String description = "";
 	
 	public AddRule(Window prevWindow) {
 		super(prevWindow);
@@ -32,13 +34,12 @@ public class AddRule extends Window {
 		
 	}
 	
-	public void loadData(TextField uniqueIdField, TextField nameField,
-			 TextField descriptionField, VBox whenEventsVBox, VBox thenEventsVBox) {
+	public void loadData() {
 		editRule = MainMenu.mainDbManager.queryDB("SELECT * FROM rule JOIN event ON rule.unique_id = event.unique_id WHERE event.unique_id =  \"" + ((String)editRule.get("unique_id")) + "\"", "select").get(0);
 		try {
-	    	uniqueIdField.setText((String) editRule.get("unique_id"));
-			nameField.setText((String) editRule.get("name"));
-			descriptionField.setText((String) editRule.get("description"));
+	    	uniqueId = (String) editRule.get("unique_id");
+			name = (String) editRule.get("name");
+			description = (String) editRule.get("description");
 			String whenIds = "";
 			String[] splitWhenIds = ((String) editRule.get("when_event_ids")).split("\\s*,\\s*");
 			for(int i = 0; i < splitWhenIds.length; i++) {
@@ -48,7 +49,14 @@ public class AddRule extends Window {
 				else
 					whenIds += "\"" + whenId + "\"";
 			}
-			MyStyles.getEvents("SELECT * FROM event WHERE unique_id IN (" + whenIds + ")", whenEventsVBox, this);
+			for(Map<String, Object> whenEvent : MyStyles.getEvents("SELECT * FROM event WHERE unique_id IN (" + whenIds + ")", null, this)) {
+				ArrayList<String> whenDetails = new ArrayList<>();
+				whenDetails.add((String) whenEvent.get("unique_id"));
+				whenDetails.add((String) whenEvent.get("name"));
+				whenDetails.add((String) whenEvent.get("description"));
+				if(!whenData.contains(whenDetails))
+					whenData.add(whenDetails);
+			}
 			String thenIds = "";
 			String[] splitThenIds = ((String) editRule.get("then_event_ids")).split("\\s*,\\s*");
 			for(int i = 0; i < splitThenIds.length; i++) {
@@ -58,8 +66,14 @@ public class AddRule extends Window {
 				else
 					thenIds += "\"" + thenId + "\"";
 			}
-			MyStyles.getEvents("SELECT * FROM event WHERE unique_id IN (" + thenIds + ")", thenEventsVBox, this);
-			
+			for(Map<String, Object> thenEvent : MyStyles.getEvents("SELECT * FROM event WHERE unique_id IN (" + thenIds + ")", null, this)) {
+				ArrayList<String> thenDetails = new ArrayList<>();
+				thenDetails.add((String) thenEvent.get("unique_id"));
+				thenDetails.add((String) thenEvent.get("name"));
+				thenDetails.add((String) thenEvent.get("description"));
+				if(!thenData.contains(thenDetails))
+					thenData.add(thenDetails);
+			}		
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -67,11 +81,14 @@ public class AddRule extends Window {
 
 
 	public void open() {
+        if(!editRule.isEmpty())
+        	loadData();
+        
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add Rule");
 		
-      Button button1 = new Button("Back");
-      button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+		Button button1 = new Button("Back");
+		button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
 
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
@@ -91,7 +108,7 @@ public class AddRule extends Window {
         Text column1HBox1VBox1Header = new Text("UniqueID");
         VBox column1HBox1VBox2 = new VBox();
         column1HBox1VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        TextField column1HBox1VBox2TextField = new TextField();
+        TextField column1HBox1VBox2TextField = new TextField(uniqueId);
         column1HBox1VBox1.getChildren().addAll(column1HBox1VBox1Header);
         column1HBox1VBox2.getChildren().addAll(column1HBox1VBox2TextField);
         column1HBox1.getChildren().addAll(column1HBox1VBox1, column1HBox1VBox2);
@@ -103,7 +120,7 @@ public class AddRule extends Window {
         Text column1HBox2VBox1Header = new Text("Name");
         VBox column1HBox2VBox2 = new VBox();
         column1HBox2VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        TextField column1HBox2VBox2TextField = new TextField();
+        TextField column1HBox2VBox2TextField = new TextField(name);
         column1HBox2VBox1.getChildren().addAll(column1HBox2VBox1Header);
         column1HBox2VBox2.getChildren().addAll(column1HBox2VBox2TextField);
         column1HBox2.getChildren().addAll(column1HBox2VBox1, column1HBox2VBox2);
@@ -115,7 +132,7 @@ public class AddRule extends Window {
         Text column1HBox3VBox1Header = new Text("Description");
         VBox column1HBox3VBox2 = new VBox();
         column1HBox3VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        TextField column1HBox3VBox2TextField = new TextField();
+        TextField column1HBox3VBox2TextField = new TextField(description);
         column1HBox3VBox1.getChildren().addAll(column1HBox3VBox1Header);
         column1HBox3VBox2.getChildren().addAll(column1HBox3VBox2TextField);
         column1HBox3.getChildren().addAll(column1HBox3VBox1, column1HBox3VBox2);
@@ -125,21 +142,29 @@ public class AddRule extends Window {
         Text column1VBox2Header = new Text("When");
         column1VBox2Header.setStyle(MainMenu.HEADER_1_STYLE);
         column1VBox2.getChildren().addAll(column1VBox2Header);
-        if(column1VBox2.getChildren().size() > 1)
-        	getEvents(column1VBox2, whenData);
+        getEvents(column1VBox2, whenData);
         int whenEventsLastIndex = column1VBox2.getChildren().size() - 1;
-        column1VBox2.getChildren().get(whenEventsLastIndex).setOnMouseClicked(event -> {new AddWhen(this).open();});
+        column1VBox2.getChildren().get(whenEventsLastIndex).setOnMouseClicked(event -> {
+        	uniqueId = column1HBox1VBox2TextField.getText();
+        	name = column1HBox2VBox2TextField.getText();
+        	description = column1HBox3VBox2TextField.getText();
+        	new AddWhen(this).open();
+        });
 
         //column1urations
         VBox column1VBox3 = new VBox(2);
         Text column1VBox3Header = new Text("Then");
         column1VBox3Header.setStyle(MainMenu.HEADER_1_STYLE);
         column1VBox3.getChildren().addAll(column1VBox3Header);
-        if(column1VBox3.getChildren().size() == 1) {
-        	getEvents(column1VBox3, thenData);
+    	getEvents(column1VBox3, thenData);
         int thenEventsLastIndex = column1VBox3.getChildren().size() - 1;
-        column1VBox3.getChildren().get(thenEventsLastIndex).setOnMouseClicked(event -> {  new AddThen(this).open();});
-        }
+        column1VBox3.getChildren().get(thenEventsLastIndex).setOnMouseClicked(event -> {
+        	uniqueId = column1HBox1VBox2TextField.getText();
+        	name = column1HBox2VBox2TextField.getText();
+        	description = column1HBox3VBox2TextField.getText();
+        	new AddThen(this).open();
+        });
+        
 
         VBox column1ButtonsVBox = new VBox(2);
         
@@ -153,9 +178,6 @@ public class AddRule extends Window {
         
     	mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3, column1ButtonsVBox);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
-        
-        if(!editRule.isEmpty())
-        	loadData(column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, column1VBox2, column1VBox3);
 	}
 	
 	public void getEvents(VBox eventsVBox, ArrayList<ArrayList<String>> events) {

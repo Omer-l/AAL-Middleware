@@ -43,9 +43,11 @@ public class MyStyles {
 	        eventsVBox.getChildren().add(column1VBox2);
 	}
 	
-	public static void getEvents(String query, VBox eventsVBox, Window window) {
+	public static ArrayList<Map<String, Object>> getEvents(String query, VBox eventsVBox, Window window) {
 //		int divider = eventsVBox.getParent().getChildrenUnmodifiable().size();
 		ArrayList<Map<String, Object>> events = MainMenu.mainDbManager.queryDB(query, "select");
+		if(eventsVBox == null) return events;
+		
 		for(Map<String, Object> readEvent : events) {
 			HBox column1HBox = new HBox();
 			VBox column1VBox = new VBox();
@@ -118,8 +120,8 @@ public class MyStyles {
 	        column1VBox.setOnMouseClicked(event -> {
 	        	if(window.prevWindow instanceof AddWhen) { //add uniqueId
 	        		ArrayList<String> whenEvent = new ArrayList<String>();
-	        		whenEvent.add(column1VBoxHeader.getText());
 	        		whenEvent.add(column1VBoxUniqueId.getText());
+	        		whenEvent.add(column1VBoxHeader.getText());
 	        		whenEvent.add(column1VBoxDescription.getText());
 	        		((AddRule) window.prevWindow.prevWindow).whenData.add(whenEvent);
 	        		window.back().back();
@@ -141,6 +143,7 @@ public class MyStyles {
 		}
 		VBox column1VBox2 = new VBox();
 		MyStyles.createAddNewEvent(column1VBox2,eventsVBox);
+        return events;
        }
 
 	
