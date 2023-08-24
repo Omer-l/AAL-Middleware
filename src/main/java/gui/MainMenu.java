@@ -29,8 +29,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -39,11 +43,30 @@ import javafx.geometry.Pos;
 public class MainMenu extends Application {
 	private final int WINDOW_WIDTH = 900;
 	private final int WINDOW_HEIGHT = 800;
-	public final static String HEADER_1_STYLE = "-fx-font-size: 20px;";
-	public final static String HEADER_2_STYLE = "-fx-font-weight:   bold; -fx-font-size: 16px;";
-	public final static String CARD_STYLE = "-fx-background-color:   yellow; -fx-border-color: black;";
+	private final int VBOX_HEIGHT = 50;
+	private final int VBOX_WIDTH = 600;
+	private final int HBOX_HEIGHT = 50;
+	private final int HBOX_WIDTH = 500;
+
+	public final static String HEADER = "-fx-font-size: 24px;"
+			+ "    -fx-font-weight: bold;"
+			+ "    -fx-fill: #512DA8;";
+	public final static String HEADER_1_STYLE = "-fx-font-size: 21px;"
+			+ "    -fx-font-weight: bold;"
+			+ "    -fx-fill: #8E24AA;";
+	public final static String HEADER_2_STYLE = "-fx-font-size: 20px;"
+			+ "    -fx-font-weight: bold;"
+			+ "    -fx-fill: #EF6C00;";
 	
-//	public final static String CARD_STYLE = "";
+	public final static String CARD_STYLE = "-fx-background-color:  white ; "
+		
+			+ "-fx-background-radius: 10;";
+	
+	public final static String DATABASE_ICON_PATH = "M448 80v48c0 44.2-100.3 80-224 80S0 172.2 0 128V80C0 35.8 100.3 0 224 0S448 35.8 448 80zM393.2 214.7c20.8-7.4 39.9-16.9 54.8-28.6V288c0 44.2-100.3 80-224 80S0 332.2 0 288V186.1c14.9 11.8 34 21.2 54.8 28.6C99.7 230.7 159.5 240 224 240s124.3-9.3 169.2-25.3zM0 346.1c14.9 11.8 34 21.2 54.8 28.6C99.7 390.7 159.5 400 224 400s124.3-9.3 169.2-25.3c20.8-7.4 39.9-16.9 54.8-28.6V432c0 44.2-100.3 80-224 80S0 476.2 0 432V346.1z";
+	public final static double ICON_WIDTH = 40;
+	public final static double ICON_HEIGHT = 30;
+	public final static String ICON_STYLE = "-fx-background-color: black;";
+	
 
 	public final static String MENU_ADD_NEW_EVENT_BUTTON_STYLE = "-fx-background-color:   yellow; -fx-border-color: black;";
 	public final static String MAIN_CONTENT_STYLE = "-fx-background-color:  #d3d3d3;";
@@ -102,16 +125,39 @@ public class MainMenu extends Application {
     	//LEFT SIDE MAIN
     	VBox mainVBox1 = new VBox(2);
     	mainVBox1.prefWidthProperty().bind(root.widthProperty().divide(2));
+    	
+    	//SVG PATH 
+    	// Create SVGPath with the icon path data
+        SVGPath databaseIcon = new SVGPath();
+        databaseIcon.setContent(DATABASE_ICON_PATH);
+        databaseIcon.setStyle("-fx-fill: #007ACC;");
+        databaseIcon.setScaleX(ICON_WIDTH / 500); // Scale based on width
+        databaseIcon.setScaleY(ICON_HEIGHT / 500);
+        
+        final Region svgshape = new Region();
+        svgshape.setShape(databaseIcon);
+        svgshape.setMinSize(ICON_WIDTH, ICON_HEIGHT);
+        svgshape.setPrefSize(ICON_WIDTH, ICON_HEIGHT);
+        svgshape.setMaxSize(ICON_WIDTH, ICON_HEIGHT);
+        svgshape.setStyle(ICON_STYLE);
+        
+        
     	//Configurations
     	VBox configVBox = new VBox(2);
     	Text configHeader = new Text("Configuration");
     	configHeader.setStyle(HEADER_1_STYLE);
+    	HBox configHBox1 = new HBox();
+    	configHBox1.setPrefHeight(HBOX_HEIGHT);
+    	configHBox1.setPrefWidth(HBOX_WIDTH);
     	VBox configVBox1 = new VBox();
+//    	configVBox1.setPrefHeight(VBOX_HEIGHT);
+//    	configVBox1.setPrefWidth(VBOX_WIDTH);
     	configVBox1.setStyle(CARD_STYLE);
     	Text configVBox1Header = new Text("Database");
     	configVBox1Header.setStyle(HEADER_2_STYLE);
-    	Text configVBox1Details = new Text("Read/Write database");
+    	Text configVBox1Details = new Text("Read and Write database");
     	configVBox1.getChildren().addAll(configVBox1Header, configVBox1Details);
+    	configHBox1.getChildren().addAll(new StackPane(svgshape), configVBox1);
     	configVBox1.setOnMouseClicked(event -> { goToDatabaseListWindow(null);});
     	VBox configVBox2 = new VBox();
     	configVBox2.setStyle(CARD_STYLE);
@@ -133,7 +179,7 @@ public class MainMenu extends Application {
     	configVBox4Header.setStyle(HEADER_2_STYLE);
     	Text configVBox4Details = new Text("Define, connect and use API of hardware and online services");
     	configVBox4.getChildren().addAll(configVBox4Header, configVBox4Details);
-    	configVBox.getChildren().addAll(configHeader, configVBox1, configVBox2, configVBox3, configVBox4);
+    	configVBox.getChildren().addAll(configHeader, configHBox1, configVBox2, configVBox3, configVBox4);
     	//Automation
     	VBox automationVBox = new VBox(2);
     	Text automationHeader = new Text("Automation");
@@ -168,7 +214,7 @@ public class MainMenu extends Application {
     	
     	mainVBox2.getChildren().addAll(settingsVBox);
 
-    	addHoverInteraction(new VBox[] {configVBox1, configVBox2, configVBox3, configVBox4, automationVBox1, settingsVBox1}, "white", "darkgray");
+    	addHoverInteraction(new Pane[] {configHBox1, configVBox2, configVBox3, configVBox4, automationVBox1, settingsVBox1}, "white", "darkgray");
     	mainHBox.getChildren().addAll(mainVBox1, mainVBox2);
     }
     
@@ -181,7 +227,7 @@ public class MainMenu extends Application {
     
     public static void changeTitle(String title) {
     	Text newTitle = new Text(title);
-    	newTitle.setStyle(HEADER_1_STYLE);
+    	newTitle.setStyle(HEADER);
     	titleHBox.getChildren().add(newTitle);
     }
     
@@ -201,8 +247,8 @@ public class MainMenu extends Application {
     	mm.open();
 	}
 
-	public static void addHoverInteraction(VBox[] buttons, String fromColor, String toColor) {
-    	for(VBox button : buttons) {
+	public static void addHoverInteraction(Pane[] buttons, String fromColor, String toColor) {
+    	for(Pane button : buttons) {
 	    	button.setStyle("-fx-background-color: " + fromColor +";");
 	
 	        // Set the initial appearance of the pane
