@@ -284,12 +284,4 @@ public class AddSchedule extends Window {
         alert.setContentText(content);
         alert.showAndWait();
     }
-	
-	public  void loadData(String Uniqueid) {
-	editData = MainMenu.mainDbManager.queryDB("SELECT * FROM schedule JOIN event ON schedule.unique_id = event.unique_id", "select").get(0);
-
-	}
-	
-	
-	
 }

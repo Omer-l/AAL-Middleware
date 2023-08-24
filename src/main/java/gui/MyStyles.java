@@ -74,11 +74,12 @@ public class MyStyles {
 	        		}
 	        		afe.open();
 	        	} else if(window instanceof Rules) {
-	        			Rules rules = new Rules();
-//	        			rules.editData((String) readEvent.get("unique_id"))
+	        			AddRule addRule = new AddRule(new Rules());
+	        			addRule.editRule.put("unique_id", (String) readEvent.get("unique_id"));
+	        			addRule.open();
 	        	} else if(window instanceof Schedules) {
 	        		AddSchedule addSchedule = new AddSchedule(window);
-	        		addSchedule.loadData((String) readEvent.get("unique_id"));
+	        		addSchedule.editData = MainMenu.mainDbManager.queryDB("SELECT * FROM schedule JOIN event ON schedule.unique_id = event.unique_id WHERE event.unique_id = \"" + ((String) readEvent.get("unique_id")) + "\"", "select").get(0);
 	        		addSchedule.open();
 	        	}
 	        			

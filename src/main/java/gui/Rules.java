@@ -57,6 +57,5 @@ public class Rules extends Window {
 
 	public void editData(String uniqueId) {
 		AddRule addRule = new AddRule(this);
-		addRule.editRule.put("unique_id", uniqueId);
 	}
 }
