@@ -128,8 +128,8 @@ public class MyStyles {
 //	        		window.back().back();
 	        	} if(window.prevWindow instanceof AddThen) {//add uniqueID
 	        		ArrayList<String> thenEvent = new ArrayList<String>();
-	        		thenEvent.add(column1VBoxHeader.getText());
 	        		thenEvent.add(column1VBoxUniqueId.getText());
+	        		thenEvent.add(column1VBoxHeader.getText());
 	        		thenEvent.add(column1VBoxDescription.getText());
 	        		((AddRule) window.prevWindow.prevWindow).thenData.add(thenEvent);
 	        		window.back().back();

@@ -221,8 +221,17 @@ public class AddRule extends Window {
     	String whenUniqueIds = getUniqueIds(whenData);
     	String thenUniqueIds = getUniqueIds(thenData);
     	if(!emptyField) {
-        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-        	MainMenu.mainDbManager.queryDB("INSERT INTO rule VALUES ('" + uniqueIdInput + "', '" + whenUniqueIds + "', '" + thenUniqueIds + "');", "");
+    		if(editRule.isEmpty()) {
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO rule VALUES ('" + uniqueIdInput + "', '" + whenUniqueIds + "', '" + thenUniqueIds + "');", "");
+    		} else {
+    			MainMenu.mainDbManager.queryDB("UPDATE event SET"
+	        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
+	        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+    			MainMenu.mainDbManager.queryDB("UPDATE rule SET"
+	        			+ " unique_id = '" + uniqueIdInput + "', when_event_ids = '" + whenUniqueIds + "', "
+	        			+ "then_event_ids = '" + thenUniqueIds + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+    		}
     	} else {
     		System.out.println("unique id, name or description field is empty");
     	}
@@ -233,7 +242,7 @@ public class AddRule extends Window {
 		StringBuilder uniqueIds = new StringBuilder();
 		for(int i = 0; i < data.size(); i++) {
 			ArrayList<String> event = data.get(i);
-			String id = event.get(1);
+			String id = event.get(0);
 			if(i != data.size() - 1)
 				uniqueIds.append(id + ", ");
 			else
