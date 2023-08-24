@@ -56,7 +56,7 @@ public class Rules extends Window {
     }
 
 	public void editData(String uniqueId) {
-	 MainMenu.mainDbManager.queryDB("SELECT * FROM rule JOIN event ON rule.unique_id = event.unique_id WHERE event.unique_id =  \"" + uniqueId + "\"", "select").get(0);
-		
+		AddRule addRule = new AddRule(this);
+		addRule.editRule.put("unique_id", uniqueId);
 	}
 }

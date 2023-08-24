@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import middleware.RuleRunner;
 
 public class AddRule extends Window {
 	ArrayList<ArrayList<String>> whenData = new ArrayList<>();
@@ -33,7 +34,17 @@ public class AddRule extends Window {
 	
 	public void loadData(String uniqueId, TextField uniqueIdField, TextField nameField,
 			 TextField descriptionField) {
-		unique
+		editRule = MainMenu.mainDbManager.queryDB("SELECT * FROM rules JOIN event ON rule.unique_id = event.unique_id WHERE event.unique_id =  \"" + uniqueId + "\"", "select").get(0);
+		try {
+	    	uniqueIdField.setText(uniqueId);
+			nameField.setText((String) editRule.get("name"));
+			descriptionField.setText((String) editRule.get("description"));
+			ArrayList<Map<String, Object>> whens = RuleRunner.getEvents(((String) editRule.get("when_event_ids")).split("\\s*,\\s*"));
+			ArrayList<Map<String, Object>> thens = RuleRunner.getEvents(((String) editRule.get("then_event_ids")).split("\\s*,\\s*"));
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 

@@ -45,7 +45,7 @@ public class RuleRunner extends Thread{
 	    thens = getEvents(thenIds);
 	}
 
-	private ArrayList<Map<String, Object>> getEvents(String[] ids) {
+	public static ArrayList<Map<String, Object>> getEvents(String[] ids) {
 		ArrayList<Map<String, Object>> matchingEvents = new ArrayList<>();
 		
 		for(String id : ids) {
