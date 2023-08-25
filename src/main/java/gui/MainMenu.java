@@ -48,8 +48,8 @@ public class MainMenu extends Application {
 	private final int WINDOW_HEIGHT = 800;
 	private final int VBOX_HEIGHT = 50;
 	private final int VBOX_WIDTH = 600;
-	private final int HBOX_HEIGHT = 80;
-	private final int HBOX_WIDTH = 1000;
+	private final int HBOX_HEIGHT = 100;
+	private final int HBOX_WIDTH = 1200;
 
 	public final static String HEADER = "-fx-font-size: 24px;"
 			+ "    -fx-font-weight: bold;"
@@ -76,7 +76,7 @@ public class MainMenu extends Application {
 	public static String RULE_SVG = "M0 80v48c0 17.7 14.3 32 32 32H48 96V80c0-26.5-21.5-48-48-48S0 53.5 0 80zM112 32c10 13.4 16 30 16 48V384c0 35.3 28.7 64 64 64s64-28.7 64-64v-5.3c0-32.4 26.3-58.7 58.7-58.7H480V128c0-53-43-96-96-96H112zM464 480c61.9 0 112-50.1 112-112c0-8.8-7.2-16-16-16H314.7c-14.7 0-26.7 11.9-26.7 26.7V384c0 53-43 96-96 96H368h96z";
 	public static String DB_SETTINGS_SVG = "M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z";
 	
-	
+	public static final int SVG_VBOX_SPACING = 30;
 
 	public final static String MENU_ADD_NEW_EVENT_BUTTON_STYLE = "-fx-background-color:   yellow; -fx-border-color: black;";
 	public final static String MAIN_CONTENT_STYLE = "-fx-background-color:  #d3d3d3;";
@@ -153,7 +153,10 @@ public class MainMenu extends Application {
     	svgShape.setMinSize(ICON_WIDTH, ICON_HEIGHT);
         svgShape.setPrefSize(ICON_WIDTH, ICON_HEIGHT);
         svgShape.setMaxSize(ICON_WIDTH, ICON_HEIGHT);
-        svgShape.setStyle("-fx-background-color: black;");
+        svgShape.setStyle("-fx-background-color: silver;");
+        
+        StackPane svgStackPane = new StackPane(svgShape);
+        svgStackPane.setPadding(new javafx.geometry.Insets(0, SVG_VBOX_SPACING, 0, 0));
     	
     	VBox configVBox1 = new VBox();
     	//configVBox1.setStyle(CARD_STYLE);
@@ -161,7 +164,7 @@ public class MainMenu extends Application {
     	configVBox1Header.setStyle(HEADER_2_STYLE);
     	Text configVBox1Details = new Text("Read and Write database");
     	configVBox1.getChildren().addAll(configVBox1Header, configVBox1Details);
-    	configHBox1.getChildren().addAll(new StackPane(svgShape), configVBox1);
+    	configHBox1.getChildren().addAll(svgStackPane, configVBox1);
     	configHBox1.setOnMouseClicked(event -> { goToDatabaseListWindow(null);});
     	
     	//second 
@@ -180,7 +183,10 @@ public class MainMenu extends Application {
     	svgShape2.setMinSize(ICON_WIDTH, ICON_HEIGHT);
         svgShape2.setPrefSize(ICON_WIDTH, ICON_HEIGHT);
         svgShape2.setMaxSize(ICON_WIDTH, ICON_HEIGHT);
-        svgShape2.setStyle("-fx-background-color: black;");
+        svgShape2.setStyle("-fx-background-color: silver;");
+        
+        StackPane svgStackPane1 = new StackPane(svgShape2);
+        svgStackPane1.setPadding(new javafx.geometry.Insets(0, SVG_VBOX_SPACING, 0, 0));
     	
     	VBox configVBox2 = new VBox();
 //    	configVBox2.setStyle(CARD_STYLE);
@@ -188,7 +194,7 @@ public class MainMenu extends Application {
     	configVBox2Header.setStyle(HEADER_2_STYLE);
     	Text configVBox2Details = new Text("Run,Read and Write files");
     	configVBox2.getChildren().addAll(configVBox2Header, configVBox2Details);
-    	configHBox2.getChildren().addAll(new StackPane(svgShape2), configVBox2);
+    	configHBox2.getChildren().addAll(svgStackPane1, configVBox2);
     	configHBox2.setOnMouseClicked(event -> { goToDatabaseListWindow(null);});
     	
     	
@@ -205,7 +211,10 @@ public class MainMenu extends Application {
      	svgShape3.setMinSize(ICON_WIDTH, ICON_HEIGHT);
          svgShape3.setPrefSize(ICON_WIDTH, ICON_HEIGHT);
          svgShape3.setMaxSize(ICON_WIDTH, ICON_HEIGHT);
-         svgShape3.setStyle("-fx-background-color: black;");
+         svgShape3.setStyle("-fx-background-color: silver;");
+         
+         StackPane svgStackPane2 = new StackPane(svgShape3);
+         svgStackPane2.setPadding(new javafx.geometry.Insets(0, SVG_VBOX_SPACING, 0, 0));
     
     	VBox configVBox3 = new VBox();
 //    	configVBox3.setStyle(CARD_STYLE);
@@ -213,7 +222,7 @@ public class MainMenu extends Application {
     	configVBox3Header.setStyle(HEADER_2_STYLE);
     	Text configVBox3Details = new Text("Schedules to keep track of");
     	configVBox3.getChildren().addAll(configVBox3Header, configVBox3Details);
-    	configHBox3.getChildren().addAll(new StackPane(svgShape3), configVBox3);
+    	configHBox3.getChildren().addAll(svgStackPane2, configVBox3);
     	configHBox3.setOnMouseClicked(event -> { new Schedules(null).open();});
     	
     	HBox configHBox4 = new HBox();
@@ -229,9 +238,10 @@ public class MainMenu extends Application {
      	svgShape4.setMinSize(ICON_WIDTH, ICON_HEIGHT);
          svgShape4.setPrefSize(ICON_WIDTH, ICON_HEIGHT);
          svgShape4.setMaxSize(ICON_WIDTH, ICON_HEIGHT);
-         svgShape4.setStyle("-fx-background-color: black;");
+         svgShape4.setStyle("-fx-background-color: silver;");
     	
-    	
+         StackPane svgStackPane3 = new StackPane(svgShape4);
+         svgStackPane3.setPadding(new javafx.geometry.Insets(0, SVG_VBOX_SPACING, 0, 0));
     	
     	VBox configVBox4 = new VBox();
 //    	configVBox4.setStyle(CARD_STYLE);
@@ -239,7 +249,7 @@ public class MainMenu extends Application {
     	configVBox4Header.setStyle(HEADER_2_STYLE);
     	Text configVBox4Details = new Text("Define, connect and use API of hardware and online services");
     	configVBox4.getChildren().addAll(configVBox4Header, configVBox4Details);
-    	configHBox4.getChildren().addAll(new StackPane(svgShape4), configVBox4);
+    	configHBox4.getChildren().addAll(svgStackPane3, configVBox4);
     	
     	configVBox.getChildren().addAll(configHeader, configHBox1, configHBox2, configHBox3, configHBox4);
     	
@@ -263,28 +273,24 @@ public class MainMenu extends Application {
      	svgShape5.setMinSize(ICON_WIDTH, ICON_HEIGHT);
          svgShape5.setPrefSize(ICON_WIDTH, ICON_HEIGHT);
          svgShape5.setMaxSize(ICON_WIDTH, ICON_HEIGHT);
-         svgShape5.setStyle("-fx-background-color: black;");
+         svgShape5.setStyle("-fx-background-color: silver;");
     	
-    	
+         StackPane svgStackPane4 = new StackPane(svgShape5);
+         svgStackPane4.setPadding(new javafx.geometry.Insets(0, SVG_VBOX_SPACING, 0, 0));
     	
     	VBox automationVBox1 = new VBox();
-    	automationVBox1.setStyle(CARD_STYLE);
+//    	automationVBox1.setStyle(CARD_STYLE);
     	Text automationVBox1Header = new Text("Rules");
     	automationVBox1Header.setStyle(HEADER_2_STYLE);
     	Text automationVBox1Details = new Text("Rules in system");
     	automationVBox1.getChildren().addAll(automationVBox1Header, automationVBox1Details);
-    	configHBox5.getChildren().addAll(new StackPane(svgShape5),automationVBox1);
+    	configHBox5.getChildren().addAll(svgStackPane4,automationVBox1);
     	automationVBox1.setOnMouseClicked(event -> { goToRulesListWindow(null); });
     	automationVBox.getChildren().addAll(automationHeader, configHBox5);
     	
     	mainVBox1.getChildren().addAll(configVBox, automationVBox);
     	// Set alignment to center within the VBox
     	mainVBox1.setAlignment(Pos.TOP_CENTER);
-    	
-    	//RIGHT SIDE MAIN
-//    	VBox mainVBox2 = new VBox(2);
-//    	mainVBox2.prefWidthProperty().bind(root.widthProperty().divide(2));
-    	
     	
     	HBox configHBox6 = new HBox();
 
@@ -299,8 +305,10 @@ public class MainMenu extends Application {
      	svgShape6.setMinSize(ICON_WIDTH, ICON_HEIGHT);
          svgShape6.setPrefSize(ICON_WIDTH, ICON_HEIGHT);
          svgShape6.setMaxSize(ICON_WIDTH, ICON_HEIGHT);
-         svgShape6.setStyle("-fx-background-color: black;");
+         svgShape6.setStyle("-fx-background-color: silver;");
     	
+         StackPane svgStackPane5 = new StackPane(svgShape6);
+         svgStackPane5.setPadding(new javafx.geometry.Insets(0, SVG_VBOX_SPACING, 0, 0));
     	
     	
     	//Settings
@@ -315,17 +323,16 @@ public class MainMenu extends Application {
     	Text settingsVBox1Details = new Text("RDBM URL, Username, Password");
     	settingsVBox1.getChildren().addAll(settingsVBox1Header, settingsVBox1Details);
     	settingsVBox.getChildren().addAll(settingsHeader, configHBox6);
-    	configHBox6.getChildren().addAll(new StackPane(svgShape6),settingsVBox1);
+    	configHBox6.getChildren().addAll(svgStackPane5,settingsVBox1);
 
     	mainVBox1.getChildren().add(settingsVBox);
 
     	
-    	//mainVBox2.getChildren().addAll(settingsVBox);
-    	addHoverInteraction(new Pane[] {configHBox1, configHBox2, configHBox3, configHBox4, automationVBox1,settingsVBox}, "white", "darkgray");
+    	addHoverInteraction(new Pane[] {configHBox1, configHBox2, configHBox3, configHBox4,configHBox5 ,configHBox6},"#FFEBEE", "darkgray");
     	mainHBox.getChildren().addAll(mainVBox1);
     }
-    
-    public static void clearMainBox() {
+
+	public static void clearMainBox() {
 		menuBarHBox.getChildren().clear();
     	mainHBox.getChildren().clear();
     	mainVBox.getChildren().clear();
@@ -356,11 +363,11 @@ public class MainMenu extends Application {
 
 	public static void addHoverInteraction(Pane[] buttons, String fromColor, String toColor) {
     	for(Pane button : buttons) {
-//	    	button.setStyle("-fx-background-color: " + fromColor +";");
+	    	//button.setStyle("-fx-background-color: " + fromColor +";");
 	
 	        // Set the initial appearance of the pane
-//	    	button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: " + toColor + ";"));
-//	    	button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + fromColor + ";"));
+	    	button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: " + toColor + ";"));
+	    	button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + fromColor + ";"));
     	}
     }
 	
