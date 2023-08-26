@@ -35,7 +35,7 @@ public class DatabaseEvents extends Window {
 		MainMenu.clearMainBox();
     	MainMenu.changeTitle("Database Events");
         Button button1 = new Button("Back");
-        button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+        button1.setStyle("-fx-font: 15 arial; -fx-base: #BDBDBD");
 
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
@@ -65,7 +65,7 @@ public class DatabaseEvents extends Window {
         int writeEventsLastIndex = column2VBox.getChildren().size() - 1;
         column2VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { /** add event */ System.out.println("Write event clicked"); });
 //START
-    	MainMenu.addHoverInteraction(new VBox[] {(VBox) column1VBox.getChildren().get(readEventsLastIndex), (VBox) column2VBox.getChildren().get(writeEventsLastIndex)}, "yellow", "darkgray");
+    	//MainMenu.addHoverInteraction(new VBox[] {(VBox) column1VBox.getChildren().get(readEventsLastIndex), (VBox) column2VBox.getChildren().get(writeEventsLastIndex)}, "yellow", "darkgray");
         MainMenu.mainHBox.getChildren().addAll(mainVBox1, mainVBox2);
 	}
 	
