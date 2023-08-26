@@ -44,7 +44,7 @@ import javafx.stage.Stage;
 import javafx.geometry.Pos;
 
 public class MainMenu extends Application {
-	private final int WINDOW_WIDTH = 700;
+	private final int WINDOW_WIDTH = 1000;
 	private final int WINDOW_HEIGHT = 800;
 	private final int VBOX_HEIGHT = 50;
 	private final int VBOX_WIDTH = 600;
@@ -59,7 +59,7 @@ public class MainMenu extends Application {
 			+ "    -fx-fill: #EC407A;";
 	public final static String HEADER_2_STYLE = "-fx-font-size: 20px;"
 			+ "    -fx-font-weight: bold;"
-			+ "    -fx-fill: #F48FB1;";
+			+ "    -fx-fill: #D81B60;";
 	
 	public final static String CARD_STYLE = "-fx-background-color:  white ; ";
 	
@@ -338,7 +338,7 @@ public class MainMenu extends Application {
     	mainVBox1.getChildren().add(settingsVBox);
 
     	
-    	addHoverInteraction(new Pane[] {configHBox1, configHBox2, configHBox3, configHBox4,configHBox5 ,configHBox6},"#FFEBEE", "darkgray");
+    	addHoverInteraction(new Pane[] {configHBox1, configHBox2, configHBox3, configHBox4,configHBox5 ,configHBox6},"#FFEBEE", "#F48FB1");
     	mainHBox.getChildren().addAll(mainVBox1);
     	mainHBox.setAlignment(Pos.CENTER);
     }
