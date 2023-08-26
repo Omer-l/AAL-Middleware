@@ -57,6 +57,7 @@ public class AddFileEvent extends Window {
 	Map<String, Object> editRunData = new HashMap<String, Object>();
 	Map<String, Object> editReadData = new HashMap<String, Object>();
 	Map<String, Object> editWriteData = new HashMap<String, Object>();
+	private int id;
 
     
 	public AddFileEvent(Window prevWindow, String operation) {
@@ -72,14 +73,14 @@ public class AddFileEvent extends Window {
 		
 	}
 
-	public static void removeEventFromFileEvent(String uniqueID, String operation) {
+	public static void removeEventFromFileEvent(int uniqueID, String operation) {
 		try {
 			if(operation == "run") {
-				  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_run_event WHERE system_file_run_event.unique_id = '" + uniqueID + "'","");
+				  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_run_event WHERE system_file_run_event.id = " + uniqueID,"");
 			}else if(operation == "read") {
-			  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_read_event WHERE system_file_read_event.unique_id = '" + uniqueID + "'","");
+			  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_read_event WHERE system_file_read_event.id = " + uniqueID,"");
 			}else if(operation == "write") {
-			  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_write_event WHERE system_file_write_event.unique_id = '" + uniqueID + "'","");
+			  MainMenu.mainDbManager.queryDB("DELETE FROM system_file_write_event WHERE system_file_write_event.id = " + uniqueID,"");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,23 +88,23 @@ public class AddFileEvent extends Window {
 
 		}
 	
-	public void loadData(String uniqueId, String operation) {
+	public void loadData(int id, String operation) {
+		this.id = id;
 		this.operation = operation;
 		if(operation == "run") {
-			editRunData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_run_event JOIN event ON system_file_run_event.unique_id = event.unique_id WHERE event.unique_id =  \"" + uniqueId + "\"", "select").get(0);
+			editRunData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_run_event JOIN event ON system_file_run_event.id = event.id WHERE event.id =  " + id + "", "select").get(0);
 		} else if(operation == "read") {
-			editReadData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_read_event JOIN event ON system_file_read_event.unique_id = event.unique_id WHERE event.unique_id = \"" + uniqueId + "\"", "select").get(0);
+			editReadData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_read_event JOIN event ON system_file_read_event.id = event.id WHERE event.id = " + id, "select").get(0);
 		} else if(operation == "write") {
-			editWriteData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_write_event JOIN event ON system_file_write_event.unique_id = event.unique_id WHERE event.unique_id = \"" + uniqueId + "\"", "select").get(0);
+			editWriteData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_write_event JOIN event ON system_file_write_event.id = event.id WHERE event.id = " + id, "select").get(0);
 		}
 	}
 	
-	public void loadData(String uniqueId, TextField uniqueIdField, TextField nameField,
+	public void loadData(TextField uniqueIdField, TextField nameField,
 			 TextField descriptionField, VBox column1VBox3) {
-		
 		try {
 		if(operation  == "run") {
-			uniqueIdField.setText(uniqueId);
+			uniqueIdField.setText(id + "");
 			nameField.setText((String) editRunData.get("name"));
 			descriptionField.setText((String) editRunData.get("description"));
 			currentWorkingDirectyField.setText((String) editRunData.get("current_working_directory"));
@@ -115,7 +116,7 @@ public class AddFileEvent extends Window {
         	readFileMethodButton.setDisable(true);
         	writeFileMethodButton.setDisable(true);
 	    }else if( operation == "read") {
-	    	uniqueIdField.setText(uniqueId);
+	    	uniqueIdField.setText(id + "");
 			nameField.setText((String) editReadData.get("name"));
 			descriptionField.setText((String) editReadData.get("description"));
 			selectedFile = new File((String) editReadData.get("path"));
@@ -254,7 +255,7 @@ public class AddFileEvent extends Window {
         testButton.setOnAction(event -> { processTestButton(operation); });
         saveButton.setDisable(true);
     	saveButton.setOnAction(event -> {
-        	processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText());
+//        	processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText());
     	});
         column1ButtonBar2.getButtons().addAll(testButton, saveButton);
        HBox column1HBox9 = new HBox();
@@ -269,10 +270,10 @@ public class AddFileEvent extends Window {
         if(!editRunData.isEmpty()) {
     		column1VBox3.getChildren().clear();
         	operation = "run";
-        	loadData((String) editRunData.get("unique_id"), column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, column1VBox3);
+        	loadData(column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, column1VBox3);
         }else if(!editReadData.isEmpty()) {
     		column1VBox3.getChildren().clear();
-        	loadData((String) editReadData.get("unique_id"), column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, column1VBox3);
+        	loadData(column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, column1VBox3);
 
         }
 	}
@@ -429,7 +430,7 @@ public class AddFileEvent extends Window {
 		}
 	}
 
-	private void processSaveButton(String uniqueIdInput, String nameInput, String descriptionInput) {
+	private void processSaveButton(String nameInput, String descriptionInput) {
 		String command = valueField.getText().replaceAll("\\\\", "/");
 		String currentWorkingDirectory = currentWorkingDirectyField.getText().replaceAll("\\\\", "/");
 //		System.out.println(filePath);
@@ -437,40 +438,40 @@ public class AddFileEvent extends Window {
 		if(MainMenu.isActive(runFileMethodButton)) {
 	    	String arguments = valueField.getText();
 	    	System.out.println("WROTE");
-	    	boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
+	    	boolean emptyField = nameInput.isEmpty() || descriptionInput.isEmpty();
 	    	if(!emptyField) {
 	    		if(editRunData.isEmpty()) {
-		    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-		        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES ('" + uniqueIdInput + "', '" + command + "', '" + currentWorkingDirectory + "');", "");
+		    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES (null, '" + nameInput + "', '" + descriptionInput + "');", "");
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES (null, '" + command + "', '" + currentWorkingDirectory + "');", "");
 	    		} else {
 	    			MainMenu.mainDbManager.queryDB("UPDATE event SET"
-		        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
-		        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+		        			+ " id = " + id + ", name = '" + nameInput + "', "
+		        			+ "description = '" + descriptionInput + "' WHERE id = " + id + ";", "");
 	    			MainMenu.mainDbManager.queryDB("UPDATE system_file_run_event SET"
-		        			+ " unique_id = '" + uniqueIdInput + "', command = '" + command + "', "
-		        			+ "current_working_directory = '" + currentWorkingDirectory + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+		        			+ " id = " + id + ", command = '" + command + "', "
+		        			+ "current_working_directory = '" + currentWorkingDirectory + "' WHERE id = " + id + ";", "");
 	    		}
 	    	} else {
-	    		logField.setText("unique id, name or description field is empty");
+	    		logField.setText("name or description field is empty");
 	    	} 
 		} else if(MainMenu.isActive(readFileMethodButton)) {
 			String filePath = selectedFile.getAbsolutePath().replaceAll("\\\\", "/");
 			String content = valueField.getText();
-			boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
+			boolean emptyField = nameInput.isEmpty() || descriptionInput.isEmpty();
 	    	if(!emptyField) {
 	    		if(editReadData.isEmpty()) {
-	    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_read_event VALUES ('" + uniqueIdInput + "', '" + filePath + "', '" + content + "');", "");
+	    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES (null, '" + nameInput + "', '" + descriptionInput + "');", "");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_read_event VALUES (null, '" + filePath + "', '" + content + "');", "");
 		    	} else {
 	    			MainMenu.mainDbManager.queryDB("UPDATE event SET"
-		        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
-		        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+		        			+ " id = " + id + ", name = '" + nameInput + "', "
+		        			+ "description = '" + descriptionInput + "' WHERE id = " + id + ";", "");
 	    			MainMenu.mainDbManager.queryDB("UPDATE system_file_read_event SET"
-		        			+ " unique_id = '" + uniqueIdInput + "', path = '" + filePath + "', "
-		        			+ "content = '" + content + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+		        			+ " id = " + id + ", path = '" + filePath + "', "
+		        			+ "content = '" + content + "' WHERE id = " + id + ";", "");
 	    		}
 	    	} else { 
-	    		logField.setText("unique id, name or description field is empty");
+	    		logField.setText("name or description field is empty");
 	    	} 
 		}
 		back();

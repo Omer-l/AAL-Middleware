@@ -19,8 +19,8 @@ public class Rules extends Window {
     	
     }
     
-    public  static void removeRule(String uniqueId) {
-        MainMenu.mainDbManager.queryDB("DELETE FROM rule WHERE rule.unique_id = '" + uniqueId + "'", "");		
+    public  static void removeRule(int uniqueId) {
+        MainMenu.mainDbManager.queryDB("DELETE FROM rule WHERE rule.id = " + uniqueId, "");		
    	}
     
 	public void open() {
@@ -44,9 +44,7 @@ public class Rules extends Window {
         configVBox.getChildren().addAll(configHeader);
         Button removeButton = new Button("Remove");
         removeButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
-//        VBox configVBox1 = new VBox();
-//        getEvents("SELECT * FROM rule INNER JOIN event ON rule.unique_id = event.unique_id;", configVBox,removeButton);        
-        MyStyles.getEvents("SELECT * FROM rule INNER JOIN event ON rule.unique_id = event.unique_id;", configVBox, this);
+        MyStyles.getEvents("SELECT * FROM rule INNER JOIN event ON rule.id = event.id;", configVBox, this);
         int rulesLastIndex = configVBox.getChildren().size() - 1;
        
         configVBox.getChildren().get(rulesLastIndex).setOnMouseClicked(event -> {new AddRule(this).open();});

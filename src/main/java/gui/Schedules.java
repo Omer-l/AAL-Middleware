@@ -41,8 +41,8 @@ public class Schedules extends Window {
        // Button removeButton = new Button("Remove");
         //removeButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
 //        VBox configVBox1 = new VBox();
-//        getEvents("SELECT * FROM rule INNER JOIN event ON rule.unique_id = event.unique_id;", configVBox,removeButton);        
-        MyStyles.getEvents("SELECT * FROM schedule INNER JOIN event ON schedule.unique_id = event.unique_id;", configVBox, this);
+//        getEvents("SELECT * FROM rule INNER JOIN event ON rule.id = event.id;", configVBox,removeButton);        
+        MyStyles.getEvents("SELECT * FROM schedule INNER JOIN event ON schedule.id = event.id;", configVBox, this);
         int schedulesLastIndex = configVBox.getChildren().size() - 1;
        
         configVBox.getChildren().get(schedulesLastIndex).setOnMouseClicked(event -> {new AddSchedule(this).open();});
@@ -58,7 +58,7 @@ public class Schedules extends Window {
 	        column1VBox.setStyle(MainMenu.CARD_STYLE);
 	        Text column1VBoxHeader = new Text((String) readEvent.get("name"));
 	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
-	        Text column1VBoxUniqueId = new Text((String) readEvent.get("unique_id"));
+	        Text column1VBoxUniqueId = new Text((String) readEvent.get("id"));
 	        Text column1VBoxDescription = new Text((String) readEvent.get("description"));
 	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
@@ -75,8 +75,8 @@ public class Schedules extends Window {
         eventsVBox.getChildren().add(column1VBox2);
 	}
 
-	public static void removeSchedule(String uniqueID) {
-		  MainMenu.mainDbManager.queryDB("DELETE FROM schedule WHERE schedule.unique_id = '" + uniqueID + "'","");
+	public static void removeSchedule(int uniqueID) {
+		  MainMenu.mainDbManager.queryDB("DELETE FROM schedule WHERE schedule.id = " + uniqueID, "");
 
 	}
 }

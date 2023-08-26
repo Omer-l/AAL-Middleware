@@ -51,7 +51,7 @@ public class FileEvents extends Window {
         Text column1Header = new Text("Run Events");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
         column1VBox.getChildren().addAll(column1Header);
-        MyStyles.getEvents("SELECT * FROM system_file_run_event INNER JOIN event ON system_file_run_event.unique_id = event.unique_id;", column1VBox, this);
+        MyStyles.getEvents("SELECT * FROM system_file_run_event INNER JOIN event ON system_file_run_event.id = event.id;", column1VBox, this);
         int runEventsLastIndex = column1VBox.getChildren().size() - 1;
         column1VBox.getChildren().get(runEventsLastIndex).setOnMouseClicked(event -> {new AddFileEvent(this, "run").open();});
         mainVBox1.getChildren().addAll(column1VBox);
@@ -63,7 +63,7 @@ public class FileEvents extends Window {
         Text column2Header = new Text("Read Events");
         column2Header.setStyle(MainMenu.HEADER_1_STYLE);
         column2VBox.getChildren().addAll(column2Header);
-        MyStyles.getEvents("SELECT * FROM system_file_read_event INNER JOIN event ON system_file_read_event.unique_id = event.unique_id;", column2VBox, this);
+        MyStyles.getEvents("SELECT * FROM system_file_read_event INNER JOIN event ON system_file_read_event.id = event.id;", column2VBox, this);
         int readEventsLastIndex = column2VBox.getChildren().size() - 1;
         column2VBox.getChildren().get(readEventsLastIndex).setOnMouseClicked(event -> {new AddFileEvent(this, "read").open();});
         mainVBox2.getChildren().addAll(column2VBox);
@@ -75,7 +75,7 @@ public class FileEvents extends Window {
         Text column3Header = new Text("Write Events");
         column3Header.setStyle(MainMenu.HEADER_1_STYLE);
         column3VBox.getChildren().add(column3Header);
-        MyStyles.getEvents("SELECT * FROM system_file_write_event INNER JOIN event ON system_file_write_event.unique_id = event.unique_id;", column3VBox, this);
+        MyStyles.getEvents("SELECT * FROM system_file_write_event INNER JOIN event ON system_file_write_event.id = event.id;", column3VBox, this);
         int writeEventsLastIndex = column3VBox.getChildren().size() - 1;
         column3VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { new AddFileEvent(this, "write").open(); });
         mainVBox3.getChildren().addAll(column3VBox);
@@ -84,7 +84,7 @@ public class FileEvents extends Window {
 	}
 	
 	public void loadData(String uniqueId) {
-		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_run_event JOIN event ON database_read_event.unique_id = event.unique_id", "select").get(0);
+		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM system_file_run_event JOIN event ON database_read_event.id = event.id", "select").get(0);
 	}
 	
 	

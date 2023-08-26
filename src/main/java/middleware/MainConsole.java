@@ -129,7 +129,7 @@ public class MainConsole {
 
 	private void runRules(Map<String, Object> event) {
 		for (RuleRunner rule : ruleThreads) {
-				if( ((String)event.get("event_type")).equals("database_read_event") || rule.containsWhenId((String) event.get("unique_id"))) {
+				if( ((String)event.get("event_type")).equals("database_read_event") || rule.containsWhenId((int) event.get("id"))) {
 				
 				//clone first to avoid IllegalThreadStateException
 				RuleRunner ruleThread = new RuleRunner(rule.whens, rule.thens); //carry of the whens and thens to the clone
@@ -233,7 +233,7 @@ public class MainConsole {
 //            if ( iteration != 0 && (now.isEqual(startDateTime) || now.isAfter(startDateTime)) && now.isBefore(endDateTime))
 //            	result.put("achieved", true);
 //            else
-//            	result.put("unique_id", null); //nullify the result, in case previously it was set to true
+//            	result.put("id", null); //nullify the result, in case previously it was set to true
 //        	latestResults.add(result);
 //        	prevResultsIndex++;
 ////	        System.out.println(result);
@@ -247,7 +247,7 @@ public class MainConsole {
 			ScheduleInterval scheduleInterval = ScheduleInterval.valueOf(((String) result.get("repetition")).toUpperCase());
 			Schedule schedule = now.isAfter(startDateTime)  && (((String) result.get("repetition")).equals("Minute") || ((String) result.get("repetition")).equals("Second")) ? new Schedule(LocalDate.now().getDayOfWeek(), LocalDateTime.now().toLocalTime(), scheduleInterval) : new Schedule(startDateTime.getDayOfWeek(), startDateTime.toLocalTime(), scheduleInterval);
 
-			schedule.uniqueId = (String) result.get("unique_id");
+			schedule.uniqueId = (int) result.get("id");
 	        // Calculate the initial delay until the next schedule time
 	        Duration initialDelay = calculateInitialDelay(schedule);
 	        Timer timer = new Timer();
@@ -263,7 +263,7 @@ public class MainConsole {
 	                Map<String, Object> scheduleEvent = new HashMap<String, Object>();
 	                scheduleEvent.put("start_date_time", now);
 	                scheduleEvent.put("event_type", "schedule");
-	                scheduleEvent.put("unique_id", schedule.uniqueId);
+	                scheduleEvent.put("id", schedule.uniqueId);
 //	                    System.out.println("Schedule met at: " + now);
 		           completedSchedules.add(scheduleEvent);
 	            }
@@ -291,7 +291,7 @@ public class MainConsole {
         private final DayOfWeek dayOfWeek;
         private final LocalTime time;
         private final ScheduleInterval interval;
-        private String uniqueId;
+        private int uniqueId;
         private LocalDateTime dateTime;
 
         public Schedule(DayOfWeek dayOfWeek, LocalTime time, ScheduleInterval interval) {

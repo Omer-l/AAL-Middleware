@@ -46,7 +46,7 @@ public class MyStyles {
 	public static ArrayList<Map<String, Object>> getEvents(String query, VBox eventsVBox, Window window) {
 //		int divider = eventsVBox.getParent().getChildrenUnmodifiable().size();
 		ArrayList<Map<String, Object>> events = MainMenu.mainDbManager.queryDB(query, "select");
-		if(eventsVBox == null) return events;
+		if(eventsVBox == null) return events; //user just wants events
 		
 		for(Map<String, Object> readEvent : events) {
 			HBox column1HBox = new HBox();
@@ -56,7 +56,7 @@ public class MyStyles {
 			column1VBox.setStyle(MainMenu.CARD_STYLE);
 	        Text column1VBoxHeader = new Text((String) readEvent.get("name"));
 	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
-	        Text column1VBoxUniqueId = new Text((String) readEvent.get("unique_id"));
+	        Text column1VBoxId = new Text((int) readEvent.get("id") + "");
 	        Text column1VBoxDescription = new Text((String) readEvent.get("description"));
 	        
 	        Button editButton = new Button("Edit");
@@ -64,24 +64,24 @@ public class MyStyles {
 	        editButton.setOnAction(event -> {
 	        	if(window instanceof DatabaseEvents) {
 	        		AddDatabaseEvent ade = new AddDatabaseEvent(window);
-	        		ade.loadData((String) readEvent.get("unique_id"));
+	        		ade.loadData((int) readEvent.get("id"));
 	        		ade.open();
 	        	} else if(window instanceof FileEvents) {
 	        		String header = ((Text) eventsVBox.getChildren().get(0)).getText();
 	        		AddFileEvent afe = new AddFileEvent(window);
 	        		if(header.equals("Run Events")) {
-	        			afe.loadData((String) readEvent.get("unique_id"), "run");
+	        			afe.loadData((int) readEvent.get("id"), "run");
 	        		} else if (header.equals("Read Events")) {
-	        			afe.loadData((String) readEvent.get("unique_id"), "read");
+	        			afe.loadData((int) readEvent.get("id"), "read");
 	        		}
 	        		afe.open();
 	        	} else if(window instanceof Rules) {
         			AddRule addRule = new AddRule(new Rules());
-        			addRule.editRule.put("unique_id", (String) readEvent.get("unique_id"));
+        			addRule.editRule.put("id", (int) readEvent.get("id"));
         			addRule.open();
 	        	} else if(window instanceof Schedules) {
 	        		AddSchedule addSchedule = new AddSchedule(window);
-	        		addSchedule.editData = MainMenu.mainDbManager.queryDB("SELECT * FROM schedule JOIN event ON schedule.unique_id = event.unique_id WHERE event.unique_id = \"" + ((String) readEvent.get("unique_id")) + "\"", "select").get(0);
+	        		addSchedule.editData = MainMenu.mainDbManager.queryDB("SELECT * FROM schedule JOIN event ON schedule.id = event.id WHERE event.id = " + ((int) readEvent.get("id")), "select").get(0);
 	        		addSchedule.open();
 	        	}
 	        			
@@ -91,36 +91,35 @@ public class MyStyles {
 	        removeButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
 	        removeButton.setOnAction(event -> {
 	        	if(window instanceof DatabaseEvents) {
-	        		AddDatabaseEvent.removeEventFromDatabaseReadEvent((String) readEvent.get("unique_id"));
+	        		AddDatabaseEvent.removeEventFromDatabaseReadEvent((int) readEvent.get("id"));
 	        		eventsVBox.getChildren().remove(column1HBox);
 	        	}else if(window instanceof FileEvents) {
 	        		String header = ((Text) eventsVBox.getChildren().get(0)).getText();
 	        		if(header.equals("Read Events")) {
-	        			AddFileEvent.removeEventFromFileEvent((String) readEvent.get("unique_id"),"read");
+	        			AddFileEvent.removeEventFromFileEvent((int) readEvent.get("id"),"read");
 		        		eventsVBox.getChildren().remove(column1HBox);
 	        		} else if (header.equals("Run Events")) {
-	        			AddFileEvent.removeEventFromFileEvent((String) readEvent.get("unique_id"), "run");
+	        			AddFileEvent.removeEventFromFileEvent((int) readEvent.get("id"), "run");
 		        		eventsVBox.getChildren().remove(column1HBox);
 	        		} else if (header.equals("Write Events")) {
-	        			AddFileEvent.removeEventFromFileEvent((String) readEvent.get("unique_id"),"write");
+	        			AddFileEvent.removeEventFromFileEvent((int) readEvent.get("id"),"write");
 		        		eventsVBox.getChildren().remove(column1HBox);
 	        		} 
-	            }else if (window instanceof Rules) {
-        			Rules.removeRule((String) readEvent.get("unique_id"));
+	            } else if (window instanceof Rules) {
+        			Rules.removeRule((int) readEvent.get("id"));
 	        		eventsVBox.getChildren().remove(column1HBox);
-        		}else if(window instanceof Schedules) {
-        			Schedules.removeSchedule((String) readEvent.get("unique_id"));
+        		} else if(window instanceof Schedules) {
+        			Schedules.removeSchedule((int) readEvent.get("id"));
         			eventsVBox.getChildren().remove(column1HBox);
-        			
         		}
 	        });
-	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
-	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
-	        column1VBoxUniqueId.setVisible(false);
+	        column1VBox.getChildren().addAll(column1VBoxId, column1VBoxHeader, column1VBoxDescription);
+	        column1VBoxId.managedProperty().bind(column1VBoxId.visibleProperty());
+	        column1VBoxId.setVisible(false);
 	        column1VBox.setOnMouseClicked(event -> {
 	        	if(window.prevWindow instanceof AddWhen) { //add uniqueId
 	        		ArrayList<String> whenEvent = new ArrayList<String>();
-	        		whenEvent.add(column1VBoxUniqueId.getText());
+	        		whenEvent.add(column1VBoxId.getText());
 	        		whenEvent.add(column1VBoxHeader.getText());
 	        		whenEvent.add(column1VBoxDescription.getText());
 	        		((AddRule) window.prevWindow.prevWindow).whenData.add(whenEvent);
@@ -128,7 +127,7 @@ public class MyStyles {
 //	        		window.back().back();
 	        	} if(window.prevWindow instanceof AddThen) {//add uniqueID
 	        		ArrayList<String> thenEvent = new ArrayList<String>();
-	        		thenEvent.add(column1VBoxUniqueId.getText());
+	        		thenEvent.add(column1VBoxId.getText());
 	        		thenEvent.add(column1VBoxHeader.getText());
 	        		thenEvent.add(column1VBoxDescription.getText());
 	        		((AddRule) window.prevWindow.prevWindow).thenData.add(thenEvent);
