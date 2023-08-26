@@ -49,7 +49,7 @@ public class MyStyles {
 		if(eventsVBox == null) return events; //user just wants events
 		
 		for(Map<String, Object> readEvent : events) {
-			HBox column1HBox = new HBox();
+			HBox column1HBox = new HBox(10);
 			VBox column1VBox = new VBox();
 			column1HBox.minWidthProperty().bind(eventsVBox.widthProperty().subtract(140));
 			column1VBox.minWidthProperty().bind(eventsVBox.widthProperty().subtract(140));
@@ -60,7 +60,7 @@ public class MyStyles {
 	        Text column1VBoxDescription = new Text((String) readEvent.get("description"));
 	        
 	        Button editButton = new Button("Edit");
-	        editButton.setStyle("-fx-font: 15 arial;-fx-base: #FFE4E1");
+	        editButton.setStyle(MainMenu.EDIT_BUTTON_STYLE);
 	        editButton.setOnAction(event -> {
 	        	if(window instanceof DatabaseEvents) {
 	        		AddDatabaseEvent ade = new AddDatabaseEvent(window);
@@ -88,7 +88,7 @@ public class MyStyles {
 	        });
 	        
 	        Button removeButton = new Button("Remove");
-	        removeButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
+	        removeButton.setStyle(MainMenu.DELETE_BUTTON_STYLE);
 	        removeButton.setOnAction(event -> {
 	        	if(window instanceof DatabaseEvents) {
 	        		AddDatabaseEvent.removeEventFromDatabaseReadEvent((int) readEvent.get("id"));
@@ -138,7 +138,7 @@ public class MyStyles {
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        column1HBox.getChildren().addAll(column1VBox, editButton, removeButton);
 	        eventsVBox.getChildren().add(column1HBox);
-	        MyStyles.addHover(column1VBox);
+	       // MyStyles.addHover(column1VBox);
 		}
 		VBox column1VBox2 = new VBox();
 		MyStyles.createAddNewEvent(column1VBox2,eventsVBox);

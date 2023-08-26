@@ -188,7 +188,7 @@ public class AddRule extends Window {
 	  
 	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        //eventsVBox.getChildren().add(column1VBox);
-	        MyStyles.addHover(column1VBox);
+	       // MyStyles.addHover(column1VBox);
 			Button removeButton = new Button("-");
 			removeButton.setOnMouseClicked(e -> {
 				eventsVBox.getChildren().remove(column1HBox);
@@ -209,7 +209,7 @@ public class AddRule extends Window {
         Text column1VBox2Header = new Text("Add New Event");
         column1VBox2Header.setStyle(MainMenu.HEADER_2_STYLE);        
         column1VBox2.getChildren().addAll(column1VBox2Header);**/ //HERE
-    	MainMenu.addHoverInteraction(new VBox[] {column1VBox2}, "yellow", "darkgray");
+//    	MainMenu.addHoverInteraction(new VBox[] {column1VBox2}, "yellow", "darkgray");
        // eventsVBox.getChildren().add(column1VBox2);
 	}
 

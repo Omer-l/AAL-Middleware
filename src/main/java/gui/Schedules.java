@@ -63,7 +63,7 @@ public class Schedules extends Window {
 	        column1VBox.getChildren().addAll(column1VBoxUniqueId, column1VBoxHeader, column1VBoxDescription);
 	        column1VBoxUniqueId.managedProperty().bind(column1VBoxUniqueId.visibleProperty());
 	        column1VBoxUniqueId.setVisible(false);
-	    	MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
+	    	//MainMenu.addHoverInteraction(new VBox[] {column1VBox}, "white", "darkgray");
 	        eventsVBox.getChildren().addAll(column1VBox);
 		}
 		

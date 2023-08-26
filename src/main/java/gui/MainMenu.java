@@ -67,8 +67,11 @@ public class MainMenu extends Application {
 			+ "-fx-background-radius: 10; ";
 	
 	public final static String BACK_BUTTON_SVG ="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"; 
-	public final static String BACK_BUTTON_STYLE = "-fx-fill: #007ACC;";
+	public final static String BACK_BUTTON_STYLE = "-fx-font: 15 arial; -fx-base: #3F51B5";
 	public final static double SCALE_FACTOR = 0.4;
+	
+	public final static String EDIT_BUTTON_STYLE = "-fx-font: 12 arial; -fx-base: #3F51B5";
+	public final static String DELETE_BUTTON_STYLE = "-fx-font: 12 arial; -fx-base: #3F51B5";
 	
 	public final static double ICON_WIDTH = 75;
 	public final static double ICON_HEIGHT = 70;
@@ -202,7 +205,7 @@ public class MainMenu extends Application {
     	Text configVBox2Details = new Text("Run,Read and Write files");
     	configVBox2.getChildren().addAll(configVBox2Header, configVBox2Details);
     	configHBox2.getChildren().addAll(svgStackPane1, configVBox2);
-    	configHBox2.setOnMouseClicked(event -> { goToDatabaseListWindow(null);});
+    	configHBox2.setOnMouseClicked(event -> { new FileEvents(null).open();});
     	
     	
     	 HBox configHBox3 = new HBox();
