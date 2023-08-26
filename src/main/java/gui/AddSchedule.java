@@ -45,6 +45,7 @@ public class AddSchedule extends Window {
     TextField startTimeField = new TextField();
     TextField endTimeField = new TextField();
     Menu menu1 =  new Menu();
+	private int id;
     
 	public AddSchedule(Window prevWindow) {
 		super(prevWindow);
@@ -58,6 +59,7 @@ public class AddSchedule extends Window {
 	public void loadData(int uniqueId, TextField uniqueIdField, TextField nameField, TextField descriptionField, 
 			String startTime, String endTime, String repeat) {
 		System.out.println(editData);
+		this.id = uniqueId;
 		uniqueIdField.setText(uniqueId + "");
 		nameField.setText((String) editData.get("name"));
 		descriptionField.setText((String) editData.get("description"));
@@ -263,15 +265,16 @@ public class AddSchedule extends Window {
 		boolean emptyField = uniqueId.isEmpty() || name.isEmpty() || description.isEmpty();
 			if(!emptyField) {
 				if(editData.isEmpty()) {
-					MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES (null, '" + uniqueId + "', '" + name + "', '" + description + "');", "");
-		        	MainMenu.mainDbManager.queryDB("INSERT INTO schedule VALUES (null, '" + uniqueId + "', '" + startDate + "', '" + endDate + "', '" + repeat + "', '" + LocalDateTime.now() + "');", ""); 
+					MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES (null, '" + name + "', '" + description + "');", "");
+		        	id = (int) MainMenu.mainDbManager.queryDB("SELECT * FROM event ORDER BY id  DESC LIMIT 1;", "select").get(0).get("id");
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO schedule VALUES (" + id + ", '" + startDate + "', '" + endDate + "', '" + repeat + "', '" + LocalDateTime.now() + "');", ""); 
 				} else {
 		        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
 		        			+ " id = '" + uniqueId + "', name = '" + name + "', "
-		        			+ "description = '" + description + "' WHERE id = '" + uniqueId + "';", "");
+		        			+ "description = '" + description + "' WHERE id = '" + id + "';", "");
 		        	MainMenu.mainDbManager.queryDB("UPDATE schedule SET"
 		        			+ " id = '" + uniqueId + "', start_date_time = '" + startDate + "', "
-		        			+ "end_date_time = '" + endDate + "' WHERE id = '" + uniqueId + "';", "");
+		        			+ "end_date_time = '" + endDate + "' WHERE id = '" + id + "';", "");
 				}
 			}
 			back();
