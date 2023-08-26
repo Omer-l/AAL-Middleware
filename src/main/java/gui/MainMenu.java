@@ -66,6 +66,9 @@ public class MainMenu extends Application {
 	public final static String HBOX_LIST_STYLE = "-fx-background-color: #FFEBEE ;"
 			+ "-fx-background-radius: 10; ";
 	
+	public final static String BACK_BUTTON_SVG ="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"; 
+	public final static String BACK_BUTTON_STYLE = 
+	
 	public final static double ICON_WIDTH = 75;
 	public final static double ICON_HEIGHT = 70;
 	
@@ -79,8 +82,8 @@ public class MainMenu extends Application {
 	public static final int SVG_VBOX_SPACING = 30;
 
 	public final static String MENU_ADD_NEW_EVENT_BUTTON_STYLE = "-fx-background-color:   yellow; -fx-border-color: black;";
-	public final static String MAIN_CONTENT_STYLE = "-fx-background-color:  #d3d3d3;";
-	public final static String GUI_BACKGROUND_STYLE = "-fx-background-color:   #FAF0DC;";
+	public final static String MAIN_CONTENT_STYLE = "-fx-background-color: white ;";
+	public final static String GUI_BACKGROUND_STYLE = "-fx-background-color:   #F48FB1;";
 	public final static ArrayList<String> databaseQueries = new ArrayList<String>();
 	//ensure connection to middleware is established before allowing configuring of middleware
 	public static MySqlConnection mainDbManager = new MySqlConnection("jdbc:mysql://localhost:3306/middleware", "root", "root");
@@ -100,8 +103,11 @@ public class MainMenu extends Application {
 	
 	public static void main(String[] args) {
     	
-    		MainMenu mm = new MainMenu();
-    		mm.open();
+    		//MainMenu mm = new MainMenu();
+    		//mm.open();
+    		DatabaseEvents db = new DatabaseEvents();
+    		db.open();
+    				
     	
     		launch(args);
     	 
@@ -330,6 +336,7 @@ public class MainMenu extends Application {
     	
     	addHoverInteraction(new Pane[] {configHBox1, configHBox2, configHBox3, configHBox4,configHBox5 ,configHBox6},"#FFEBEE", "darkgray");
     	mainHBox.getChildren().addAll(mainVBox1);
+    	mainHBox.setAlignment(Pos.CENTER);
     }
 
 	public static void clearMainBox() {
@@ -366,8 +373,10 @@ public class MainMenu extends Application {
 	    	//button.setStyle("-fx-background-color: " + fromColor +";");
 	
 	        // Set the initial appearance of the pane
-	    	button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: " + toColor + ";"));
-	    	button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + fromColor + ";"));
+	    	button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: " + toColor + ";" 
+	    			+ "-fx-background-radius: 10;"));
+	    	button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + fromColor + ";"
+	    			+ "-fx-background-radius: 10; "));
     	}
     }
 	
