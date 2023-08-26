@@ -96,7 +96,7 @@ public class AddSchedule extends Window {
 
         HBox column1HBox1 = new HBox();
         VBox column1HBox1VBox1 = new VBox();
-        column1HBox1VBox1.setStyle(MainMenu.CARD_STYLE);
+        column1HBox1VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox1VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox1VBox1Header = new Text("UniqueID"); //TODO: delete this unique id field and make it so that the db auto increments this
         VBox column1HBox1VBox2 = new VBox();
@@ -108,7 +108,7 @@ public class AddSchedule extends Window {
 
         HBox column1HBox2 = new HBox();
         VBox column1HBox2VBox1 = new VBox();
-        column1HBox2VBox1.setStyle(MainMenu.CARD_STYLE);
+        column1HBox2VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox2VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox2VBox1Header = new Text("Name");
         VBox column1HBox2VBox2 = new VBox();
@@ -120,7 +120,7 @@ public class AddSchedule extends Window {
 
         HBox column1HBox3 = new HBox();
         VBox column1HBox3VBox1 = new VBox();
-        column1HBox3VBox1.setStyle(MainMenu.CARD_STYLE);
+        column1HBox3VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox3VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox3VBox1Header = new Text("Description");
         VBox column1HBox3VBox2 = new VBox();
@@ -137,7 +137,7 @@ public class AddSchedule extends Window {
         
         HBox column1Hbox4 = new HBox();
         VBox column1Hbox4VBox1 = new VBox();
-        column1Hbox4VBox1.setStyle(MainMenu.CARD_STYLE);
+        column1Hbox4VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1Hbox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1Hbox4VBox1Header = new Text("Start date and time");
         HBox column1Hbox4HBox2 = new HBox();
@@ -153,7 +153,7 @@ public class AddSchedule extends Window {
 
         HBox column1Hbox5 = new HBox();
         VBox column1Hbox5VBox1 = new VBox();
-        column1Hbox5VBox1.setStyle(MainMenu.CARD_STYLE);
+        column1Hbox5VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1Hbox5VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1Hbox5VBox1Header = new Text("End date and time");
         HBox column1Hbox5HBox2 = new HBox();
@@ -168,7 +168,7 @@ public class AddSchedule extends Window {
         
         HBox column1Hbox6 = new HBox();
         VBox column1Hbox6VBox1 = new VBox();
-        column1Hbox6VBox1.setStyle(MainMenu.CARD_STYLE);
+        column1Hbox6VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1Hbox6VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1Hbox6VBox1Header = new Text("Repeat");
         VBox column1Hbox6VBox2 = new VBox();

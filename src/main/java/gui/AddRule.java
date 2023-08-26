@@ -107,7 +107,7 @@ public class AddRule extends Window {
 
         HBox column1HBox2 = new HBox();
         VBox column1HBox2VBox1 = new VBox();
-        column1HBox2VBox1.setStyle(MainMenu.CARD_STYLE);
+        column1HBox2VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox2VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox2VBox1Header = new Text("Name");
         VBox column1HBox2VBox2 = new VBox();
@@ -119,7 +119,7 @@ public class AddRule extends Window {
 
         HBox column1HBox3 = new HBox();
         VBox column1HBox3VBox1 = new VBox();
-        column1HBox3VBox1.setStyle(MainMenu.CARD_STYLE);
+        column1HBox3VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox3VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox3VBox1Header = new Text("Description");
         VBox column1HBox3VBox2 = new VBox();
@@ -177,7 +177,7 @@ public class AddRule extends Window {
 			VBox column1VBox = new VBox();
 			column1HBox.minWidthProperty().bind(eventsVBox.widthProperty().subtract(140));
 			column1VBox.minWidthProperty().bind(eventsVBox.widthProperty().subtract(140));
-	        column1VBox.setStyle(MainMenu.CARD_STYLE);
+	        column1VBox.setStyle(MainMenu.USER_INPUT_STYLE);
 	        Text column1VBoxUniqueId = new Text((String) event.get(0) + "");
 	        Text column1VBoxHeader = new Text((String) event.get(1));
 	        column1VBoxHeader.setStyle(MainMenu.HEADER_2_STYLE);
