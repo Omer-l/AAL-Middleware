@@ -52,7 +52,7 @@ public class RuleRunner extends Thread{
 //			Map<String, Object> when = new HashMap<String, Object>();
 			//loop through the tables
 			for(String tableName : middlewareTableNames) {
-				String query = "SELECT * FROM " + tableName + " WHERE unique_id = \"" + id + "\"";
+				String query = "SELECT * FROM " + tableName + " WHERE id = " + id;
 				ArrayList<Map<String, Object>> resultList = mainDbManager.queryDB(query, "select");
 				//is there is a matching id in this table
 				if(resultList.size() > 0) {
@@ -82,7 +82,7 @@ public class RuleRunner extends Thread{
 						|| ( event.keySet().contains((String) when.get("column")) 
 								&& ((String) event.get(when.get("column"))).equals(((String) when.get("value")))))
 					when.put("reached", true);
-			} else if(event.get("unique_id") != null && event.get("unique_id").equals(when.get("unique_id"))) {
+			} else if(event.get("id") != null && (int) event.get("id") == (int) when.get("id") ) {
 				when.put("reached", true);
 			}
 		}
@@ -110,7 +110,7 @@ public class RuleRunner extends Thread{
 //
 //			testEvent.put("path", "C:/Users/ASUS/git/AAL-Middleware/lastAccessedBLE.txt");
 //			testEvent.put("previous_result", 1691063796908l);
-//			testEvent.put("unique_id", "kewnfkwjen");
+//			testEvent.put("id", "kewnfkwjen");
 //			testEvent.put("event_type", "system_file_read_event");
 //			testEvent.put("content", "");
 //
@@ -124,7 +124,7 @@ public class RuleRunner extends Thread{
 				case "system_file_run_event": 
 					try { //TODO: duplicate code with AddFileEvent.java
 						mainDbManager.connectToDb("middleware");
-						Map<String, Object> row = mainDbManager.queryDB("SELECT * FROM system_file_run_event WHERE unique_id = '" + (String) then.get("unique_id") + "'", "select").get(0);						
+						Map<String, Object> row = mainDbManager.queryDB("SELECT * FROM system_file_run_event WHERE id = " + (int) then.get("id"), "select").get(0);						
 						String command = (String) row.get("command");
 //						String command = "java --version";
 			            String currentWorkingDirectory = (String) row.get("current_working_directory");
@@ -166,9 +166,9 @@ public class RuleRunner extends Thread{
 			when.put("reached", false);
 	}
 	
-	public boolean containsWhenId(String id) {
+	public boolean containsWhenId(int id) {
 		for(Map<String, Object> when : whens)
-			if(((String) when.get("unique_id")).equals(id))
+			if((int) when.get("id") == id)
 				return true;
 		
 		return false;

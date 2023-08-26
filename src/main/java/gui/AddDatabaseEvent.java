@@ -35,22 +35,23 @@ public class AddDatabaseEvent extends Window {
     private Button testButton = new Button("Test");
     private Button saveButton = new Button("Save");
     private String query;
+    private int id;
 	Map<String, Object> editData = new HashMap<String, Object>();
 	Map<String, Object> removeData = new HashMap<String, Object>();
 
-	public void loadData(String uniqueId) {
-		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.unique_id = event.unique_id", "select").get(0);
+	public void loadData(int id) {
+		this.id = id;
+		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.id = event.id", "select").get(0);
 	}
 	
-	public void loadData(String uniqueId, TextField uniqueIdField, TextField nameField, TextField descriptionField,
+	public void loadData(TextField uniqueIdField, TextField nameField, TextField descriptionField,
 			Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, TextField valueField, Menu sortByMenu) {
-		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.unique_id = event.unique_id", "select").get(0);
+		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.id = event.id", "select").get(0);
 		System.out.println(editData);
 		if(((String) editData.get("rdbm")).equals("MySQL"))
 			dbManager.setDetails(DbXMLParser.dbDetailsMySql);
 		else if(((String) editData.get("rdbm")).equals("PostgreSQL"))
 			dbManager.setDetails(DbXMLParser.dbDetailsPostgresql);
-		uniqueIdField.setText(uniqueId);
 		nameField.setText((String) editData.get("name"));
 		descriptionField.setText((String) editData.get("description"));
 		rdbmMenu.setText((String) editData.get("rdbm"));
@@ -66,8 +67,8 @@ public class AddDatabaseEvent extends Window {
 	}
 	
 
-	public static void removeEventFromDatabaseReadEvent(String uniqueID) {
-	  MainMenu.mainDbManager.queryDB("DELETE FROM database_read_event WHERE database_read_event.unique_id = '" + uniqueID + "'","");
+	public static void removeEventFromDatabaseReadEvent(int uniqueID) {
+	  MainMenu.mainDbManager.queryDB("DELETE FROM database_read_event WHERE database_read_event.id = " + uniqueID,"");
 	}
  
     
@@ -239,7 +240,7 @@ public class AddDatabaseEvent extends Window {
         ButtonBar column1ButtonBar = new ButtonBar(); 
         testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, valueField); });
         saveButton.setDisable(true);
-        saveButton.setOnAction(event -> { processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText(), menu1.getText(), menu2.getText(), menu3.getText(), menu4.getText(), valueField.getText(), menu5.getText());});
+        saveButton.setOnAction(event -> { processSaveButton(column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText(), menu1.getText(), menu2.getText(), menu3.getText(), menu4.getText(), valueField.getText(), menu5.getText());});
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
         HBox column1HBox9 = new HBox();
         MyStyles.createLogField(logField, mainVBox1, column1HBox9);
@@ -254,7 +255,7 @@ public class AddDatabaseEvent extends Window {
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
         
         if(!editData.isEmpty()) {
-        	loadData((String) editData.get("unique_id"), column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, menu1, menu2, menu3, menu4, valueField, menu5);
+        	loadData(column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, menu1, menu2, menu3, menu4, valueField, menu5);
         }
 	}
 
@@ -385,23 +386,24 @@ public class AddDatabaseEvent extends Window {
     	}
 	}
 
-	private void processSaveButton(String uniqueIdInput, String nameInput, String descriptionInput, String rdbm, String db, String table, String column, String value, String sortBy) {
-		boolean emptyField = uniqueIdInput.isEmpty() || nameInput.isEmpty() || descriptionInput.isEmpty();
+	private void processSaveButton(String nameInput, String descriptionInput, String rdbm, String db, String table, String column, String value, String sortBy) {
+		boolean emptyField = nameInput.isEmpty() || descriptionInput.isEmpty();
 		if(!emptyField) {
 			if(editData.isEmpty()) {
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueIdInput + "', '" + nameInput + "', '" + descriptionInput + "');", "");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ('" + uniqueIdInput + "', '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); 
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES (null, '" + nameInput + "', '" + descriptionInput + "');", "");
+	        	id = (int) MainMenu.mainDbManager.queryDB("SELECT * FROM event ORDER BY id  DESC LIMIT 1;", "select").get(0).get("id");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ("+ id + ", '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); 
 			} else {
 	        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
-	        			+ " unique_id = '" + uniqueIdInput + "', name = '" + nameInput + "', "
-	        			+ "description = '" + descriptionInput + "' WHERE unique_id = '" + uniqueIdInput + "';", "");
+	        			+ " name = '" + nameInput + "', "
+	        			+ "description = '" + descriptionInput + "' WHERE id = " + id + ";", "");
 	        	MainMenu.mainDbManager.queryDB("UPDATE database_read_event"
 	        			+ " SET "
 	        			+ "rdbm = '" + rdbm + "', "
 	        			+ "`database` = '" + db + "', `table` = '" + table + "',"
 	        			+ "`column` = '" + column + "', `value` = '" + value
 	        			+ "', sortby = '" + sortBy
-	        			+ "', query = \"" + this.query + "\" WHERE unique_id = '" + uniqueIdInput + "';", "");
+	        			+ "', query = \"" + this.query + "\" WHERE id = " + id + ";", "");
 	        	}
 			back();
 		} else {

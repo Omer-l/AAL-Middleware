@@ -55,10 +55,10 @@ public class AddSchedule extends Window {
 		
 	}
 	
-	public void loadData(String uniqueId, TextField uniqueIdField, TextField nameField, TextField descriptionField, 
+	public void loadData(int uniqueId, TextField uniqueIdField, TextField nameField, TextField descriptionField, 
 			String startTime, String endTime, String repeat) {
 		System.out.println(editData);
-		uniqueIdField.setText(uniqueId);
+		uniqueIdField.setText(uniqueId + "");
 		nameField.setText((String) editData.get("name"));
 		descriptionField.setText((String) editData.get("description"));
 		menu1.setText((String) editData.get("repetition"));
@@ -224,7 +224,7 @@ public class AddSchedule extends Window {
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
         
         if(!editData.isEmpty()) {
-        	loadData((String) editData.get("unique_id"),column1HBox1VBox2TextField, column1HBox2VBox2TextField,column1HBox3VBox2TextField,
+        	loadData((int) editData.get("id"),column1HBox1VBox2TextField, column1HBox2VBox2TextField,column1HBox3VBox2TextField,
         			(startDatePicker.getValue() + " " +  startTimeField.getText()),  (endDatePicker.getValue() + " " + endTimeField.getText())
         			,menu1.toString());
         }
@@ -263,15 +263,15 @@ public class AddSchedule extends Window {
 		boolean emptyField = uniqueId.isEmpty() || name.isEmpty() || description.isEmpty();
 			if(!emptyField) {
 				if(editData.isEmpty()) {
-					MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES ('" + uniqueId + "', '" + name + "', '" + description + "');", "");
-		        	MainMenu.mainDbManager.queryDB("INSERT INTO schedule VALUES ('" + uniqueId + "', '" + startDate + "', '" + endDate + "', '" + repeat + "', '" + LocalDateTime.now() + "');", ""); 
+					MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES (null, '" + uniqueId + "', '" + name + "', '" + description + "');", "");
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO schedule VALUES (null, '" + uniqueId + "', '" + startDate + "', '" + endDate + "', '" + repeat + "', '" + LocalDateTime.now() + "');", ""); 
 				} else {
 		        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
-		        			+ " unique_id = '" + uniqueId + "', name = '" + name + "', "
-		        			+ "description = '" + description + "' WHERE unique_id = '" + uniqueId + "';", "");
+		        			+ " id = '" + uniqueId + "', name = '" + name + "', "
+		        			+ "description = '" + description + "' WHERE id = '" + uniqueId + "';", "");
 		        	MainMenu.mainDbManager.queryDB("UPDATE schedule SET"
-		        			+ " unique_id = '" + uniqueId + "', start_date_time = '" + startDate + "', "
-		        			+ "end_date_time = '" + endDate + "' WHERE unique_id = '" + uniqueId + "';", "");
+		        			+ " id = '" + uniqueId + "', start_date_time = '" + startDate + "', "
+		        			+ "end_date_time = '" + endDate + "' WHERE id = '" + uniqueId + "';", "");
 				}
 			}
 			back();
