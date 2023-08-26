@@ -15,8 +15,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -34,9 +37,10 @@ public class DatabaseEvents extends Window {
 	public void open() {
 		MainMenu.clearMainBox();
     	MainMenu.changeTitle("Database Events");
+    	
         Button button1 = new Button("Back");
-        button1.setStyle("-fx-font: 15 arial; -fx-base: #BDBDBD");
-
+        button1.setStyle(MainMenu.BACK_BUTTON_STYLE);
+       
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);
