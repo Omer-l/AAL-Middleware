@@ -255,7 +255,7 @@ public class AddFileEvent extends Window {
         testButton.setOnAction(event -> { processTestButton(operation); });
         saveButton.setDisable(true);
     	saveButton.setOnAction(event -> {
-//        	processSaveButton(column1HBox1VBox2TextField.getText(), column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText());
+        	processSaveButton(column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText());
     	});
         column1ButtonBar2.getButtons().addAll(testButton, saveButton);
        HBox column1HBox9 = new HBox();
@@ -442,14 +442,15 @@ public class AddFileEvent extends Window {
 	    	if(!emptyField) {
 	    		if(editRunData.isEmpty()) {
 		    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES (null, '" + nameInput + "', '" + descriptionInput + "');", "");
-		        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES (null, '" + command + "', '" + currentWorkingDirectory + "');", "");
+		        	int id = (int) MainMenu.mainDbManager.queryDB("SELECT * FROM event ORDER BY id  DESC LIMIT 1;", "select").get(0).get("id");
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_run_event VALUES (" + id + ", '" + command + "', '" + currentWorkingDirectory + "');", "");
 	    		} else {
 	    			MainMenu.mainDbManager.queryDB("UPDATE event SET"
-		        			+ " id = " + id + ", name = '" + nameInput + "', "
-		        			+ "description = '" + descriptionInput + "' WHERE id = " + id + ";", "");
+		        			+ " id = " + id + ", name = '" + nameInput + "',"
+		        			+ " description = '" + descriptionInput + "' WHERE id = " + id + ";", "");
 	    			MainMenu.mainDbManager.queryDB("UPDATE system_file_run_event SET"
-		        			+ " id = " + id + ", command = '" + command + "', "
-		        			+ "current_working_directory = '" + currentWorkingDirectory + "' WHERE id = " + id + ";", "");
+		        			+ " id = " + id + ", command = '" + command + "',"
+		        			+ " current_working_directory = '" + currentWorkingDirectory + "' WHERE id = " + id + ";", "");
 	    		}
 	    	} else {
 	    		logField.setText("name or description field is empty");
@@ -461,7 +462,8 @@ public class AddFileEvent extends Window {
 	    	if(!emptyField) {
 	    		if(editReadData.isEmpty()) {
 	    		MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES (null, '" + nameInput + "', '" + descriptionInput + "');", "");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_read_event VALUES (null, '" + filePath + "', '" + content + "');", "");
+	        	int id = (int) MainMenu.mainDbManager.queryDB("SELECT * FROM event ORDER BY id  DESC LIMIT 1;", "select").get(0).get("id");
+	        	MainMenu.mainDbManager.queryDB("INSERT INTO system_file_read_event VALUES (" + id + ", '" + filePath + "', '" + content + "');", "");
 		    	} else {
 	    			MainMenu.mainDbManager.queryDB("UPDATE event SET"
 		        			+ " id = " + id + ", name = '" + nameInput + "', "
