@@ -17,6 +17,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.layout.VBox;
@@ -44,7 +45,7 @@ public class AddDatabaseEvent extends Window {
 		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.id = event.id", "select").get(0);
 	}
 	
-	public void loadData(TextField uniqueIdField, TextField nameField, TextField descriptionField,
+	public void loadData( TextField nameField, TextField descriptionField,
 			Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, TextField valueField, Menu sortByMenu) {
 		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.id = event.id", "select").get(0);
 		System.out.println(editData);
@@ -87,84 +88,87 @@ public class AddDatabaseEvent extends Window {
 		
 	        
         Button button1 = new Button("Back");
-        button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+        button1.setStyle(MainMenu.BACK_BUTTON_STYLE);
         saveButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
         testButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
 
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
         MainMenu.menuBarHBox.getChildren().addAll(button1);
+        
+  
         //LEFT SIDE MAIN
         VBox mainVBox1 = new VBox(2);
+        
         mainVBox1.prefWidthProperty().bind(MainMenu.root.widthProperty());
         //column1urations
         VBox column1VBox1 = new VBox(2);
         Text column1Header = new Text("Details");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
 
-        HBox column1HBox1 = new HBox();
-        VBox column1HBox1VBox1 = new VBox();
-        column1HBox1VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
-        column1HBox1VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox1VBox1Header = new Text("UniqueID"); //TODO: delete this unique id field and make it so that the db auto increments this
-        VBox column1HBox1VBox2 = new VBox();
-        column1HBox1VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        TextField column1HBox1VBox2TextField = new TextField();
-        column1HBox1VBox1.getChildren().addAll(column1HBox1VBox1Header);
-        column1HBox1VBox2.getChildren().addAll(column1HBox1VBox2TextField);
-        column1HBox1.getChildren().addAll(column1HBox1VBox1, column1HBox1VBox2);
-
-        HBox column1HBox2 = new HBox();
+        VBox column1HBox2 = new VBox();
         VBox column1HBox2VBox1 = new VBox();
+
         column1HBox2VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
-        column1HBox2VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox2VBox1Header = new Text("Name");
         VBox column1HBox2VBox2 = new VBox();
-        column1HBox2VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+
         TextField column1HBox2VBox2TextField = new TextField();
+        column1HBox2VBox2TextField.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
         column1HBox2VBox1.getChildren().addAll(column1HBox2VBox1Header);
         column1HBox2VBox2.getChildren().addAll(column1HBox2VBox2TextField);
         column1HBox2.getChildren().addAll(column1HBox2VBox1, column1HBox2VBox2);
 
-        HBox column1HBox3 = new HBox();
+        VBox column1HBox3 = new VBox();
         VBox column1HBox3VBox1 = new VBox();
         column1HBox3VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
-        column1HBox3VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+//        column1HBox3VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox3VBox1Header = new Text("Description");
         VBox column1HBox3VBox2 = new VBox();
-        column1HBox3VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+//        column1HBox3VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         TextField column1HBox3VBox2TextField = new TextField();
+        column1HBox3VBox2TextField.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
+
         column1HBox3VBox1.getChildren().addAll(column1HBox3VBox1Header);
         column1HBox3VBox2.getChildren().addAll(column1HBox3VBox2TextField);
         column1HBox3.getChildren().addAll(column1HBox3VBox1, column1HBox3VBox2);
-
-        //column1urations
+//
+//        //column1urations
         VBox column1VBox2 = new VBox(2);
         Text column1VBox2Header = new Text("Method");
         column1VBox2Header.setStyle(MainMenu.HEADER_1_STYLE);
-        HBox column1Hbox4 = new HBox();
-        
+        VBox column1Hbox4 = new VBox();
+//        
         VBox column1Hbox4VBox1 = new VBox();
         column1Hbox4VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
-        column1Hbox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+//        column1Hbox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1Hbox4VBox1Header = new Text("RDBM ");
         VBox column1Hbox4VBox2 = new VBox();
-        column1Hbox4VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        
-        
-        // Create a MenuItem
+//        column1Hbox4VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(7));
+//        
+//        
+//        // Create a MenuItem
         MenuBar column1HBox4VBox2MenuBar = new MenuBar();
+        
+        column1HBox4VBox2MenuBar.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
         Menu menu1 =  new Menu();
         // Create MenuItems for the dropdown menu
+       //here we need to add databases
+        menu1.setText("Choose RDBM");
         MenuItem option1 = new MenuItem("MySQL");
         MenuItem option2 = new MenuItem("PostgreSQL");
-        menu1.getItems().addAll(option1, option2);
+        
+        menu1.getItems().addAll(option1,option2);
         column1HBox4VBox2MenuBar.getMenus().add(menu1);
         column1Hbox4VBox1.getChildren().addAll(column1Hbox4VBox1Header);
         column1Hbox4VBox2.getChildren().addAll(column1HBox4VBox2MenuBar);
         column1Hbox4.getChildren().addAll(column1Hbox4VBox1, column1Hbox4VBox2);
-
-        HBox column1HBox5 = new HBox();
+        
+        
+        
+        
+//
+        VBox column1HBox5 = new VBox();
         VBox column1HBox5VBox1 = new VBox();
         column1HBox5VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox5VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
@@ -175,14 +179,14 @@ public class AddDatabaseEvent extends Window {
         Menu menu2 = new Menu();
         // Create MenuItems for the dropdown menu
         column1HBox5VBox2MenuBar.getMenus().add(menu2);
-//        Text menuBar2Label = new Text("Table");
-//    	HBox menuBar2HBox = new HBox(10);
-//    	menuBar2HBox.getChildren().addAll(menuBar2Label, column1HBox5VBox2MenuBar);
+        Text menuBar2Label = new Text("Table");
+    	HBox menuBar2HBox = new HBox(10);
+    	menuBar2HBox.getChildren().addAll(menuBar2Label, column1HBox5VBox2MenuBar);
         column1HBox5VBox1.getChildren().addAll(column1HBox5VBox1Header);
         column1HBox5VBox2.getChildren().addAll(column1HBox5VBox2MenuBar);
         column1HBox5.getChildren().addAll(column1HBox5VBox1, column1HBox5VBox2);
-
-        HBox column1HBox6 = new HBox();
+//
+        VBox column1HBox6 = new VBox();
         VBox column1HBox6VBox1 = new VBox();
         column1HBox6VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox6VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
@@ -191,16 +195,18 @@ public class AddDatabaseEvent extends Window {
         column1HBox6VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         MenuBar column1HBox6VBox2MenuBar = new MenuBar();
         Menu menu3 = new Menu();
+//        menu3.setText("Choose Table");
+
         // Create MenuItems for the dropdown menu
         column1HBox6VBox2MenuBar.getMenus().add(menu3);
-//        Text menuBar3Label = new Text("Table");
-//    	HBox menuBar3HBox = new HBox(10);
-//    	menuBar3HBox.getChildren().addAll(menuBar3Label, column1HBox6VBox2MenuBar);
+        Text menuBar3Label = new Text("Table");
+    	HBox menuBar3HBox = new HBox(10);
+    	menuBar3HBox.getChildren().addAll(menuBar3Label, column1HBox6VBox2MenuBar);
         column1HBox6VBox1.getChildren().addAll(column1HBox6VBox1Header);
         column1HBox6VBox2.getChildren().addAll(column1HBox6VBox2MenuBar);
         column1HBox6.getChildren().addAll(column1HBox6VBox1, column1HBox6VBox2);
-
-        HBox column1HBox7 = new HBox();
+//
+        VBox column1HBox7 = new VBox();
         VBox column1HBox7VBox1 = new VBox();
         column1HBox7VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox7VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
@@ -210,33 +216,37 @@ public class AddDatabaseEvent extends Window {
         MenuBar column1HBox7VBox2MenuBar = new MenuBar();
         column1HBox7VBox2MenuBar.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
         Menu menu4 = new Menu();
+//        menu4.setText("Choose Column");
+
         // Create MenuItems for the dropdown menu
         column1HBox7VBox2MenuBar.getMenus().add(menu4);
         column1HBox7VBox1.getChildren().addAll(column1HBox7VBox1Header);
         column1HBox7VBox2.getChildren().addAll(valueField);
         valueField.setDisable(true);
         column1HBox7.getChildren().addAll(column1HBox7VBox1, column1HBox7VBox2MenuBar, column1HBox7VBox2);
-        
-
-        HBox column1HBox8 = new HBox();
+//        
+//
+        VBox column1HBox8 = new VBox();
         VBox column1HBox8VBox1 = new VBox();
         column1HBox8VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox8VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox8VBox1Header = new Text("Sort By");
+//        menu5.setText("Sort by");
+
         VBox column1HBox8VBox2 = new VBox();
         column1HBox8VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         MenuBar column1HBox8VBox2MenuBar = new MenuBar();
         // Create MenuItems for the dropdown menu
         column1HBox8VBox2MenuBar.getMenus().add(menu5);
-//        Text menuBar3Label = new Text("Table");
-//    	HBox menuBar3HBox = new HBox(10);
-//    	menuBar3HBox.getChildren().addAll(menuBar3Label, column1HBox8VBox2MenuBar);
+        Text menuBar3Label1 = new Text("Table");
+    	HBox menuBar3HBox1 = new HBox(10);
+    	menuBar3HBox.getChildren().addAll(menuBar3Label1, column1HBox8VBox2MenuBar);
         column1HBox8VBox1.getChildren().addAll(column1HBox8VBox1Header);
         column1HBox8VBox2.getChildren().addAll(column1HBox8VBox2MenuBar);
         column1HBox8.getChildren().addAll(column1HBox8VBox1, column1HBox8VBox2);
-        
+//        
         VBox column1VBox3 = new VBox(10);
-        
+//        
         ButtonBar column1ButtonBar = new ButtonBar(); 
         testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, valueField); });
         saveButton.setDisable(true);
@@ -244,28 +254,29 @@ public class AddDatabaseEvent extends Window {
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
         HBox column1HBox9 = new HBox();
         MyStyles.createLogField(logField, mainVBox1, column1HBox9);
-        
-        
+//        
+//        
         setRDBMSMenuOnAction(menu1, menu2, menu3, menu4);
-        column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
+        column1VBox1.getChildren().addAll(column1Header, column1HBox2, column1HBox3);
         column1VBox2.getChildren().addAll(column1VBox2Header, column1Hbox4, column1HBox5, column1HBox6, column1HBox7, column1HBox8);
         column1VBox3.getChildren().addAll(column1ButtonBar, column1HBox9);
-        
+//        
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
         
         if(!editData.isEmpty()) {
-        	loadData(column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, menu1, menu2, menu3, menu4, valueField, menu5);
+        	loadData(column1HBox2VBox2TextField, column1HBox3VBox2TextField, menu1, menu2, menu3, menu4, valueField, menu5);
         }
 	}
 
 	private void setRDBMSMenuOnAction(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu) {
-	    Menu[] menusToReset = {databaseMenu, tableMenu, columnMenu};
+	    Menu[] menusToReset = {databaseMenu, tableMenu, columnMenu, menu5};
 		rdbmMenu.getItems().get(0).setOnAction(event -> {
 	        reset(menusToReset);
 			loadDatabasesMenu(rdbmMenu, databaseMenu, "mysql.cfg.xml");
 			rdbmMenu.setText(rdbmMenu.getItems().get(0).getText());
 	        setDatabaseMenuOnAction(databaseMenu, tableMenu, columnMenu);
+	        databaseMenu.setText("Choose database");
 		
 		});
 		rdbmMenu.getItems().get(1).setOnAction(event -> {
@@ -273,6 +284,7 @@ public class AddDatabaseEvent extends Window {
 			loadDatabasesMenu(rdbmMenu, databaseMenu, "postgresql.cfg.xml");
 			rdbmMenu.setText(rdbmMenu.getItems().get(1).getText());
 	        setDatabaseMenuOnAction(databaseMenu, tableMenu, columnMenu);
+	        databaseMenu.setText("Choose database");
 			});
 	}
 
@@ -284,13 +296,14 @@ public class AddDatabaseEvent extends Window {
 	}
 
 	private void setDatabaseMenuOnAction(Menu dbMenu, Menu tableMenu, Menu columnMenu) {
-	    Menu[] menusToReset = {tableMenu, columnMenu};
+	    Menu[] menusToReset = {tableMenu, columnMenu, menu5};
 		for(MenuItem menuItem : dbMenu.getItems()) {
 			menuItem.setOnAction(event -> {
 	    		reset(menusToReset);
 				loadTablesMenu(tableMenu, columnMenu, menuItem.getText());
 				System.out.println(menuItem.getText());
 	    		menuItem.getParentMenu().setText(menuItem.getText());
+	    		tableMenu.setText("Choose table");
 			});
 		}
 	}
@@ -318,6 +331,7 @@ public class AddDatabaseEvent extends Window {
 				reset(menusToReset);
 				tableMenu.setText(tableName);
 				loadColumnsMenu(tableMenu, columnMenu, tableName);
+				columnMenu.setText("Choose column");
 			});
 			tables.add(tableOption);
 		}
@@ -333,6 +347,7 @@ public class AddDatabaseEvent extends Window {
 		wholeRowOption.setOnAction(event -> {
 			columnMenu.setText(wholeRowOption.getText());
 			valueField.setDisable(true);
+			menu5.setText("Choose sort by column");
 		});
 		columns.add(wholeRowOption);
 		
@@ -342,6 +357,7 @@ public class AddDatabaseEvent extends Window {
 			columnOption.setOnAction(event -> {
 				columnMenu.setText(columnName);
 				valueField.setDisable(false);
+				menu5.setText("Choose sort by column");
 			});
 			sortByColumnOption.setOnAction(event -> {
 				menu5.setText(columnName);
@@ -349,7 +365,6 @@ public class AddDatabaseEvent extends Window {
 			columns.add(columnOption);
 			sortByColumns.add(sortByColumnOption);
 		}
-		
 		columnMenu.getItems().addAll(columns);
         menu5.getItems().addAll(sortByColumns);
 	}
