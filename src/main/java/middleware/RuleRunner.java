@@ -41,8 +41,10 @@ public class RuleRunner extends Thread{
     private void getWhensAndThens(Map<String, Object> rule) {
 	    String[] whenIds = ((String) rule.get("when_event_ids")).split("\\s*,\\s*");
 	    String[] thenIds = ((String) rule.get("then_event_ids")).split("\\s*,\\s*");
-	    whens = getEvents(whenIds);
-	    thens = getEvents(thenIds);
+	    if( !( (whenIds.length > 0 && whenIds[0].length() == 0) && (thenIds.length > 0 && thenIds[0].length() == 0) )) {
+		    whens = getEvents(whenIds);
+		    thens = getEvents(thenIds);
+	    }
 	}
 
 	public static ArrayList<Map<String, Object>> getEvents(String[] ids) {

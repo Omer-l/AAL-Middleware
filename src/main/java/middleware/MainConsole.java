@@ -72,7 +72,7 @@ public class MainConsole {
 //        	    System.out.println(latestResults + "\n" + prevResults);
     	        if(iteration == 0) //only for first iteration
     	        	prevResults = latestResults;
-    	        if(!latestResults.equals(prevResults)) {
+    	        if(!latestResults.equals(prevResults)) { //TODO fix schedules adding on to queue
     	        	Map<String, Object> event = getNewEvent(prevResults, latestResults);
     	        	if(event != null) {
         	        	System.out.println("EVENT!\n");
@@ -133,13 +133,13 @@ public class MainConsole {
 				
 				//clone first to avoid IllegalThreadStateException
 				RuleRunner ruleThread = new RuleRunner(rule.whens, rule.thens); //carry of the whens and thens to the clone
-				if(completedSchedules.contains(event)) {
-					completedSchedules.remove(event);
-					prevResults.remove(event);
-				}
 				ruleThread.event = event;
 				ruleThread.start();
 			}
+		}
+		if(completedSchedules.contains(event)) {
+			completedSchedules.remove(event);
+			prevResults.remove(event);
 		}
 	}
 
