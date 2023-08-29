@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
@@ -33,21 +34,22 @@ public class BLEtoMReasonerScript {
     				+ 	" beacon on beacon.MAC = record.MAC"
     				+ " JOIN"
     				+ 	" user on user.idUser = record.idUser"
-    				+ " ORDER BY 1 DESC LIMIT 1";
+    				+ " ORDER BY idRecord DESC LIMIT 1";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             if (resultSet.next()) {
                 // Retrieve data from the latest row
                 latestName = resultSet.getString("name");
                 latestLocation = resultSet.getString("location");
+                System.out.println("latest: " + latestName + latestLocation + ": ");
             } else {
                 System.out.println("Table is empty.");
             }
-            String fileName = "./lastAccessedBLE.txt";
-            File f = new File ("./lastAccessedBLE.txt");
+            String absFilePath = "C:/Users/ASUS/Documents/lastAccessedBLE.txt";
+            File f = new File (absFilePath);
         	if(!f.exists())
         		f.createNewFile();
-        	BufferedInputStream bis = new BufferedInputStream(new FileInputStream(fileName));
+        	BufferedInputStream bis = new BufferedInputStream(new FileInputStream(absFilePath));
             byte[] buffer = new byte[4096]; // Adjust buffer size as needed
             int bytesRead;
             while ((bytesRead = bis.read(buffer)) != -1) {
@@ -55,12 +57,14 @@ public class BLEtoMReasonerScript {
                 String data = new String(buffer, 0, bytesRead);
                 for(String line : data.split("\n")) {
                 	String[] lineSplit = line.split(",");
-                	nameAndLocationArr.put(lineSplit[0], lineSplit[1]);
+                	if(lineSplit.length == 2)
+                		nameAndLocationArr.put(lineSplit[0], lineSplit[1]);
+                	System.out.println(lineSplit.length);
                 }
             }
             bis.close();
     		connection.close(); //loading data complete
-//          connect to postgresql jdbc
+//            	connect to postgresql jdbc
         	dbUrl = "jdbc:postgresql://localhost:5432/sensors";
             username = "postgres";
             password = "123456";
@@ -72,11 +76,14 @@ public class BLEtoMReasonerScript {
             // Convert the date to the desired time format
             String formattedTime = timeFormat.format(date);
 //            	send relevant data to incoming_events postgresql, if user was in a different room before, send a second command confirming that previosu room is now false
-            query = "SELECT * FROM public.results (state,value, iteration, date_old, time_old) VALUES ('" + latestName + "In" + latestLocation + "',true, 85732,'" + formattedDate + "','" + formattedTime + "');";
+            query = "INSERT INTO public.incoming_events (state,value, iteration, date_old, time_old) VALUES ('" + latestName + "In" + latestLocation + "',true, 85732,'" + formattedDate + "','" + formattedTime + "');";
             statement = connection.createStatement();
             statement.executeUpdate(query);
             String previousLocation = nameAndLocationArr.get(latestName);
+            System.out.println(nameAndLocationArr);
+        	System.out.println("NAME: " + latestName + ", " +  previousLocation + " " + latestLocation);
             if(!latestLocation.equals(previousLocation)) { //prev location might be different room, or NULL
+            	System.out.println("NOT IN SAME ROOMG");
             	if(previousLocation != null) {
             		nameAndLocationArr.replace(latestName, latestLocation);
                 	query = "INSERT INTO public.incoming_events (state,value, iteration, date_old, time_old) VALUES ('" + latestName + "In" + previousLocation + "',false, 85732,'" + formattedDate + "','" + formattedTime + "');";
@@ -93,7 +100,7 @@ public class BLEtoMReasonerScript {
             	dataToSave.append(nameAndLocationArr.get(key));
             	dataToSave.append("\n");
             }
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("lastAccessedBLE.txt"));
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(absFilePath));
             byte[] data = dataToSave.toString().getBytes(); // Replace with your data
             bos.write(data);
             bos.close();
