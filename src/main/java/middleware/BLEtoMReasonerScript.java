@@ -59,7 +59,6 @@ public class BLEtoMReasonerScript {
                 	String[] lineSplit = line.split(",");
                 	if(lineSplit.length == 2)
                 		nameAndLocationArr.put(lineSplit[0], lineSplit[1]);
-                	System.out.println(lineSplit.length);
                 }
             }
             bis.close();
@@ -80,10 +79,7 @@ public class BLEtoMReasonerScript {
             statement = connection.createStatement();
             statement.executeUpdate(query);
             String previousLocation = nameAndLocationArr.get(latestName);
-            System.out.println(nameAndLocationArr);
-        	System.out.println("NAME: " + latestName + ", " +  previousLocation + " " + latestLocation);
             if(!latestLocation.equals(previousLocation)) { //prev location might be different room, or NULL
-            	System.out.println("NOT IN SAME ROOMG");
             	if(previousLocation != null) {
             		nameAndLocationArr.replace(latestName, latestLocation);
                 	query = "INSERT INTO public.incoming_events (state,value, iteration, date_old, time_old) VALUES ('" + latestName + "In" + previousLocation + "',false, 85732,'" + formattedDate + "','" + formattedTime + "');";
