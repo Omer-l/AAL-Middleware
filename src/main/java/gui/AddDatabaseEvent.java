@@ -37,6 +37,8 @@ public class AddDatabaseEvent extends Window {
     private Button saveButton = new Button("Save");
     private String query;
     private int id;
+    private String operation = "read";
+	private VBox dbWriteVBox = new VBox();
 	Map<String, Object> editData = new HashMap<String, Object>();
 	Map<String, Object> removeData = new HashMap<String, Object>();
 
@@ -80,6 +82,11 @@ public class AddDatabaseEvent extends Window {
     
 	public AddDatabaseEvent() {
 		
+	}
+
+	public AddDatabaseEvent(Window prevWindow, String operation) {
+		super(prevWindow);
+		this.operation = operation;
 	}
 
 	public void open() {
@@ -231,8 +238,6 @@ public class AddDatabaseEvent extends Window {
         column1HBox8VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox8VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox8VBox1Header = new Text("Sort By");
-//        menu5.setText("Sort by");
-
         VBox column1HBox8VBox2 = new VBox();
         column1HBox8VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         MenuBar column1HBox8VBox2MenuBar = new MenuBar();
@@ -258,7 +263,12 @@ public class AddDatabaseEvent extends Window {
 //        
         setRDBMSMenuOnAction(menu1, menu2, menu3, menu4);
         column1VBox1.getChildren().addAll(column1Header, column1HBox2, column1HBox3);
-        column1VBox2.getChildren().addAll(column1VBox2Header, column1Hbox4, column1HBox5, column1HBox6, column1HBox7, column1HBox8);
+        column1VBox2.getChildren().addAll(column1VBox2Header, column1Hbox4, column1HBox5, column1HBox6);
+        if(operation == "read") {
+        	column1VBox2.getChildren().addAll(column1HBox7, column1HBox8);
+        } else { //write
+        	column1VBox2.getChildren().add(dbWriteVBox);
+        }
         column1VBox3.getChildren().addAll(column1ButtonBar, column1HBox9);
 //        
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3);
@@ -293,6 +303,8 @@ public class AddDatabaseEvent extends Window {
 			menu.setText("");
 			menu.getItems().clear();
 		}
+		if(operation == "write")
+			dbWriteVBox.getChildren().clear();
 	}
 
 	private void setDatabaseMenuOnAction(Menu dbMenu, Menu tableMenu, Menu columnMenu) {
@@ -330,13 +342,31 @@ public class AddDatabaseEvent extends Window {
 			tableOption.setOnAction(event -> {
 				reset(menusToReset);
 				tableMenu.setText(tableName);
-				loadColumnsMenu(tableMenu, columnMenu, tableName);
-				columnMenu.setText("Choose column");
+				if(operation == "read") {
+					loadColumnsMenu(tableMenu, columnMenu, tableName);
+					columnMenu.setText("Choose column");
+				} else {
+					loadInputFields(tableName);
+				}
 			});
 			tables.add(tableOption);
 		}
 		
 		tableMenu.getItems().addAll(tables);
+	}
+
+	private void loadInputFields(String tableName) {
+		String[] columnNames = dbManager.getColumnNames(tableName);
+		dbWriteVBox.getChildren().clear();
+		int i = 0;
+		for(String columnName : columnNames) {
+	        VBox column1HBox6 = new VBox();
+	        Text menuBar3Label = new Text(columnName);
+	        TextField tf = new TextField();
+	        column1HBox6.getChildren().addAll(menuBar3Label, tf);
+	        dbWriteVBox.getChildren().add(column1HBox6);
+	        i++;
+		}
 	}
 
 	private void loadColumnsMenu(Menu tableMenu, Menu columnMenu, String tableName) {

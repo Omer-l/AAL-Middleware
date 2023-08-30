@@ -95,7 +95,7 @@ public class MainConsole {
 //    	        System.out.println("Elapsed Time (milliseconds): " + elapsedTime);
 //	                memoryUsage();
             }
-        } catch (InterruptedException | SQLException e) {
+        } catch (InterruptedException | SQLException | NullPointerException e) {
 			try {
 				e.printStackTrace();
 				System.out.println("Error connecting to server");
