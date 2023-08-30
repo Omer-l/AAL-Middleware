@@ -38,7 +38,7 @@ public class FileEvents extends Window {
 		MainMenu.clearMainBox();
     	MainMenu.changeTitle("File Events");
         Button button1 = new Button("Back");
-        button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+        button1.setStyle(MainMenu.BACK_BUTTON_STYLE);
 
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
@@ -79,7 +79,7 @@ public class FileEvents extends Window {
         int writeEventsLastIndex = column3VBox.getChildren().size() - 1;
         column3VBox.getChildren().get(writeEventsLastIndex).setOnMouseClicked(event -> { new AddFileEvent(this, "write").open(); });
         mainVBox3.getChildren().addAll(column3VBox);
-    	MainMenu.addHoverInteraction(new VBox[] {(VBox) column1VBox.getChildren().get(runEventsLastIndex), (VBox) column2VBox.getChildren().get(readEventsLastIndex), (VBox) column3VBox.getChildren().get(writeEventsLastIndex)}, "yellow", "darkgray");
+    	//MainMenu.addHoverInteraction(new VBox[] {(VBox) column1VBox.getChildren().get(runEventsLastIndex), (VBox) column2VBox.getChildren().get(readEventsLastIndex), (VBox) column3VBox.getChildren().get(writeEventsLastIndex)}, "yellow", "darkgray");
         MainMenu.mainHBox.getChildren().addAll(mainVBox1, mainVBox2, mainVBox3);
 	}
 	

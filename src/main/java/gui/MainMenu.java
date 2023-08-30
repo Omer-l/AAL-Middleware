@@ -76,6 +76,12 @@ public class MainMenu extends Application {
 	public final static String TEST_BUTTON_STYLE = "-fx-font: 12 arial; -fx-base: #3F51B5";
 	public final static String SAVE_BUTTON_STYLE = "-fx-font: 12 arial; -fx-base: #3F51B5";
 	
+	public final static String RUN_BUTTON_STYLE = "-fx-font: 12 arial; -fx-base: #26A69A";
+	public final static String READ_BUTTON_STYLE = "-fx-font: 12 arial; -fx-base: #26A69A";
+	public final static String WRITE_BUTTON_STYLE = "-fx-font: 12 arial; -fx-base: #26A69A";
+	
+	
+	
 	public final static double ICON_WIDTH = 75;
 	public final static double ICON_HEIGHT = 70;
 	
@@ -95,7 +101,7 @@ public class MainMenu extends Application {
 	
 	public static final int SVG_VBOX_SPACING = 30;
 
-	public final static String MENU_ADD_NEW_EVENT_BUTTON_STYLE = "-fx-background-color:   yellow; -fx-border-color: black;";
+	public final static String MENU_ADD_NEW_EVENT_BUTTON_STYLE = "-fx-background-color: #BDBDBD; -fx-border-color: black;";
 	public final static String MAIN_CONTENT_STYLE = "-fx-background-color: white ;";
 	public final static String GUI_BACKGROUND_STYLE = "-fx-background-color:   #F48FB1;";
 	public final static ArrayList<String> databaseQueries = new ArrayList<String>();
@@ -119,7 +125,7 @@ public class MainMenu extends Application {
     	
     		//MainMenu mm = new MainMenu();
     		//mm.open();
-    		DatabaseEvents db = new DatabaseEvents();
+    		FileEvents db = new FileEvents();
     		db.open();
     				
     	

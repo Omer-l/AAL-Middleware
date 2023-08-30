@@ -100,11 +100,10 @@ public class AddFileEvent extends Window {
 		}
 	}
 	
-	public void loadData(TextField uniqueIdField, TextField nameField,
+	public void loadData( TextField nameField,
 			 TextField descriptionField, VBox column1VBox3) {
 		try {
 		if(operation  == "run") {
-			uniqueIdField.setText(id + "");
 			nameField.setText((String) editRunData.get("name"));
 			descriptionField.setText((String) editRunData.get("description"));
 			currentWorkingDirectyField.setText((String) editRunData.get("current_working_directory"));
@@ -116,7 +115,6 @@ public class AddFileEvent extends Window {
         	readFileMethodButton.setDisable(true);
         	writeFileMethodButton.setDisable(true);
 	    }else if( operation == "read") {
-	    	uniqueIdField.setText(id + "");
 			nameField.setText((String) editReadData.get("name"));
 			descriptionField.setText((String) editReadData.get("description"));
 			selectedFile = new File((String) editReadData.get("path"));
@@ -144,12 +142,12 @@ public class AddFileEvent extends Window {
 		
       Button button1 = new Button("Back");
         button1.setOnAction(event -> { back(); });
-        button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
-        saveButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
-        testButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
-        runFileMethodButton.setStyle("-fx-font: 15 arial ; -fx-base: #E9967A");
-        readFileMethodButton.setStyle("-fx-font: 15 arial ; -fx-base: #E9967A");
-        writeFileMethodButton.setStyle("-fx-font: 15 arial ; -fx-base: #E9967A");
+        button1.setStyle(MainMenu.BACK_BUTTON_STYLE);
+        saveButton.setStyle(MainMenu.SAVE_BUTTON_STYLE);
+        testButton.setStyle(MainMenu.TEST_BUTTON_STYLE);
+        runFileMethodButton.setStyle(MainMenu.RUN_BUTTON_STYLE);
+        readFileMethodButton.setStyle(MainMenu.READ_BUTTON_STYLE);
+        writeFileMethodButton.setStyle(MainMenu.WRITE_BUTTON_STYLE);
 
 
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
@@ -162,19 +160,8 @@ public class AddFileEvent extends Window {
         Text column1Header = new Text("Details");
         column1Header.setStyle(MainMenu.HEADER_1_STYLE);
 
-        HBox column1HBox1 = new HBox();
-        VBox column1HBox1VBox1 = new VBox();
-        column1HBox1VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
-        column1HBox1VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        Text column1HBox1VBox1Header = new Text("UniqueID");
-        VBox column1HBox1VBox2 = new VBox();
-        column1HBox1VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
-        TextField column1HBox1VBox2TextField = new TextField();
-        column1HBox1VBox1.getChildren().addAll(column1HBox1VBox1Header);
-        column1HBox1VBox2.getChildren().addAll(column1HBox1VBox2TextField);
-        column1HBox1.getChildren().addAll(column1HBox1VBox1, column1HBox1VBox2);
 
-        HBox column1HBox2 = new HBox();
+        VBox column1HBox2 = new VBox();
         VBox column1HBox2VBox1 = new VBox();
         column1HBox2VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox2VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
@@ -182,11 +169,13 @@ public class AddFileEvent extends Window {
         VBox column1HBox2VBox2 = new VBox();
         column1HBox2VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         TextField column1HBox2VBox2TextField = new TextField();
+        column1HBox2VBox2TextField.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
+
         column1HBox2VBox1.getChildren().addAll(column1HBox2VBox1Header);
         column1HBox2VBox2.getChildren().addAll(column1HBox2VBox2TextField);
         column1HBox2.getChildren().addAll(column1HBox2VBox1, column1HBox2VBox2);
 
-        HBox column1HBox3 = new HBox();
+        VBox column1HBox3 = new VBox();
         VBox column1HBox3VBox1 = new VBox();
         column1HBox3VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox3VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
@@ -194,6 +183,8 @@ public class AddFileEvent extends Window {
         VBox column1HBox3VBox2 = new VBox();
         column1HBox3VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         TextField column1HBox3VBox2TextField = new TextField();
+        column1HBox3VBox2TextField.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
+
         column1HBox3VBox1.getChildren().addAll(column1HBox3VBox1Header);
         column1HBox3VBox2.getChildren().addAll(column1HBox3VBox2TextField);
         column1HBox3.getChildren().addAll(column1HBox3VBox1, column1HBox3VBox2);
@@ -203,8 +194,9 @@ public class AddFileEvent extends Window {
         VBox column1VBox3 = new VBox();
         Text column1VBox2Header = new Text("Method");
         column1VBox2Header.setStyle(MainMenu.HEADER_1_STYLE);
+        
         HBox column1ButtonBar1HBox = new HBox();
-        column1ButtonBar1HBox.setAlignment(Pos.CENTER);
+        column1ButtonBar1HBox.setAlignment(Pos.CENTER_LEFT);
         ButtonBar column1ButtonBar1 = new ButtonBar();
 
         runFileMethodButton.setOnAction(event -> { 
@@ -241,16 +233,12 @@ public class AddFileEvent extends Window {
 
         }
         
-//        switch(operation) {
-//	        case "run": MainMenu.setActive(runFileMethodButton); openRunForm(column1VBox3); break;
-//	        case "read": MainMenu.setActive(readFileMethodButton); openReadForm(column1VBox3); break;
-//	        case "write": MainMenu.setActive(writeFileMethodButton); openWriteForm(column1VBox3); break;
-//        }
         column1ButtonBar1.getButtons().addAll(runFileMethodButton, readFileMethodButton, writeFileMethodButton);
         column1ButtonBar1HBox.getChildren().add(column1ButtonBar1);
-//        column1ButtonBar1
         VBox column1VBox4 = new VBox(10);
         
+        VBox buttons = new VBox();
+        buttons.setAlignment(Pos.CENTER_LEFT);
         ButtonBar column1ButtonBar2 = new ButtonBar();
         testButton.setOnAction(event -> { processTestButton(operation); });
         saveButton.setDisable(true);
@@ -261,19 +249,20 @@ public class AddFileEvent extends Window {
        HBox column1HBox9 = new HBox();
         MyStyles.createLogField(logField, mainVBox1,column1HBox9);
         
-        column1VBox1.getChildren().addAll(column1Header, column1HBox1, column1HBox2, column1HBox3);
+        column1VBox1.getChildren().addAll(column1Header, column1HBox2, column1HBox3);
         column1VBox2.getChildren().addAll(column1VBox2Header, column1ButtonBar1HBox);
-        column1VBox4.getChildren().addAll(column1ButtonBar2, column1HBox9);
+        column1VBox4.getChildren().addAll(column1HBox9);
+        buttons.getChildren().add(column1ButtonBar2);
         
-        mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3, column1VBox4);
+        mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3, column1VBox4,buttons);
         MainMenu.mainHBox.getChildren().addAll(mainVBox1);
         if(!editRunData.isEmpty()) {
     		column1VBox3.getChildren().clear();
         	operation = "run";
-        	loadData(column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, column1VBox3);
+        	loadData(column1HBox2VBox2TextField, column1HBox3VBox2TextField, column1VBox3);
         }else if(!editReadData.isEmpty()) {
     		column1VBox3.getChildren().clear();
-        	loadData(column1HBox1VBox2TextField, column1HBox2VBox2TextField, column1HBox3VBox2TextField, column1VBox3);
+        	loadData( column1HBox2VBox2TextField, column1HBox3VBox2TextField, column1VBox3);
 
         }
 	}
@@ -281,23 +270,27 @@ public class AddFileEvent extends Window {
 
 	private void openRunForm(VBox column1VBox3) {
 
-        HBox column1HBox7 = new HBox();
+        VBox column1HBox7 = new VBox();
         VBox column1HBox7VBox1 = new VBox();
         column1HBox7VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox7VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox7VBox1Header = new Text("Working Directory of Command");
         VBox column1HBox7VBox2 = new VBox();
+        currentWorkingDirectyField.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
+
         column1HBox7VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         column1HBox7VBox1.getChildren().addAll(column1HBox7VBox1Header);
 		column1HBox7VBox2.getChildren().addAll(currentWorkingDirectyField );
         column1HBox7.getChildren().addAll(column1HBox7VBox1, column1HBox7VBox2);
 
-        HBox column1HBox8 = new HBox();
+        VBox column1HBox8 = new VBox();
         VBox column1HBox8VBox1 = new VBox();
         column1HBox8VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox8VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox8VBox1Header = new Text("Command (including classpath, args etc)");
         VBox column1HBox8VBox2 = new VBox();
+        valueField.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
+
         column1HBox8VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         column1HBox8VBox1.getChildren().addAll(column1HBox8VBox1Header);
         column1HBox8VBox2.getChildren().addAll(valueField);
@@ -328,7 +321,7 @@ public class AddFileEvent extends Window {
 
 
 	private void openReadForm(VBox column1VBox2) {
-        HBox column1Hbox4 = new HBox();
+        VBox column1Hbox4 = new VBox();
         VBox column1Hbox4VBox1 = new VBox();
         column1Hbox4VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1Hbox4VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
@@ -342,7 +335,7 @@ public class AddFileEvent extends Window {
         column1Hbox4VBox2.getChildren().addAll(uploadButton);
         column1Hbox4.getChildren().addAll(column1Hbox4VBox1, column1Hbox4VBox2);
 
-        HBox column1HBox7 = new HBox();
+        VBox column1HBox7 = new VBox();
         VBox column1HBox7VBox1 = new VBox();
         column1HBox7VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox7VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
@@ -368,9 +361,6 @@ public class AddFileEvent extends Window {
 			case "run":
 		        try {
 		        	String args = valueField.getText();
-//		        	String nameOfFile = selectedFile.getName().substring(0, selectedFile.getName().indexOf("."));
-//		        	if(!args.contains(nameOfFile))
-//		        		args += selectedFile.getAbsolutePath();
 		        	String command = valueField.getText();
 		            String currentWorkingDirectory = currentWorkingDirectyField.getText();
 	        		ProcessBuilder processBuilder = new ProcessBuilder("cmd" ,"/c", command);
