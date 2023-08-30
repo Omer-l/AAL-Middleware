@@ -73,8 +73,16 @@ public class MainMenu extends Application {
 	public final static String EDIT_BUTTON_STYLE = "-fx-font: 12 arial; -fx-base: #3F51B5";
 	public final static String DELETE_BUTTON_STYLE = "-fx-font: 12 arial; -fx-base: #3F51B5";
 	
+	public final static String TEST_BUTTON_STYLE = "-fx-font: 12 arial; -fx-base: #3F51B5";
+	public final static String SAVE_BUTTON_STYLE = "-fx-font: 12 arial; -fx-base: #3F51B5";
+	
 	public final static double ICON_WIDTH = 75;
 	public final static double ICON_HEIGHT = 70;
+	
+	public final static String HBOX_STYLE = "-fx-background-color: white ;"
+			+ "-fx-border-color: black;"
+   +" -fx-border-width: 2px;"
+    + "-fx-padding: 10px;";
 	
 			
 	

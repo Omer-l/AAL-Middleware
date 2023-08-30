@@ -24,7 +24,7 @@ public class MyStyles {
 	
 	public static void createLogField(TextField logField, VBox mainVBox1, HBox column1HBox) {
 	     Text logText = new Text("LOG: ");
-	     logField.prefWidthProperty().bind(mainVBox1.widthProperty().multiply(0.9));
+	     logField.maxWidthProperty().bind(mainVBox1.widthProperty().multiply(5));
 	     logField.prefHeightProperty().bind(mainVBox1.heightProperty().multiply(0.1));
 	     logField.setEditable(false);
 	     column1HBox.getChildren().addAll(logText,logField);
@@ -151,7 +151,7 @@ public class MyStyles {
 
 	public static void thenAndWhen(Window window) {
 		Button button1 = new Button("Back");
-        button1.setStyle("-fx-font: 15 arial; -fx-base: #b6e7c9");
+        button1.setStyle(MainMenu.BACK_BUTTON_STYLE);
 
         button1.setOnAction(event -> { window.back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left

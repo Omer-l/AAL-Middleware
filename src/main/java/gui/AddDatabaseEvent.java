@@ -93,11 +93,15 @@ public class AddDatabaseEvent extends Window {
 		MainMenu.clearMainBox();
 		MainMenu.changeTitle("Add Database Event");
 		
+		HBox mainHbox = new HBox(10);
+		mainHbox.setAlignment(Pos.CENTER_RIGHT);
+		mainHbox.setStyle(MainMenu.HBOX_STYLE);
+		
 	        
         Button button1 = new Button("Back");
         button1.setStyle(MainMenu.BACK_BUTTON_STYLE);
-        saveButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
-        testButton.setStyle("-fx-font: 15 arial ; -fx-base: #FFE4E1");
+        saveButton.setStyle(MainMenu.SAVE_BUTTON_STYLE);
+        testButton.setStyle(MainMenu.TEST_BUTTON_STYLE);
 
         button1.setOnAction(event -> { back(); });
         MainMenu.menuBarHBox.setAlignment(Pos.TOP_LEFT); // button on the left
@@ -157,14 +161,14 @@ public class AddDatabaseEvent extends Window {
 //        // Create a MenuItem
         MenuBar column1HBox4VBox2MenuBar = new MenuBar();
         
-        column1HBox4VBox2MenuBar.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
+        column1HBox4VBox2MenuBar.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
         Menu menu1 =  new Menu();
         // Create MenuItems for the dropdown menu
        //here we need to add databases
         menu1.setText("Choose RDBM");
         MenuItem option1 = new MenuItem("MySQL");
         MenuItem option2 = new MenuItem("PostgreSQL");
-        
+       
         menu1.getItems().addAll(option1,option2);
         column1HBox4VBox2MenuBar.getMenus().add(menu1);
         column1Hbox4VBox1.getChildren().addAll(column1Hbox4VBox1Header);
@@ -178,14 +182,17 @@ public class AddDatabaseEvent extends Window {
         VBox column1HBox5 = new VBox();
         VBox column1HBox5VBox1 = new VBox();
         column1HBox5VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
-        column1HBox5VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+//        column1HBox5VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox5VBox1Header = new Text("Database");
         VBox column1HBox5VBox2 = new VBox();
-        column1HBox5VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
+//        column1HBox5VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         MenuBar column1HBox5VBox2MenuBar = new MenuBar();
+        column1HBox5VBox2MenuBar.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
+
         Menu menu2 = new Menu();
         // Create MenuItems for the dropdown menu
         column1HBox5VBox2MenuBar.getMenus().add(menu2);
+        
         Text menuBar2Label = new Text("Table");
     	HBox menuBar2HBox = new HBox(10);
     	menuBar2HBox.getChildren().addAll(menuBar2Label, column1HBox5VBox2MenuBar);
@@ -201,6 +208,8 @@ public class AddDatabaseEvent extends Window {
         VBox column1HBox6VBox2 = new VBox();
         column1HBox6VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         MenuBar column1HBox6VBox2MenuBar = new MenuBar();
+        column1HBox6VBox2MenuBar.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
+
         Menu menu3 = new Menu();
 //        menu3.setText("Choose Table");
 
@@ -221,7 +230,7 @@ public class AddDatabaseEvent extends Window {
         VBox column1HBox7VBox2 = new VBox();
         column1HBox7VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
         MenuBar column1HBox7VBox2MenuBar = new MenuBar();
-        column1HBox7VBox2MenuBar.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
+        column1HBox7VBox2MenuBar.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
         Menu menu4 = new Menu();
 //        menu4.setText("Choose Column");
 
@@ -238,9 +247,13 @@ public class AddDatabaseEvent extends Window {
         column1HBox8VBox1.setStyle(MainMenu.USER_INPUT_STYLE);
         column1HBox8VBox1.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         Text column1HBox8VBox1Header = new Text("Sort By");
+//        menu5.setText("Sort by");
+
         VBox column1HBox8VBox2 = new VBox();
         column1HBox8VBox2.prefWidthProperty().bind(MainMenu.root.widthProperty().divide(2));
         MenuBar column1HBox8VBox2MenuBar = new MenuBar();
+        column1HBox8VBox2MenuBar.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
+
         // Create MenuItems for the dropdown menu
         column1HBox8VBox2MenuBar.getMenus().add(menu5);
         Text menuBar3Label1 = new Text("Table");
@@ -249,14 +262,15 @@ public class AddDatabaseEvent extends Window {
         column1HBox8VBox1.getChildren().addAll(column1HBox8VBox1Header);
         column1HBox8VBox2.getChildren().addAll(column1HBox8VBox2MenuBar);
         column1HBox8.getChildren().addAll(column1HBox8VBox1, column1HBox8VBox2);
-//        
+        valueField.maxWidthProperty().bind(MainMenu.root.widthProperty().divide(4));
         VBox column1VBox3 = new VBox(10);
-//        
+         
         ButtonBar column1ButtonBar = new ButtonBar(); 
         testButton.setOnAction(event -> { processTestQuery(menu1, menu2, menu3, menu4, menu5, valueField); });
         saveButton.setDisable(true);
         saveButton.setOnAction(event -> { processSaveButton(column1HBox2VBox2TextField.getText(), column1HBox3VBox2TextField.getText(), menu1.getText(), menu2.getText(), menu3.getText(), menu4.getText(), valueField.getText(), menu5.getText());});
         column1ButtonBar.getButtons().addAll(testButton, saveButton);
+            
         HBox column1HBox9 = new HBox();
         MyStyles.createLogField(logField, mainVBox1, column1HBox9);
 //        
@@ -269,10 +283,15 @@ public class AddDatabaseEvent extends Window {
         } else { //write
         	column1VBox2.getChildren().add(dbWriteVBox);
         }
-        column1VBox3.getChildren().addAll(column1ButtonBar, column1HBox9);
-//        
+        column1VBox3.getChildren().addAll(column1HBox9,column1ButtonBar);
+        
+        
         mainVBox1.getChildren().addAll(column1VBox1, column1VBox2, column1VBox3);
-        MainMenu.mainHBox.getChildren().addAll(mainVBox1);
+        
+        mainHbox.getChildren().add(mainVBox1);
+        MainMenu.mainHBox.getChildren().addAll(mainHbox);
+        mainVBox1.setAlignment(Pos.TOP_CENTER);
+      
         
         if(!editData.isEmpty()) {
         	loadData(column1HBox2VBox2TextField, column1HBox3VBox2TextField, menu1, menu2, menu3, menu4, valueField, menu5);
