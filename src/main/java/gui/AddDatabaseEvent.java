@@ -381,10 +381,14 @@ public class AddDatabaseEvent extends Window {
 		dbWriteVBox.getChildren().clear();
 		int i = 0;
 		for(String columnName : columnNames) {
-			if(columnName.toLowerCase().contains("id") && i == 0) continue;
 	        VBox column1HBox6 = new VBox();
 	        Text menuBar3Label = new Text(columnName);
 	        TextField tf = new TextField();
+//			if(columnName.toLowerCase().contains("id") && i == 0) {
+//				menuBar3Label.setVisible(false);
+//				tf.setVisible(false);
+//				tf.setText(tableName);
+//			}
 	        column1HBox6.getChildren().addAll(menuBar3Label, tf);
 	        dbWriteVBox.getChildren().add(column1HBox6);
 	        i++;
@@ -465,14 +469,20 @@ public class AddDatabaseEvent extends Window {
 	    			else
 	    				query += input + ", ";
 	    		}
+	    		
 	        	String result = dbManager.queryDB(query.toString(), "").toString();
-	        	System.out.println(result);
+	        	if(result.contains("ERROR")) {
+	        		saveButton.setDisable(true);
+	        	} else {
+	        		saveButton.setDisable(false);
+		        	System.out.println(result);
+	        	}
 	    	}
     	}
 	}
 
 	private String getValue(String value) {
-		if(value.matches("\\d+")) 
+		if(value.matches("\\d+") || value.toLowerCase().equals("null")) 
 			return (value);
 		else
 			return "'" + value + "'";
