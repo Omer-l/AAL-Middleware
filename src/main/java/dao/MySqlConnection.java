@@ -103,10 +103,10 @@ public class MySqlConnection {
 			// Print out column names
 			boolean firstColumn = true;
 			while (rs.next()) {
-				if(firstColumn) {
-					firstColumn = false;
-					continue;
-				}
+//				if(firstColumn) {
+//					firstColumn = false;
+//					continue;
+//				}
 				String columnName = rs.getString("column_name");
 //				String columnDataType = rs.getString("type_name");
 //				System.out.println("col: " + columnName + "... TYPE: " + columnDataType);

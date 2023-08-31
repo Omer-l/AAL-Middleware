@@ -1,6 +1,7 @@
 package gui;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -377,14 +379,12 @@ public class AddDatabaseEvent extends Window {
 	private void loadInputFields(String tableName) {
 		String[] columnNames = dbManager.getColumnNames(tableName);
 		dbWriteVBox.getChildren().clear();
-		int i = 0;
 		for(String columnName : columnNames) {
 	        VBox column1HBox6 = new VBox();
 	        Text menuBar3Label = new Text(columnName);
 	        TextField tf = new TextField();
 	        column1HBox6.getChildren().addAll(menuBar3Label, tf);
 	        dbWriteVBox.getChildren().add(column1HBox6);
-	        i++;
 		}
 	}
 
@@ -423,31 +423,66 @@ public class AddDatabaseEvent extends Window {
     	String db = databaseMenu.getText();
     	String table = tableMenu.getText();
     	String column = columnMenu.getText();
-    	String value = valueField.getText();
-    	String sortBy = menu5.getText();
-    	boolean wholeRow = column.equals("Whole Row");
-    	boolean noBlankFields = !(rdbm.isEmpty() || db.isEmpty() || table.isEmpty() || column.isEmpty() || (value.isEmpty() && !wholeRow));
-    	if(noBlankFields) {
-        	System.out.println(rdbm + ", " + db + ", " + table + ", " + column + ", " + value);
-        	StringBuilder query = new StringBuilder("SELECT * FROM " + table);
-        	if(!wholeRow) {
-        		query.append(" WHERE " + column + " = ");
-        		if(value.matches("\\d+"))
-        			query.append(value);
-        		else
-        			query.append("'" + value + "'");
-        	}
-        	
-        	query.append(" ORDER BY " + sortBy + " DESC LIMIT 1");
-        	System.out.println(query);
-        	String result = dbManager.queryDB(query.toString(), "select").toString();
-        	logField.setText(result);
-        	if(!result.contains("ERROR")) {
-        		saveButton.setDisable(false);
-        		this.query = query.toString();
-        	} else
-        		System.out.println("Blank");
+    	if(operation == "read") {
+	    	String value = valueField.getText();
+	    	String sortBy = menu5.getText();
+	    	boolean wholeRow = column.equals("Whole Row");
+	    	boolean noBlankFields = !(rdbm.isEmpty() || db.isEmpty() || table.isEmpty() || column.isEmpty() || (value.isEmpty() && !wholeRow));
+	    	if(noBlankFields) {
+	        	System.out.println(rdbm + ", " + db + ", " + table + ", " + column + ", " + value);
+	        	StringBuilder query = new StringBuilder("SELECT * FROM " + table);
+	        	if(!wholeRow) {
+	        		query.append(" WHERE " + column + " = ");
+	        		
+	        			query.append(getValue(value));
+	        	}
+	        	
+	        	query.append(" ORDER BY " + sortBy + " DESC LIMIT 1");
+	        	System.out.println(query);
+	        	String result = dbManager.queryDB(query.toString(), "select").toString();
+	        	logField.setText(result);
+	        	if(!result.contains("ERROR")) {
+	        		saveButton.setDisable(false);
+	        		this.query = query.toString();
+	        	} else
+	        		System.out.println("Blank");
+	    	}
+    	} else {
+	    	ArrayList<String> value = getInputValues();
+	    	String sortBy = menu5.getText();
+	    	boolean wholeRow = column.equals("Whole Row");
+	    	boolean noBlankFields = !(rdbm.isEmpty() || db.isEmpty() || table.isEmpty());
+	    	if(noBlankFields) {
+	    		ArrayList<String> inputValues = getInputValues();
+	    		String query = "INSERT INTO " + table + " VALUES (";
+	    		for(int i = 0; i < inputValues.size(); i++) {
+	    			String input = inputValues.get(i);
+	    			if(i == inputValues.size() - 1)
+	    				query += input + ");";
+	    			else
+	    				query += input + ", ";
+	    		}
+	        	String result = dbManager.queryDB(query.toString(), "").toString();
+	        	System.out.println(result);
+	    	}
     	}
+	}
+
+	private String getValue(String value) {
+		if(value.matches("\\d+")) 
+			return (value);
+		else
+			return "'" + value + "'";
+	}
+
+	private ArrayList<String> getInputValues() {
+		ArrayList<String> values = new ArrayList<>();
+		ObservableList<Node> children = dbWriteVBox.getChildren();
+		for (Node node : children) {
+			String value = (String) ((TextField) ((VBox) node).getChildren().get(1)).getText();
+			values.add(getValue(value));
+		}
+		return values;
 	}
 
 	private void processSaveButton(String nameInput, String descriptionInput, String rdbm, String db, String table, String column, String value, String sortBy) {
