@@ -128,6 +128,10 @@ public class MainConsole {
 	}
 
 	private void runRules(Map<String, Object> event) {
+		if(completedSchedules.contains(event)) { //QUICKLY REMOVES EVENT TO AVOID DOUBLE EVENT
+			completedSchedules.remove(event);
+			prevResults.remove(event);
+		}
 		for (RuleRunner rule : ruleThreads) {
 				if( ((String)event.get("event_type")).equals("database_read_event") || rule.containsWhenId((int) event.get("id"))) {
 				
@@ -136,10 +140,6 @@ public class MainConsole {
 				ruleThread.event = event;
 				ruleThread.start();
 			}
-		}
-		if(completedSchedules.contains(event)) {
-			completedSchedules.remove(event);
-			prevResults.remove(event);
 		}
 	}
 

@@ -379,12 +379,15 @@ public class AddDatabaseEvent extends Window {
 	private void loadInputFields(String tableName) {
 		String[] columnNames = dbManager.getColumnNames(tableName);
 		dbWriteVBox.getChildren().clear();
+		int i = 0;
 		for(String columnName : columnNames) {
+			if(columnName.toLowerCase().contains("id") && i == 0) continue;
 	        VBox column1HBox6 = new VBox();
 	        Text menuBar3Label = new Text(columnName);
 	        TextField tf = new TextField();
 	        column1HBox6.getChildren().addAll(menuBar3Label, tf);
 	        dbWriteVBox.getChildren().add(column1HBox6);
+	        i++;
 		}
 	}
 
@@ -479,6 +482,7 @@ public class AddDatabaseEvent extends Window {
 		ArrayList<String> values = new ArrayList<>();
 		ObservableList<Node> children = dbWriteVBox.getChildren();
 		for (Node node : children) {
+			String columnName = (String) ((Text) ((VBox) node).getChildren().get(0)).getText();
 			String value = (String) ((TextField) ((VBox) node).getChildren().get(1)).getText();
 			values.add(getValue(value));
 		}
