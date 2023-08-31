@@ -63,8 +63,12 @@ public class MyStyles {
 	        editButton.setStyle(MainMenu.EDIT_BUTTON_STYLE);
 	        editButton.setOnAction(event -> {
 	        	if(window instanceof DatabaseEvents) {
+	        		String header = ((Text) eventsVBox.getChildren().get(0)).getText();
 	        		AddDatabaseEvent ade = new AddDatabaseEvent(window);
-	        		ade.loadData((int) readEvent.get("id"));
+	        		if(header.equals("Read Events")) 
+	        			ade.loadData((int) readEvent.get("id"), "read");
+	        		else 
+	        			ade.loadData((int) readEvent.get("id"), "write");
 	        		ade.open();
 	        	} else if(window instanceof FileEvents) {
 	        		String header = ((Text) eventsVBox.getChildren().get(0)).getText();

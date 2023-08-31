@@ -4,6 +4,8 @@ package gui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import dao.DbXMLParser;
 import dao.MySqlConnection;
@@ -44,15 +46,18 @@ public class AddDatabaseEvent extends Window {
 	Map<String, Object> editData = new HashMap<String, Object>();
 	Map<String, Object> removeData = new HashMap<String, Object>();
 
-	public void loadData(int id) {
+	public void loadData(int id, String operation) {
 		this.id = id;
-		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.id = event.id", "select").get(0);
+		this.operation = operation;
+		editData.put("id", id);
 	}
 	
 	public void loadData( TextField nameField, TextField descriptionField,
 			Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, TextField valueField, Menu sortByMenu) {
-		editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.id = event.id", "select").get(0);
-		System.out.println(editData);
+		if(operation == "read")	
+			editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_read_event JOIN event ON database_read_event.id = event.id", "select").get(0);
+		else
+			editData = MainMenu.mainDbManager.queryDB("SELECT * FROM database_write_event JOIN event ON database_write_event.id = event.id", "select").get(0);
 		if(((String) editData.get("rdbm")).equals("MySQL"))
 			dbManager.setDetails(DbXMLParser.dbDetailsMySql);
 		else if(((String) editData.get("rdbm")).equals("PostgreSQL"))
@@ -63,11 +68,24 @@ public class AddDatabaseEvent extends Window {
 		databaseMenu.setText((String) editData.get("database"));
 		tableMenu.setText((String) editData.get("table"));
 		loadTablesMenu(tableMenu, columnMenu, (String) editData.get("database"));
-//		if(!((String) editData.get("column").equals("Whole Row"))
-		columnMenu.setText((String) editData.get("column"));
-		loadColumnsMenu(tableMenu, columnMenu, (String) editData.get("table"));
-		valueField.setText((String) editData.get("value"));
-		sortByMenu.setText((String) editData.get("sortby"));
+		if(operation == "read") {
+			columnMenu.setText((String) editData.get("column"));
+			loadColumnsMenu(tableMenu, columnMenu, (String) editData.get("table"));
+			valueField.setText((String) editData.get("value"));
+			sortByMenu.setText((String) editData.get("sortby"));
+		} else {
+			loadInputFields((String) editData.get("table"));
+			String[] values = parseInsertValues((String) editData.get("query"));
+			int i = 0;
+			for(Node node : dbWriteVBox.getChildren()) {
+				String value = values[i];
+		        if (value.startsWith("'") && value.endsWith("'"))
+		        	value = value.substring(1, value.length() - 1);
+		        
+				((TextField)((VBox) node).getChildren().get(1)).setText(value);
+				i++;
+			}
+		}
 		//		this.editData = data;
 	}
 	
@@ -442,7 +460,26 @@ public class AddDatabaseEvent extends Window {
 		}
 		return values;
 	}
+	
+	public static String[] parseInsertValues(String insertQuery) {
+        Pattern pattern = Pattern.compile("\\bnull\\b|\\bNULL\\b|\\d+|'[^']*'");
+        Matcher matcher = pattern.matcher(insertQuery);
 
+        StringBuilder valuesBuilder = new StringBuilder();
+
+        while (matcher.find()) {
+            String value = matcher.group(0);
+            valuesBuilder.append(value).append(",");
+        }
+
+        String valuesString = valuesBuilder.toString();
+        if (valuesString.endsWith(",")) {
+            valuesString = valuesString.substring(0, valuesString.length() - 1);
+        }
+
+        return valuesString.split(",");
+    }
+	
 	private void processTestQuery(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, Menu sortByMenu, TextField valueField) {
 		String rdbm = rdbmMenu.getText();
 		String db = databaseMenu.getText();
@@ -483,7 +520,7 @@ public class AddDatabaseEvent extends Window {
 	    		for(int i = 0; i < inputValues.size(); i++) {
 	    			String input = inputValues.get(i);
 	    			if(i == inputValues.size() - 1)
-	    				this.query += input + ");";
+	    				this.query += input + ")";
 	    			else
 	    				this.query += input + ", ";
 	    		}
@@ -529,16 +566,14 @@ public class AddDatabaseEvent extends Window {
 		        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
 		        			+ " name = '" + nameInput + "', "
 		        			+ "description = '" + descriptionInput + "' WHERE id = " + id + ";", "");
-		        	MainMenu.mainDbManager.queryDB("UPDATE database_read_event"
+		        	MainMenu.mainDbManager.queryDB("UPDATE database_write_event"
 		        			+ " SET "
 		        			+ "rdbm = '" + rdbm + "', "
 		        			+ "`database` = '" + db + "', `table` = '" + table + "',"
-		        			+ "`column` = '" + column + "', `value` = '" + value
-		        			+ "', sortby = '" + sortBy
-		        			+ "', query = \"" + this.query + "\" WHERE id = " + id + ";", "");
+		        			+ " query = \"" + this.query + "\" WHERE id = " + id + ";", "");
 		        }
 			}
-//			back();
+			back();
 		} else {
 			logField.setText("unique id, name or description field is empty");
 		}

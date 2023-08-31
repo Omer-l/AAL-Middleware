@@ -152,6 +152,13 @@ public class RuleRunner extends Thread{
 			        } catch (IOException | InterruptedException e) {
 			            e.printStackTrace();
 			        } break;
+				case "database_write_event": 
+					mainDbManager.connectToDb("middleware");
+					Map<String, Object> row = mainDbManager.queryDB("SELECT * FROM database_write_event WHERE id = " + (int) then.get("id"), "select").get(0);
+					String query = (String) row.get("query");
+					mainDbManager.setDetails(new String[] {(String) row.get("rdbm"), (String) row.get("database"), (String) row.get("table")});
+					
+					break;
 			}
 		}
 	}
