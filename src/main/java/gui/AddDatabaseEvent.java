@@ -425,12 +425,30 @@ public class AddDatabaseEvent extends Window {
         menu5.getItems().addAll(sortByColumns);
 	}
 	
+	private String getValue(String value) {
+		if(value.matches("\\d+") || value.toLowerCase().equals("null")) 
+			return (value);
+		else
+			return "'" + value + "'";
+	}
+
+	private ArrayList<String> getInputValues() {
+		ArrayList<String> values = new ArrayList<>();
+		ObservableList<Node> children = dbWriteVBox.getChildren();
+		for (Node node : children) {
+			String columnName = (String) ((Text) ((VBox) node).getChildren().get(0)).getText();
+			String value = (String) ((TextField) ((VBox) node).getChildren().get(1)).getText();
+			values.add(getValue(value));
+		}
+		return values;
+	}
+
 	private void processTestQuery(Menu rdbmMenu, Menu databaseMenu, Menu tableMenu, Menu columnMenu, Menu sortByMenu, TextField valueField) {
-    	String rdbm = rdbmMenu.getText();
-    	String db = databaseMenu.getText();
-    	String table = tableMenu.getText();
-    	String column = columnMenu.getText();
-    	if(operation == "read") {
+		String rdbm = rdbmMenu.getText();
+		String db = databaseMenu.getText();
+		String table = tableMenu.getText();
+		String column = columnMenu.getText();
+		if(operation == "read") {
 	    	String value = valueField.getText();
 	    	String sortBy = menu5.getText();
 	    	boolean wholeRow = column.equals("Whole Row");
@@ -454,20 +472,20 @@ public class AddDatabaseEvent extends Window {
 	        	} else
 	        		System.out.println("Blank");
 	    	}
-    	} else {
+		} else {
 	    	ArrayList<String> value = getInputValues();
 	    	String sortBy = menu5.getText();
 	    	boolean wholeRow = column.equals("Whole Row");
 	    	boolean noBlankFields = !(rdbm.isEmpty() || db.isEmpty() || table.isEmpty());
 	    	if(noBlankFields) {
 	    		ArrayList<String> inputValues = getInputValues();
-	    		String query = "INSERT INTO " + table + " VALUES (";
+	    		this.query = "INSERT INTO " + table + " VALUES (";
 	    		for(int i = 0; i < inputValues.size(); i++) {
 	    			String input = inputValues.get(i);
 	    			if(i == inputValues.size() - 1)
-	    				query += input + ");";
+	    				this.query += input + ");";
 	    			else
-	    				query += input + ", ";
+	    				this.query += input + ", ";
 	    		}
 	    		
 	        	String result = dbManager.queryDB(query.toString(), "").toString();
@@ -478,47 +496,49 @@ public class AddDatabaseEvent extends Window {
 		        	System.out.println(result);
 	        	}
 	    	}
-    	}
-	}
-
-	private String getValue(String value) {
-		if(value.matches("\\d+") || value.toLowerCase().equals("null")) 
-			return (value);
-		else
-			return "'" + value + "'";
-	}
-
-	private ArrayList<String> getInputValues() {
-		ArrayList<String> values = new ArrayList<>();
-		ObservableList<Node> children = dbWriteVBox.getChildren();
-		for (Node node : children) {
-			String columnName = (String) ((Text) ((VBox) node).getChildren().get(0)).getText();
-			String value = (String) ((TextField) ((VBox) node).getChildren().get(1)).getText();
-			values.add(getValue(value));
 		}
-		return values;
 	}
 
 	private void processSaveButton(String nameInput, String descriptionInput, String rdbm, String db, String table, String column, String value, String sortBy) {
 		boolean emptyField = nameInput.isEmpty() || descriptionInput.isEmpty();
+		
 		if(!emptyField) {
-			if(editData.isEmpty()) {
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES (null, '" + nameInput + "', '" + descriptionInput + "');", "");
-	        	id = (int) MainMenu.mainDbManager.queryDB("SELECT * FROM event ORDER BY id  DESC LIMIT 1;", "select").get(0).get("id");
-	        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ("+ id + ", '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); 
+			if(operation == "read") {
+				if(editData.isEmpty()) {
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES (null, '" + nameInput + "', '" + descriptionInput + "');", "");
+		        	id = (int) MainMenu.mainDbManager.queryDB("SELECT * FROM event ORDER BY id  DESC LIMIT 1;", "select").get(0).get("id");
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO database_read_event VALUES ("+ id + ", '" + rdbm + "', '" + db + "', '" + table + "', '" + column + "', '" + sortBy + "', '" + value + "', \"" + this.query + "\");", ""); 
+				} else {
+		        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
+		        			+ " name = '" + nameInput + "', "
+		        			+ "description = '" + descriptionInput + "' WHERE id = " + id + ";", "");
+		        	MainMenu.mainDbManager.queryDB("UPDATE database_read_event"
+		        			+ " SET "
+		        			+ "rdbm = '" + rdbm + "', "
+		        			+ "`database` = '" + db + "', `table` = '" + table + "',"
+		        			+ "`column` = '" + column + "', `value` = '" + value
+		        			+ "', sortby = '" + sortBy
+		        			+ "', query = \"" + this.query + "\" WHERE id = " + id + ";", "");
+		        }
 			} else {
-	        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
-	        			+ " name = '" + nameInput + "', "
-	        			+ "description = '" + descriptionInput + "' WHERE id = " + id + ";", "");
-	        	MainMenu.mainDbManager.queryDB("UPDATE database_read_event"
-	        			+ " SET "
-	        			+ "rdbm = '" + rdbm + "', "
-	        			+ "`database` = '" + db + "', `table` = '" + table + "',"
-	        			+ "`column` = '" + column + "', `value` = '" + value
-	        			+ "', sortby = '" + sortBy
-	        			+ "', query = \"" + this.query + "\" WHERE id = " + id + ";", "");
-	        	}
-			back();
+				if(editData.isEmpty()) {
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO event VALUES (null, '" + nameInput + "', '" + descriptionInput + "');", "");
+		        	id = (int) MainMenu.mainDbManager.queryDB("SELECT * FROM event ORDER BY id DESC LIMIT 1;", "select").get(0).get("id");
+		        	MainMenu.mainDbManager.queryDB("INSERT INTO database_write_event VALUES ("+ id + ", '" + rdbm + "', '" + db + "', '" + table + "', \"" + this.query + "\");", ""); 
+				} else {
+		        	MainMenu.mainDbManager.queryDB("UPDATE event SET"
+		        			+ " name = '" + nameInput + "', "
+		        			+ "description = '" + descriptionInput + "' WHERE id = " + id + ";", "");
+		        	MainMenu.mainDbManager.queryDB("UPDATE database_read_event"
+		        			+ " SET "
+		        			+ "rdbm = '" + rdbm + "', "
+		        			+ "`database` = '" + db + "', `table` = '" + table + "',"
+		        			+ "`column` = '" + column + "', `value` = '" + value
+		        			+ "', sortby = '" + sortBy
+		        			+ "', query = \"" + this.query + "\" WHERE id = " + id + ";", "");
+		        }
+			}
+//			back();
 		} else {
 			logField.setText("unique id, name or description field is empty");
 		}
