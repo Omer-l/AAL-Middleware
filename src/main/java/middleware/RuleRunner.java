@@ -18,7 +18,7 @@ import gui.MainMenu;
 
 public class RuleRunner extends Thread{
     public static String[] middlewareTableNames = {"database_read_event", "database_write_event", "rule", "system_file_read_event", "system_file_run_event", "system_file_write_event", "schedule"};
-	public static MySqlConnection mainDbManager = new MySqlConnection();
+	public MySqlConnection mainDbManager = new MySqlConnection();
 	public ArrayList<Map<String, Object>> whens;
 	public ArrayList<Map<String, Object>> thens;
 	public Map<String, Object> event; // the new event to evaluate
@@ -49,7 +49,9 @@ public class RuleRunner extends Thread{
 
 	public static ArrayList<Map<String, Object>> getEvents(String[] ids) {
 		ArrayList<Map<String, Object>> matchingEvents = new ArrayList<>();
-		
+		MySqlConnection mainDbManager = new MySqlConnection();
+		mainDbManager.setDetails(DbXMLParser.dbDetailsMySql);
+		mainDbManager.connectToDb("middleware");
 		for(String id : ids) {
 //			Map<String, Object> when = new HashMap<String, Object>();
 			//loop through the tables
@@ -153,11 +155,14 @@ public class RuleRunner extends Thread{
 			            e.printStackTrace();
 			        } break;
 				case "database_write_event": 
-					mainDbManager.connectToDb("middleware");
 					Map<String, Object> row = mainDbManager.queryDB("SELECT * FROM database_write_event WHERE id = " + (int) then.get("id"), "select").get(0);
 					String query = (String) row.get("query");
-					mainDbManager.setDetails(new String[] {(String) row.get("rdbm"), (String) row.get("database"), (String) row.get("table")});
-					
+					if( ((String) row.get("rdbm")).equals("MySQL"))
+						mainDbManager.setDetails(DbXMLParser.dbDetailsMySql);
+					else
+						mainDbManager.setDetails(DbXMLParser.dbDetailsPostgresql);
+					mainDbManager.connectToDb((String) row.get("database"));
+					mainDbManager.queryDB(query, "");
 					break;
 			}
 		}

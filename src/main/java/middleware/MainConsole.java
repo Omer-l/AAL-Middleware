@@ -30,8 +30,10 @@ public class MainConsole {
     ArrayList<Map<String, Object>> completedSchedules = new ArrayList<Map<String,Object>>();
     private int prevResultsIndex = 0;
     private MySqlConnection connection;
-    private boolean listening;		
+    private boolean listening;
+	private MySqlConnection mainDbManager = new MySqlConnection();		
     public static ArrayList<RuleRunner> ruleThreads = new ArrayList<>();
+    public static ArrayList<Timer> timers = new ArrayList<>();
     private static long iteration;
     
 	public MainConsole(MySqlConnection connection) {
@@ -43,11 +45,11 @@ public class MainConsole {
         MySqlConnection con = new MySqlConnection();
         con.setDetails(DbXMLParser.dbDetailsMySql);
         MainConsole mainConsole = new MainConsole(con);
-		RuleRunner.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
-		RuleRunner.mainDbManager.setUsername("root");
-		RuleRunner.mainDbManager.setPassword("root");
+		mainConsole.mainDbManager.setUrl("jdbc:mysql://localhost:3306/middleware");
+		mainConsole.mainDbManager.setUsername("root");
+		mainConsole.mainDbManager.setPassword("root");
         mainConsole.listen();
-}
+	}
 
     public void stopListening() {
         this.listening = false;
@@ -55,8 +57,8 @@ public class MainConsole {
 
 	public void listen() {
 	    try {
-	        initialiseSchedules();
 			assignRules();
+			initialiseSchedules();
         	//initialise prevResults
             while (listening) {
                 // Record the start time
@@ -72,7 +74,7 @@ public class MainConsole {
 //        	    System.out.println(latestResults + "\n" + prevResults);
     	        if(iteration == 0) //only for first iteration
     	        	prevResults = latestResults;
-    	        if(!latestResults.equals(prevResults)) { //TODO fix schedules adding on to queue
+    	        if(!latestResults.equals(prevResults)) {
     	        	Map<String, Object> event = getNewEvent(prevResults, latestResults);
     	        	if(event != null) {
         	        	System.out.println("EVENT!\n");
@@ -100,6 +102,9 @@ public class MainConsole {
 				e.printStackTrace();
 				System.out.println("Error connecting to server");
 				Thread.sleep(5000);
+				completedSchedules.clear();
+				prevResults.clear();
+				iteration = 0;
 				listen();   
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
@@ -122,7 +127,10 @@ public class MainConsole {
 	}
 
 	private void assignRules() throws SQLException {
-		ArrayList<Map<String, Object>> rules = RuleRunner.mainDbManager.queryDB("SELECT * from rule", "select");
+		for(RuleRunner rule : ruleThreads)
+			rule.interrupt();
+		ruleThreads.clear();
+		ArrayList<Map<String, Object>> rules = mainDbManager.queryDB("SELECT * from rule", "select");
 		for (Map<String, Object> rule : rules)
 			ruleThreads.add(new RuleRunner(rule));
 	}
@@ -189,7 +197,7 @@ public class MainConsole {
 
 	private ArrayList<Map<String, Object>> latestResultsFiles() throws SQLException {
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
-		ArrayList<Map<String, Object>> results = RuleRunner.mainDbManager.queryDB("SELECT * FROM system_file_read_event ORDER BY 1 DESC", "select");
+		ArrayList<Map<String, Object>> results = mainDbManager.queryDB("SELECT * FROM system_file_read_event ORDER BY 1 DESC", "select");
 		for(Map<String, Object> result : results) {
             try {
             	File file = new File((String) result.get("path"));
@@ -220,9 +228,12 @@ public class MainConsole {
 		return latestResults;
 	}
 	
-	private ArrayList<Map<String, Object>> initialiseSchedules() throws SQLException {
+	private ArrayList<Map<String, Object>> initialiseSchedules() {
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
-		ArrayList<Map<String, Object>> results = RuleRunner.mainDbManager.queryDB("SELECT * FROM schedule ORDER BY 1 DESC", "select");
+		ArrayList<Map<String, Object>> results = mainDbManager.queryDB("SELECT * FROM schedule ORDER BY 1 DESC", "select");
+		for(Timer timer : timers)
+			timer.cancel();
+		timers.clear(); //clear timers
 //		for(Map<String, Object> result : results) {
 //            LocalDateTime now = LocalDateTime.now();
 //            //do some calculations to solve startDateTime by using the  result.get("start_date_time") and result.get("repetition") attribute
@@ -251,6 +262,7 @@ public class MainConsole {
 	        // Calculate the initial delay until the next schedule time
 	        Duration initialDelay = calculateInitialDelay(schedule);
 	        Timer timer = new Timer();
+	        timers.add(timer);
 	        // Schedule the task to run at the specified interval
 	        timer.schedule(new TimerTask() {
 	            @Override
