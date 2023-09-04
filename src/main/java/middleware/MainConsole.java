@@ -199,7 +199,7 @@ public class MainConsole {
 		ArrayList<Map<String, Object>> latestResults = new ArrayList<>();
 		ArrayList<Map<String, Object>> results = mainDbManager.queryDB("SELECT * FROM system_file_read_event ORDER BY 1 DESC", "select");
 		for(Map<String, Object> result : results) {
-            try {
+            try { //TODO: STORE A CHANGE AND FREEZE????
             	File file = new File((String) result.get("path"));
 	            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
 	            byte[] buffer = new byte[8192]; // Adjust buffer size as needed
@@ -257,7 +257,7 @@ public class MainConsole {
 				continue; //schedule won't need to be considered
 			ScheduleInterval scheduleInterval = ScheduleInterval.valueOf(((String) result.get("repetition")).toUpperCase());
 			Schedule schedule = now.isAfter(startDateTime)  && (((String) result.get("repetition")).equals("Minute") || ((String) result.get("repetition")).equals("Second")) ? new Schedule(LocalDate.now().getDayOfWeek(), LocalDateTime.now().toLocalTime(), scheduleInterval) : new Schedule(startDateTime.getDayOfWeek(), startDateTime.toLocalTime(), scheduleInterval);
-
+			//TODO: fix day not being scheduled when hour/day/week/month
 			schedule.uniqueId = (int) result.get("id");
 	        // Calculate the initial delay until the next schedule time
 	        Duration initialDelay = calculateInitialDelay(schedule);
